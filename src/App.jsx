@@ -11,7 +11,7 @@ import Support from './Components/Pages/Dashboard/Support &Academy/support';
 import Notifications from './Components/Pages/Dashboard/Notifications/notifications';
 import Profile from './Components/Pages/Dashboard/Profile/profile';
 import Releases from './Components/Pages/Dashboard/Releases/releases';
-import dashboard from './Components/Pages/Dashboard/dashboard';
+import Dashboard from './Components/Pages/Dashboard/dashboard';
 
 // Optional: A simple Not Found page
 const NotFound = () => (
@@ -50,7 +50,7 @@ function App() {
         <Route path="/dashboard/support" element={<Support />} />
         <Route path="/dashboard/notifications" element={<Notifications />} />
         <Route path="/dashboard/profile" element={<Profile />} />
-        <Route path="/dashboard" element={<dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
 
         {/* Fallback for unknown routes */}
         <Route path="*" element={<NotFound />} />
