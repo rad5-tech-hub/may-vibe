@@ -1,0 +1,22 @@
+.signup {
+  background-image: url('./assets/signup.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: rgb(56, 56, 56);
+  background-blend-mode: overlay;
+}
+.login {
+  background-image: url('./assets/login.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: rgb(56, 56, 56);
+  background-blend-mode: overlay;
+}
+.welcome {
+  background-image: url('./assets/welcome.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat; 
+}

@@ -1,6 +1,10 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
+import  Signup from './Components/Pages/Onboarding Pages/signup.jsx';
+import  Login from './Components/Pages/Onboarding Pages/login.jsx';
+import  Welcome from './Components/Pages/Onboarding Pages/welcome.jsx';
+import ForgotPassword from './Components/Pages/Onboarding Pages/forgetPassword.jsx';
 
 // Import all your page components
 import Music from './Components/Pages/Dashboard/Music Upload/Music';
@@ -11,7 +15,7 @@ import Support from './Components/Pages/Dashboard/Support &Academy/support';
 import Notifications from './Components/Pages/Dashboard/Notifications/notifications';
 import Profile from './Components/Pages/Dashboard/Profile/profile';
 import Releases from './Components/Pages/Dashboard/Releases/releases';
-import dashboard from './Components/Pages/Dashboard/dashboard';
+import Dashboard from './Components/Pages/Dashboard/dashboard';
 
 // Optional: A simple Not Found page
 const NotFound = () => (
@@ -41,6 +45,10 @@ function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Homepage />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/welcome" element={<Welcome />} />
+        <Route path="/forgotPassword" element={<ForgotPassword />} />
 
         {/* Dashboard Routes */}
         <Route path="/dashboard/overview" element={<Overview />} />
@@ -50,7 +58,7 @@ function App() {
         <Route path="/dashboard/support" element={<Support />} />
         <Route path="/dashboard/notifications" element={<Notifications />} />
         <Route path="/dashboard/profile" element={<Profile />} />
-        <Route path="/dashboard" element={<dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
 
         {/* Fallback for unknown routes */}
         <Route path="*" element={<NotFound />} />

@@ -1,0 +1,111 @@
+import { useState } from 'react';
+import { FaFacebookF, FaApple, FaGoogle } from 'react-icons/fa';
+import "../../../index.css";
+
+const Login = () => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Login:', formData);
+  };
+
+  return (
+    <div className="login font-display">
+    
+      {/* Main Container */}
+      <div className='min-h-screen relative flex flex-col lg:flex-row items-center justify-center py-10'>        
+        <div className="relative z-10 w-[90%] max-w-7xl h-[90%] lg:h-[85vh] flex flex-col lg:flex-row rounded-xl overflow-hidden backdrop-blur-xl border border-white/10">
+          
+          {/* LEFT SIDE */}
+          <div className="w-full lg:w-1/2 px-16 py-16 lg:py-0 flex flex-col justify-center text-white bg-white/5 backdrop-blur-xl">
+            <h1 className="text-3xl lg:text-5xl font-bold mb-6">Let’s Get Started</h1>
+            <p className="text-white text-xs lg:text-md leading-relaxed max-w-xl">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elementum ligula metus,
+              ut rhoncus metus ornare quis. Donec eleifend varius orci, et lobortis augue.
+              Praesent gravida turpis a ligula hendrerit finibus.
+            </p>
+          </div>
+
+          {/* RIGHT SIDE */}
+          <div className="w-full lg:w-1/2 relative flex flex-col lg:flex-row px-16 text-white bg-black/40 backdrop-blur-xl">
+
+            {/* Vertical Divider */}
+            <div className="absolute left-0 top-0 bottom-0 w-px bg-white/20" />
+
+            <div className='w-full flex flex-col justify-center py-10 lg:py-0'>            
+              <h2 className="text-3xl font-extrabold mb-10">Login</h2>
+
+              <form onSubmit={handleSubmit} className="w-full lg:w-[80%]">
+                <div className='mb-8'>
+                  <label className="text-xs text-gray-300">Email</label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full px-2 bg-transparent border-b border-white focus:border-orange-500 outline-none text-sm py-1"
+                  />
+                </div>
+
+                <div className='mb-3'>
+                  <label className="text-xs text-gray-300">Password</label>
+                  <input
+                    type="password"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    className="w-full px-2 bg-transparent border-b border-white focus:border-orange-500 outline-none text-sm py-1"
+                  />
+                </div>
+                 <div className='mb-10'>
+                    <a href="/forgotPassword" className="text-orange-500 hover:text-orange-400 italic text-xs mb-8">
+                      forgot password
+                    </a>
+                 </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-orange-600 hover:bg-orange-500 cursor-pointer text-white font-semibold py-3 text-sm transition-all"
+                >
+                  Sign Up
+                </button>
+              </form>
+              {/* Login Link */}
+              <div className="mt-3 text-xs">
+                <span className="text-white mr-4 lg:mr-12">Not Registered? </span>
+                <a href="/signup" className="text-orange-500 hover:text-orange-400">
+                  Sign up here
+                </a>
+              </div>
+            </div> 
+
+
+
+            {/* Social + OR */}
+            <div className="hidden absolute right-30 top-1/2 -translate-y-1/2 lg:flex flex-col items-center gap-6">
+              <div className=" h-40 w-px bg-white/20" />
+                <span className="text-gray-400 text-xs tracking-widest">OR</span>
+                <div className="h-40 w-px bg-white/20" />
+            </div>
+
+            <div className='flex lg:flex-col items-center justify-center gap-6 mb-5 lg:mb-0'>
+              <button className="w-10 h-10 cursor-pointer bg-white hover:bg-orange-500 rounded-full flex items-center justify-center transition">
+                <FaFacebookF className="text-black text-lg" />
+              </button>
+              <button className="w-10 h-10 cursor-pointer bg-white hover:bg-orange-500 rounded-full flex items-center justify-center transition">
+                <FaApple className="text-black text-lg" />
+              </button>
+              <button className="w-10 h-10 cursor-pointer bg-white hover:bg-orange-500 rounded-full flex items-center justify-center transition">
+                <FaGoogle className="text-black text-lg" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
