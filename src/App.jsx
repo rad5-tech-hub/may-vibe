@@ -1,35 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'sonner';
+
+// Import all your page components
+import Music from './Components/Pages/Dashboard/Music Upload/Music';
+import Homepage from './Components/Pages/Homepage/Homepage';
+import Overview from './Components/Pages/Dashboard/Overview/overview';
+import Royalties from './Components/Pages/Dashboard/Royalties/Royalties';
+import Support from './Components/Pages/Dashboard/Support &Academy/support';
+import Notifications from './Components/Pages/Dashboard/Notifications/notifications';
+import Profile from './Components/Pages/Dashboard/Profile/profile';
+import Releases from './Components/Pages/Dashboard/Releases/releases';
+import dashboard from './Components/Pages/Dashboard/dashboard';
+
+// Optional: A simple Not Found page
+const NotFound = () => (
+  <div style={{ padding: '2rem', textAlign: 'center' }}>
+    <h1>404 - Page Not Found</h1>
+    <p>The page you&apos;re looking for doesn&apos;t exist.</p>
+  </div>
+);
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Router>
+      {/* Sonner Toaster - Place it once at the root */}
+      <Toaster
+        position="top-right"
+        richColors
+        closeButton
+        expand={true}
+        toastOptions={{
+          style: {
+            fontSize: '14px',
+          },
+          duration: 4000,
+        }}
+      />
+
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Homepage />} />
+
+        {/* Dashboard Routes */}
+        <Route path="/dashboard/overview" element={<Overview />} />
+        <Route path="/dashboard/releases" element={<Releases />} />
+        <Route path="/dashboard/music-upload" element={<Music />} />
+        <Route path="/dashboard/royalties" element={<Royalties />} />
+        <Route path="/dashboard/support" element={<Support />} />
+        <Route path="/dashboard/notifications" element={<Notifications />} />
+        <Route path="/dashboard/profile" element={<Profile />} />
+        <Route path="/dashboard" element={<dashboard />} />
+
+        {/* Fallback for unknown routes */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
