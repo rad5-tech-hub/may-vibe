@@ -5,8 +5,6 @@ import  Signup from './Components/Pages/Onboarding Pages/signup.jsx';
 import  Login from './Components/Pages/Onboarding Pages/login.jsx';
 import  Welcome from './Components/Pages/Onboarding Pages/welcome.jsx';
 import ForgotPassword from './Components/Pages/Onboarding Pages/forgetPassword.jsx';
-
-// Import all your page components
 import Music from './Components/Pages/Dashboard/Music Upload/Music';
 import Homepage from './Components/Pages/Homepage/Homepage';
 import Overview from './Components/Pages/Dashboard/Overview/overview';
