@@ -1,6 +1,6 @@
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
-
+import { Link } from 'react-router-dom';
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -88,12 +88,12 @@ export default function Navbar() {
 
           {/* CTA Buttons */}
           <div className="flex items-center gap-4">
-            <button className="px-8 py-2.5 bg-orange-600 text-white rounded-full font-medium hover:bg-orange-700 transition">
+            <Link to="/login" className="px-8 py-2.5 bg-orange-600 text-white rounded-full font-medium hover:bg-orange-700 transition">
               Login
-            </button>
-            <button className="px-6 py-2.5 font-semibold border-2 border-gray-700 rounded-full hover:bg-gray-100 transition">
+            </Link>
+            <Link to="/signup" className="px-6 py-2.5 font-semibold border-2 border-gray-700 rounded-full hover:bg-gray-100 transition">
               Get Started
-            </button>
+            </Link>
           </div>
         </div>
 
