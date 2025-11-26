@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FaCog } from 'react-icons/fa';
+import three from '../../../../../assets/three.png';
 
 const MetadataForm = () => {
   const [isrcMode, setIsrcMode] = useState('auto'); // 'auto' or 'manual'
@@ -19,8 +19,11 @@ const MetadataForm = () => {
   };
 
   return (
-    <div className="bg-gray-100 backdrop-blur-sm rounded-3xl p-10 relative">
-      <h3 className="text-2xl font-bold text-gray-900 mb-10">Fill Metadata</h3>
+    <div className="bg-gray-100 backdrop-blur-sm rounded-3xl px-4 py-10 lg:py-10 lg:px-10 relative">
+      <div className='flex justify-between mb-10'>
+        <h3 className="text-lg lg:text-2xl font-bold text-gray-900">Fill Metadata</h3>
+        <img src={three} alt="step three" />
+      </div>
 
       {/* Metadata Fields */}
       <div className="space-y-10 mb-12">
@@ -52,7 +55,7 @@ const MetadataForm = () => {
                 name="isrc"
                 checked={isrcMode === 'auto'}
                 onChange={() => setIsrcMode('auto')}
-                className="w-5 h-5 text-orange-500 focus:ring-orange-500"
+                className="w-4 h-4 lg:w-5 lg:h-5 text-orange-500 focus:ring-orange-500"
               />
               <span className="text-gray-700 font-medium">ISRC: Auto</span>
             </label>
@@ -62,16 +65,11 @@ const MetadataForm = () => {
                 name="isrc"
                 checked={isrcMode === 'manual'}
                 onChange={() => setIsrcMode('manual')}
-                className="w-5 h-5 text-orange-500 focus:ring-orange-500"
+                className="w-4 h-4 lg:w-5 lg:h-5 text-orange-500 focus:ring-orange-500"
               />
               <span className="text-gray-700 font-medium">Manual</span>
             </label>
           </div>
-
-          {/* Gear Icon */}
-          <button className="text-orange-500 hover:text-orange-600 transition">
-            <FaCog className="w-6 h-6" />
-          </button>
         </div>
 
         {/* DSP Multi-Select Dropdown */}

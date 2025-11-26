@@ -31,9 +31,9 @@ const ReleaseDatePicker = () => {
     <>
       {/* MAIN DATE PICKER CARD */}
       <div className="rounded-3xl">
-        <h3 className="text-2xl font-bold text-gray-900 mb-6">Release Date and Time</h3>
+        <h3 className="text-lg lg:text-2xl font-bold text-gray-900 mb-6">Release Date and Time</h3>
 
-        <div className="bg-gray-100 rounded-3xl p-6 space-y-6">
+        <div className="bg-gray-100 rounded-3xl p-3 lg:p-6 space-y-6">
           {/* Calendar */}
           <DatePicker
             selected={selectedDate}
@@ -50,18 +50,18 @@ const ReleaseDatePicker = () => {
           {/* Time Picker */}
           <div className="flex items-center gap-4">
             <span className="text-gray-700 font-medium">Time</span>
-            <div className="flex items-center gap-3 bg-white rounded-xl px-5 py-3 shadow-sm">
-              <span className="font-semibold text-lg">{selectedTime.slice(0, 5)}</span>
+            <div className="flex items-center gap-3 bg-white rounded-xl px-2 py-2 shadow-sm">
+              <span className="font-semibold text-sm lg:text-lg">{selectedTime.slice(0, 5)}</span>
               <div className="flex gap-2">
                 <button
                   onClick={() => setIsAM(true)}
-                  className={`px-4 py-2 rounded-lg font-medium transition ${isAM ? 'bg-orange-500 text-white' : 'text-gray-600'}`}
+                  className={`px-3 py-2 rounded-lg font-medium transition ${isAM ? 'bg-orange-500 text-white' : 'text-gray-600'}`}
                 >
                   AM
                 </button>
                 <button
                   onClick={() => setIsAM(false)}
-                  className={`px-4 py-2 rounded-lg font-medium transition ${!isAM ? 'bg-orange-500 text-white' : 'text-gray-600'}`}
+                  className={`px-3 py-2 rounded-lg font-medium transition ${!isAM ? 'bg-orange-500 text-white' : 'text-gray-600'}`}
                 >
                   PM
                 </button>
