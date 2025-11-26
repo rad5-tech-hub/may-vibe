@@ -39,7 +39,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
+    <div className="flex h-screen bg-white overflow-hidden">
       <Sidebar 
         currentPage={currentPage} 
         setCurrentPage={setCurrentPage}
@@ -58,9 +58,9 @@ const Dashboard = () => {
               >
                 <Menu size={24} />
               </button>
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 capitalize">
+              {/* <h1 className="text-xl sm:text-2xl font-bold text-gray-900 capitalize">
                 {currentPage}
-              </h1>
+              </h1> */}
             </div>
             
             <div className="flex items-center gap-2 sm:gap-4">

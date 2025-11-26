@@ -1,60 +1,61 @@
 import PropTypes from 'prop-types';
-import { TrendingUp } from 'lucide-react';
 
-// Enhanced StatsCard — pixel-perfect match to your design
-const StatsCard = ({ title, value, subtitle, change, chart, color = "orange", rank }) => (
-  <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
-    {/* Header */}
-    <div className="flex items-center justify-between mb-3">
-      <h3 className="text-sm font-medium text-gray-600">{title}</h3>
-      <div className="flex items-center gap-2">
-        {/* Rank badge (Top Song / Top Album) */}
-        {rank && (
-          <div className="flex items-center justify-center w-6 h-6 rounded-full bg-orange-100 text-orange-600 text-xs font-bold">
-            {rank}
+export default function StatCard({ 
+  title, 
+  value, 
+  change, 
+  children, 
+  badge,
+  hasDropdown = false 
+}) {
+  return (
+    <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm border border-gray-200 p-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <h3 className="text-sm font-medium text-gray-500">{title}</h3>
+          {hasDropdown && (
+            <button className="px-3 py-1.5 border border-orange-400 text-orange-500 rounded-full text-xs font-medium flex items-center gap-1 hover:bg-orange-50 transition-colors">
+              JULY, 2025
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          )}
+        </div>
+        {badge && (
+          <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
+            {badge}
           </div>
         )}
-        {/* Change indicator */}
-        {change !== undefined && (
-          <span className={`text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1 ${
-            change >= 0 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'
-          }`}>
-            {change >= 0 ? <TrendingUp className="w-3 h-3" /> : 'Down'}
-            {Math.abs(change)}%
-          </span>
-        )}
       </div>
-    </div>
 
-    {/* Main Value */}
-    <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
-    {subtitle && <div className="text-xs text-gray-500 mb-4">{subtitle}</div>}
-
-    {/* Chart */}
-    {chart && (
-      <div className="h-24 mt-6 -mx-6 -mb-6 px-6 pb-6 bg-gradient-to-t from-orange-50/30 to-transparent rounded-b-2xl">
-        <div className="h-full flex items-end gap-1">
-          {chart.map((height, i) => (
-            <div
-              key={i}
-              className={`flex-1 bg-${color}-500 rounded-t-sm transition-all duration-500 hover:bg-${color}-600`}
-              style={{ height: `${height}%` }}
-            />
-          ))}
+      {/* Value */}
+      {value && (
+        <div className="mb-2">
+          <div className="text-3xl font-bold text-gray-900">{value}</div>
+          {change && (
+            <div className="flex items-center gap-1 mt-1">
+              <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clipRule="evenodd" />
+              </svg>
+              <span className="text-sm font-medium text-green-600">{change}</span>
+            </div>
+          )}
         </div>
-      </div>
-    )}
-  </div>
-);
+      )}
 
-export default StatsCard;
+      {/* Content */}
+      {children}
+    </div>
+  );
+}
 
-StatsCard.propTypes = {
+StatCard.propTypes = {
   title: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  subtitle: PropTypes.string,
-  change: PropTypes.number,
-  chart: PropTypes.arrayOf(PropTypes.number),
-  color: PropTypes.string,
-  rank: PropTypes.number,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  change: PropTypes.string,
+  children: PropTypes.node,
+  badge: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  hasDropdown: PropTypes.bool,
 };
