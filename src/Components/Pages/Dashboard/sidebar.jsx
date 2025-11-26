@@ -1,74 +1,103 @@
-import { X,  } from 'lucide-react';
-import PropTypes from 'prop-types'
+import React from "react";
+import PropTypes from "prop-types";
+import {
+  BarChart3,
+  Upload,
+  Music,
+  TrendingUp,
+  CreditCard,
+  User,
+  Bell,
+  Headphones,
+  LogOut,
+  X,
+} from "lucide-react";
+
 const Sidebar = ({ currentPage, setCurrentPage, isOpen, setIsOpen }) => {
   const menuItems = [
-    { icon: '📊', label: 'Overview', id: 'overview' },
-    { icon: '⊕', label: 'Upload Music', id: 'upload' },
-    { icon: '🎵', label: 'My Releases', id: 'releases' },
-    { icon: '📈', label: 'Royalties', id: 'royalties' },
-    { icon: '💳', label: 'Payouts', id: 'payouts' },
-    { icon: '👤', label: 'Profile', id: 'profile' },
-    { icon: '🔔', label: 'Notifications', id: 'notifications' },
-    { icon: '🎧', label: 'Support/Academy', id: 'support' },
+    { icon: BarChart3, label: "Overview", id: "overview" },
+    { icon: Upload, label: "Upload Music", id: "upload" },
+    { icon: Music, label: "My Releases", id: "releases" },
+    { icon: TrendingUp, label: "Royalties", id: "royalties" },
+    { icon: CreditCard, label: "Payouts", id: "payouts" },
+    { icon: User, label: "Profile", id: "profile" },
+    { icon: Bell, label: "Notifications", id: "notifications" },
+    { icon: Headphones, label: "Support/Academy", id: "support" },
   ];
 
   return (
     <>
       {/* Mobile Overlay */}
       {isOpen && (
-        <div 
-          className="fixed inset-0  bg-opacity-50 z-40 lg:hidden"
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
-      
+
       {/* Sidebar */}
-      <aside className={`
-        fixed lg:static inset-y-0 left-0 z-50
-        w-64 bg-[#EFF0F5] text-black shadow-2xl
-        transform transition-transform duration-300 ease-in-out
-        ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}>
-        <div className="h-full flex flex-col py-6 px-4 overflow-y-auto">
-          {/* Close button for mobile */}
-          <button 
+      <aside
+        className={`
+          fixed lg:static inset-y-0 left-0 z-50
+          w-64 bg-[#F8F9FC] border-r border-gray-200
+          transform transition-transform duration-300 ease-in-out
+          ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+        `}
+      >
+        <div className="h-full flex flex-col py-8 px-5">
+          {/* Mobile Close Button */}
+          <button
             onClick={() => setIsOpen(false)}
-            className="lg:hidden absolute top-4 right-4 text-black hover:bg-white hover:bg-opacity-10 rounded-lg p-2"
+            className="lg:hidden absolute top-6 right-5 p-2 hover:bg-gray-100 rounded-lg transition"
           >
-            <X size={24} />
+            <X className="w-6 h-6 text-gray-700" />
           </button>
 
-          {/* Logo/Brand Area */}
-          <div className="mb-8 px-4">
-            <h1 className="text-2xl font-bold text-black">Music Dashboard</h1>
+          {/* Logo */}
+          <div className="mb-12 px-2">
+            <h1 className="text-2xl font-bold text-gray-900">Music Dashboard</h1>
           </div>
 
-          <nav className="flex-1 space-y-1">
-            {menuItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setCurrentPage(item.id);
-                  setIsOpen(false);
-                }}
-                className={`
-                  w-full flex items-center gap-3 px-4 py-3 rounded-lg
-                  transition-all duration-200 text-left
-                  ${currentPage === item.id 
-                    ? 'bg-[#EFF0F5] bg-opacity-10 text-black shadow-lg ' 
-                    : 'text-black hover:bg-[#EFF0F5] hover:bg-opacity-5 hover:shadow-2xl hover:text-orange-600 hover:scale-[1.02] hover:font-medium '
-                  }
-                `}
-              >
-                <span className="text-xl">{item.icon}</span>
-                <span className="font-medium">{item.label}</span>
-              </button>
-            ))}
+          {/* Navigation */}
+          <nav className="flex-1 space-y-1.5">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = currentPage === item.id;
+
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setCurrentPage(item.id);
+                    setIsOpen(false);
+                  }}
+                  className={`
+                    w-full flex items-center gap-4 px-4 py-3.5 rounded-xl
+                    transition-all duration-200 group
+                    ${isActive
+                      ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20"
+                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                    }
+                  `}
+                >
+                  <Icon
+                    className={`w-ml-0.5 w-5 h-5 transition-colors
+                      ${isActive ? "text-white" : "group-hover:text-orange-600"}
+                    `}
+                    strokeWidth={isActive ? 2.5 : 2}
+                  />
+                  <span className="font-medium text-sm">{item.label}</span>
+                </button>
+              );
+            })}
           </nav>
 
-          <button className="flex items-center gap-3 px-4 py-3 text-gray-900 hover:text-white hover:bg-gray-600 hover:bg-opacity-5 rounded-lg transition-colors mt-4">
-            <span className="text-xl">🚪</span>
-            <span className="font-medium">Sign Out</span>
+          {/* Sign Out */}
+          <button
+            className="mt-8 flex items-center gap-4 px-4 py-3.5 rounded-xl text-gray-600 hover:bg-gray-100 hover:text-red-600 transition-all group"
+          >
+            <LogOut className="w-5 h-5 group-hover:text-red-600" strokeWidth={2} />
+            <span className="font-medium text-sm">Sign Out</span>
           </button>
         </div>
       </aside>
@@ -76,8 +105,6 @@ const Sidebar = ({ currentPage, setCurrentPage, isOpen, setIsOpen }) => {
   );
 };
 
-
-// PropTypes Validation
 Sidebar.propTypes = {
   currentPage: PropTypes.string.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
