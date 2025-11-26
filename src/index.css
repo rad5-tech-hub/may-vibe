@@ -1,3 +1,5 @@
+@import 'react-datepicker/dist/react-datepicker.css';
+
 .signup {
   background-image: url('./assets/signup.png');
   background-position: center;
@@ -19,4 +21,131 @@
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat; 
+}
+
+.custom-calendar {
+  background: transparent !important;
+  border: none !important;
+  width: 100% !important;
+  font-family: inherit;
+  padding: 0;
+  margin: 0;
+  max-width: fit-content;
+}
+
+/* Header (Month + Navigation) */
+.custom-calendar .react-datepicker__header {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 0 16px 0 !important;
+}
+
+.custom-calendar .react-datepicker__current-month {
+  font-size: clamp(1rem, 3.5vw, 1.25rem) !important;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.custom-calendar .react-datepicker__navigation {
+  top: 4px !important;
+  width: 36px;
+  height: 36px;
+}
+
+.custom-calendar .react-datepicker__navigation-icon::before {
+  border-color: #f97316;
+  width: 10px;
+  height: 10px;
+}
+
+/* Day Names (Sun, Mon, etc.) */
+.custom-calendar .react-datepicker__day-names {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin: 16px 0 8px 0;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.custom-calendar .react-datepicker__day-name {
+  color: #9ca3af !important;
+  font-weight: 500 !important;
+  font-size: clamp(0.7rem, 2.5vw, 0.875rem) !important;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* Days Grid – Fully Responsive */
+.custom-calendar .react-datepicker__month {
+  margin: 0 !important;
+}
+
+.custom-calendar .react-datepicker__week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.custom-calendar .react-datepicker__day {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1;
+  margin: 0 !important;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(0.8rem, 3vw, 1rem) !important;
+  font-weight: 500;
+  color: #374151;
+  transition: all 0.2s ease;
+}
+
+.custom-calendar .react-datepicker__day:hover {
+  background-color: #fee2e2 !important;
+  color: #dc2626 !important;
+}
+
+/* Selected Day – Orange Circle */
+.custom-calendar .selected-day {
+  background-color: #fed7aa !important;
+  color: #c2410c !important;
+  font-weight: bold !important;
+  position: relative;
+}
+
+.custom-calendar .selected-day::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 3px solid #fdba74;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Disabled Days */
+.custom-calendar .react-datepicker__day--disabled {
+  color: #d1d5db !important;
+  pointer-events: none;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 480px) {
+  .custom-calendar .react-datepicker__day {
+    font-size: 0.875rem !important;
+  }
+  .custom-calendar .react-datepicker__navigation {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 360px) {
+  .custom-calendar .react-datepicker__day-name {
+    font-size: 0.65rem !important;
+  }
+  .custom-calendar .react-datepicker__day {
+    font-size: 0.8rem !important;
+  }
 }
