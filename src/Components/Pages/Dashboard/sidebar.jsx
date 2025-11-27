@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import {
   BarChart3,
@@ -73,7 +72,7 @@ const Sidebar = ({ currentPage, setCurrentPage, isOpen, setIsOpen }) => {
                   }}
                   className={`
                     w-full flex items-center gap-4 px-4 py-3.5 rounded-xl
-                    transition-all duration-200 group
+                    transition-all cursor-pointer duration-200 group
                     ${isActive
                       ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20"
                       : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
