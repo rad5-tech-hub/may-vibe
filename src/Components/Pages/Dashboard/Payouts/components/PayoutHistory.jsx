@@ -10,8 +10,8 @@ const PayoutHistory = () => {
   ];
 
   return (
-    <div className="bg-gray-200 rounded-3xl px-10 py-3 border">
-      <h2 className="text-2xl font-bold text-gray-900 mb-8">Payout history</h2>
+    <div className="bg-gray-200 rounded-3xl px-8 py-8">
+      <h2 className="text-xl font-bold text-gray-900 mb-8">Payout history</h2>
 
       <div className="space-y-6">
         <div className="grid grid-cols-3 text-sm font-medium text-gray-600 border-b pb-3">
@@ -21,7 +21,7 @@ const PayoutHistory = () => {
         </div>
 
         {payouts.map((payout, i) => (
-          <div key={i} className="grid grid-cols-3 text-gray-800">
+          <div key={i} className="grid grid-cols-3 text-sm text-gray-800">
             <span className="font-medium">{payout.id}</span>
             <span className="font-bold">{payout.amount}</span>
             <span className="text-gray-600">{payout.date}</span>

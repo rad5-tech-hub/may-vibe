@@ -1,11 +1,11 @@
 import BalanceCards from './components/BalanceCards';
 import PayoutHistory from './components/PayoutHistory';
-import RoyaltiesSection from '../Overview/components/RoyaltiesSection';
+import RoyaltiesSection from './components/RoyaltiesSection';
 import { FaCalendarAlt } from 'react-icons/fa';
 
 const Payouts = () => {
   return (
-    <div className="min-h-screen py-6 px-3 font-display">
+    <div className="min-h-screen py-6 px-1 font-display">
       <div className="max-w-7xl mx-auto">
 
         <h1 className="text-2xl lg:text-4xl font-bold text-black mb-10">Payouts</h1>
@@ -20,7 +20,7 @@ const Payouts = () => {
         <BalanceCards />
 
         {/* Payout History + Royalties */}
-        <div className="flex gap-6 mt-12">
+        <div className="flex flex-col lg:flex-row gap-6 mt-12">
           <PayoutHistory className='flex-1'/>
           <RoyaltiesSection className='flex-2'/>
         </div>
