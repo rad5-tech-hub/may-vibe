@@ -8,7 +8,7 @@ import ForgotPassword from './Components/Pages/Onboarding Pages/forgetPassword.j
 import Music from './Components/Pages/Dashboard/Music Upload/Music';
 import Homepage from './Components/Pages/Homepage/Homepage';
 import Overview from './Components/Pages/Dashboard/Overview/overview';
-import Royalties from './Components/Pages/Dashboard/Royalties/Royalties';
+import RoyaltiesPage from './Components/Pages/Dashboard/Royalties/Royalties';
 import Support from './Components/Pages/Dashboard/Support &Academy/support';
 import Notifications from './Components/Pages/Dashboard/Notifications/notifications';
 import Profile from './Components/Pages/Dashboard/Profile/profile';
@@ -52,7 +52,7 @@ function App() {
         <Route path="/dashboard/overview" element={<Overview />} />
         <Route path="/dashboard/releases" element={<Releases />} />
         <Route path="/dashboard/music-upload" element={<Music />} />
-        <Route path="/dashboard/royalties" element={<Royalties />} />
+        <Route path="/dashboard/royalties" element={<RoyaltiesPage />} />
         <Route path="/dashboard/support" element={<Support />} />
         <Route path="/dashboard/notifications" element={<Notifications />} />
         <Route path="/dashboard/profile" element={<Profile />} />

@@ -17,8 +17,8 @@ const barData = [
 
 export default function Royalties() {
   return (
-    <section className="w-full max-w-5xl mx-auto p-6">
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+    <section className="w-full max-w-7xl mx-auto p-6">
+      <div className="bg-gray-50 rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
         {/* Header */}
         <div className="px-8 pt-8 pb-6">
           <div className="flex items-start justify-between mb-6">
@@ -37,7 +37,7 @@ export default function Royalties() {
             <div>
               <p className="text-sm text-gray-500">Most Recent Payment</p>
               <p className="text-3xl font-bold text-gray-900 mt-1">$24,092.75</p>
-              <span className="inline-flex items-center gap-2 mt-2 px-3 py-1 bg-orange-100 text-orange-700 text-xs font-semibold rounded-full">
+              <span className="inline-flex items-center gap-2 mt-2 px-3 py-1 bg-orange-500 text-white text-xs font-semibold rounded-full">
                 Paid
               </span>
             </div>

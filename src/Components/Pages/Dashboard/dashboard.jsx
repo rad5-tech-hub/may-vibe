@@ -4,7 +4,7 @@ import Sidebar from './sidebar.jsx';
 import OverviewPage from './Overview/overview.jsx';
 // import PlaceholderPage from './PlaceholderPage.jsx';
 import Music from './Music Upload/Music.jsx';
-import Royalties from './Royalties/Royalties.jsx';
+import RoyaltiesPage from './Royalties/Royalties.jsx';
 import Support from './Support &Academy/support.jsx';
 import Notifications from './Notifications/notifications.jsx';
 import Profile from './Profile/profile.jsx';
@@ -24,7 +24,7 @@ const Dashboard = () => {
       case 'releases':
         return <Releases title="My Releases" />;
       case 'royalties':
-        return <Royalties title="Royalties" />;
+        return <RoyaltiesPage title="Royalties" />;
       case 'payouts':
         return <Payouts title="Payouts" />;
       case 'profile':

@@ -30,10 +30,10 @@ export default function Payouts() {
           {payouts.map((payout, index) => (
             <div
               key={index}
-              className="px-6 sm:px-8 py-5 hover:bg-orange-50/30 transition-colors duration-200"
+              className="px-6 sm:px-8 py-5 hover:bg-gray-50 transition-colors duration-200  border-b-2 border-orange-200"
             >
               {/* Desktop & Tablet: 3-column grid */}
-              <div className="hidden sm:grid sm:grid-cols-12 gap-4 text-sm">
+              <div className="hidden sm:grid sm:grid-cols-12 gap-4 text-sm ">
                 <div className="col-span-4 font-medium text-gray-900">{payout.id}</div>
                 <div className="col-span-4 text-center font-semibold text-orange-600">
                   {payout.amount}
@@ -44,7 +44,7 @@ export default function Payouts() {
               </div>
 
               {/* Mobile: Vertical layout */}
-              <div className="sm:hidden space-y-3">
+              <div className="sm:hidden space-y-3  ">
                 <div className="flex justify-between items-start">
                   <span className="text-xs text-gray-500 uppercase tracking-wider">ID</span>
                   <span className="font-medium text-gray-900">{payout.id}</span>
