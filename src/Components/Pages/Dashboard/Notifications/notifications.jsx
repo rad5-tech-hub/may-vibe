@@ -14,7 +14,7 @@ const Notifications = () => {
           <div className="space-y-10">
 
             {/* User Notifications */}
-            <div className="flex-2 bg-gray-200 rounded-3xl shadow-sm overflow-hidden">
+            <div className="flex-2 bg-gray-50 rounded-3xl shadow-sm overflow-hidden">
               <div className="px-4 py-4 border-b border-gray-200">
                 <h2 className="text-2xl font-bold text-gray-900">Notifications</h2>
               </div>
@@ -53,7 +53,7 @@ const Notifications = () => {
             </div>
 
             {/* System Notifications */}
-            <div className="bg-gray-200 rounded-3xl shadow-sm overflow-hidden">
+            <div className="bg-gray-50 rounded-3xl shadow-sm overflow-hidden">
               <div className="px-8 py-6 border-b border-gray-200">
                 <h2 className="text-2xl font-bold text-gray-900">System Notifications</h2>
               </div>
@@ -92,7 +92,7 @@ const Notifications = () => {
 
           {/* RIGHT: Payouts */}
           <div>
-            <div className="flex-1 bg-gray-200 rounded-3xl shadow-sm overflow-hidden">
+            <div className="flex-1 bg-gray-50 rounded-3xl shadow-sm overflow-hidden">
               <div className="px-8 py-6 border-b border-gray-200">
                 <h2 className="text-2xl font-bold text-gray-900">Payouts</h2>
               </div>

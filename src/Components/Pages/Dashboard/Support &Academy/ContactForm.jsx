@@ -1,7 +1,7 @@
 
 const ContactForm = () => {
   return (
-    <div className="bg-gray-200 rounded-3xl p-5 lg:p-10">
+    <div className="bg-gray-50 rounded-3xl p-5 lg:p-10">
       <h2 className="text-lg lg:text-2xl font-bold text-gray-900 mb-8">Get in touch</h2>
 
       <textarea

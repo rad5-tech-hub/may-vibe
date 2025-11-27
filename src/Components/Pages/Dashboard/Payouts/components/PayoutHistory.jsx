@@ -10,7 +10,7 @@ const PayoutHistory = () => {
   ];
 
   return (
-    <div className="bg-gray-200 rounded-3xl px-8 py-8">
+    <div className="flex-1 bg-gray-50 rounded-3xl px-8 py-8">
       <h2 className="text-xl font-bold text-gray-900 mb-8">Payout history</h2>
 
       <div className="space-y-6">

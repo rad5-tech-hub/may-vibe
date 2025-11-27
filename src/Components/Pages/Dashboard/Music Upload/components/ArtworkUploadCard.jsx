@@ -15,7 +15,7 @@ const ArtworkUploadCard = () => {
   };
 
   return (
-    <div className="bg-gray-100 rounded-3xl p-8 max-h-max">
+    <div className="bg-gray-50 rounded-3xl p-8 max-h-max">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-xl font-semibold text-gray-800">Upload Artwork</h3>
         <button className="text-gray-400 hover:text-gray-600">

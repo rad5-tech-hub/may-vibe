@@ -33,7 +33,7 @@ const ReleaseDatePicker = () => {
       <div className="rounded-3xl">
         <h3 className="text-lg lg:text-2xl font-bold text-gray-900 mb-6">Release Date and Time</h3>
 
-        <div className="bg-gray-100 rounded-3xl p-3 lg:p-6 space-y-6">
+        <div className="bg-gray-50 rounded-3xl p-3 lg:p-6 space-y-6">
           {/* Calendar */}
           <DatePicker
             selected={selectedDate}

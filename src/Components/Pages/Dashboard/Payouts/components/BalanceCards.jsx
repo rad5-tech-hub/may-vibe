@@ -5,7 +5,7 @@ const BalanceCards = () => {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
       {/* Total Balance */}
-      <div className="bg-gray-200 rounded-3xl p-8">
+      <div className="bg-gray-50 rounded-3xl p-8">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-gray-600 text-sm font-medium">Total balance</h3>
           <select className="bg-gray-100 text-gray-700 text-sm rounded-full px-4 py-2 focus:outline-none">
@@ -20,7 +20,7 @@ const BalanceCards = () => {
       </div>
 
       {/* Income */}
-      <div className="bg-gray-200 rounded-3xl p-8">
+      <div className="bg-gray-50 rounded-3xl p-8">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-gray-600 text-sm font-medium">Income</h3>
           <select className="bg-gray-100 text-gray-700 text-sm rounded-full px-4 py-2 focus:outline-none">
@@ -36,7 +36,7 @@ const BalanceCards = () => {
 
       {/* Payment Method + Withdraw */}
       <div className="flex flex-col justify-between">
-        <div className='bg-gray-200 rounded-3xl p-8 '>
+        <div className='bg-gray-50 rounded-3xl p-8 '>
           <h3 className="text-gray-600 text-sm font-medium mb-4">Payment Method</h3>
           <div className="bg-gray-100 rounded-full w-fit px-5 py-3 text-gray-700 font-medium flex items-center gap-3">
             <select className="bg-gray-100 text-gray-700 text-sm rounded-full px-4 py-2 focus:outline-none">

@@ -19,7 +19,7 @@ const MetadataForm = () => {
   };
 
   return (
-    <div className="bg-gray-100 backdrop-blur-sm rounded-3xl px-4 py-10 lg:py-10 lg:px-10 relative">
+    <div className="bg-gray-50 backdrop-blur-sm rounded-3xl px-4 py-10 lg:py-10 lg:px-10 relative">
       <div className='flex justify-between mb-10'>
         <h3 className="text-lg lg:text-2xl font-bold text-gray-900">Fill Metadata</h3>
         <img src={three} alt="step three" />

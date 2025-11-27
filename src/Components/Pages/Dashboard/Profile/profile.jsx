@@ -18,7 +18,7 @@ const Profile = () => {
           <div className="lg:col-span-2 space-y-8">
 
             {/* Profile Photo Upload */}
-            <div className="bg-gray-200 rounded-3xl p-10 shadow-sm">
+            <div className="bg-gray-50 rounded-3xl p-10 shadow-sm">
               <div className="flex flex-col lg:flex-row gap-8 items-center text-start">
                 <div className="relative mb-6">
                   <img
@@ -41,7 +41,7 @@ const Profile = () => {
             </div>
 
             {/* Personal Info */}
-            <div className="bg-gray-200 rounded-3xl p-8 shadow-sm">
+            <div className="bg-gray-50 rounded-3xl p-8 shadow-sm">
               <div className="flex items-center justify-between mb-8 gap-3">
                 <h3 className="text-lg lg:text-2xl font-bold text-gray-900">Personal Info</h3>
                 <button
@@ -69,7 +69,7 @@ const Profile = () => {
             </div>
 
             {/* Country & Region */}
-            <div className="bg-gray-200 rounded-3xl p-8 shadow-sm">
+            <div className="bg-gray-50 rounded-3xl p-8 shadow-sm">
               <h3 className="text-lg lg:text-2xl font-bold text-gray-900 mb-6">Country & Region</h3>
               <div className="flex flex-col lg:flex-row items-center gap-4">
                 <div className="w-8 lg:w-12 h-8 lg:h-12 bg-gray-800 rounded-full flex items-center justify-center">
@@ -87,7 +87,7 @@ const Profile = () => {
             </div>
 
             {/* Bio */}
-            <div className="bg-gray-200 rounded-3xl p-8 shadow-sm">
+            <div className="bg-gray-50 rounded-3xl p-8 shadow-sm">
               <h3 className="text-2xl font-bold text-gray-900 mb-6">Bio</h3>
               <p className="text-gray-700 leading-relaxed text-lg">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu orci ut est hendrerit dictum id at risus. Pellentesque quis ligula at risus sagittis egestas quis ut enim. Suspendisse volutpat rhoncus risus. Nam sollicitudin non orci vitae pulvinar. Pellentesque ligula elit, egestas consectetur molestie in, ultrices nec augue. Donec varius elementum neque, vel pellentesque. Quisque semper pulvinar felis at dictum. Proin non magna libero. Phasellus eleifend tellus nisi porta tempus. Mauris eu vehicula quam. Praesent facilisis risus eget sem hendrerit, in aliquet arcu eleifend. Suspendisse vel rutrum augue, eu sollicitudin leo. Ut at ex ultricies, molestie magna ac, maximus leo. Proin placerat purus blandit, vel posuere orci venenatis nec.
@@ -97,7 +97,7 @@ const Profile = () => {
 
           {/* RIGHT COLUMN – Progress Card */}
           <div className="lg:col-span-1">
-            <div className="bg-gray-200 rounded-3xl p-8 shadow-sm sticky top-8">
+            <div className="bg-gray-50 rounded-3xl p-8 shadow-sm sticky top-8">
               <h3 className="text-lg font-bold text-gray-900 mb-6">Complete your profile</h3>
 
               {/* Progress Circle */}

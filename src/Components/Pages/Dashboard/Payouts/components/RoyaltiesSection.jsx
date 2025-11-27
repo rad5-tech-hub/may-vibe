@@ -16,8 +16,8 @@ const barData = [
 
 export default function Royalties() {
   return (
-    <section className="w-full max-w-2xl mx-auto">
-      <div className="bg-gray-200 rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+    <section className="flex-2">
+      <div className="bg-gray-50 rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
         {/* Header */}
         <div className="px-8 pt-8 pb-6">
           <div className="flex flex-col lg:flex-row gap-3 items-start justify-between mb-6">
