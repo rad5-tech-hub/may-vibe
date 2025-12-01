@@ -1,7 +1,6 @@
 import  { useState, useEffect } from "react";
 import { Sun } from "lucide-react";
 
-// Multiple realistic royalty datasets (you can add as many as you want)
 const royaltyDatasets = [
   // Dataset 1 - Current (your original)
   [75, 50, 85, 100, 95, 60, 80, 70, 105, 90, 75, 88],
