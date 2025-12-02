@@ -8,6 +8,7 @@ import ProjectsSection from './components/ProjectSection';
 import MyReleases from './components/Realeases';
 import Payouts from './components/Payouts';
 import Royalties from './components/RoyaltiesSection';
+import ReferralDashboard from './components/Referrals';
 
 export default function Overview() {
   return (
@@ -67,6 +68,7 @@ export default function Overview() {
             <Payouts />
         </div>
           <Royalties />
+          <ReferralDashboard/>
       </div>
     </div>
   );
