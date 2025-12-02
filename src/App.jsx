@@ -5,6 +5,7 @@ import  Signup from './Components/Pages/Onboarding Pages/signup.jsx';
 import  Login from './Components/Pages/Onboarding Pages/login.jsx';
 import  Welcome from './Components/Pages/Onboarding Pages/welcome.jsx';
 import ForgotPassword from './Components/Pages/Onboarding Pages/forgetPassword.jsx';
+import VerifyOTP from './Components/Pages/Onboarding Pages/verifyOTP.jsx';
 import Music from './Components/Pages/Dashboard/Music Upload/Music';
 import Homepage from './Components/Pages/Homepage/Homepage';
 import Overview from './Components/Pages/Dashboard/Overview/overview';
@@ -47,6 +48,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
+        <Route path="/verifyOtp" element={<VerifyOTP />} />
 
         {/* Dashboard Routes */}
         <Route path="/dashboard/overview" element={<Overview />} />
