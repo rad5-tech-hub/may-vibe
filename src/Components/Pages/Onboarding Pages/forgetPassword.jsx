@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import '../../../index.css';
+import { Link } from 'react-router-dom';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
+  // const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -47,9 +49,9 @@ const ForgotPassword = () => {
             </form>
 
             <div className="mt-6 text-center">
-              <a href="/login" className="text-orange-500 hover:text-orange-400 text-sm">
+              <Link to="/login" className="text-orange-500 hover:text-orange-400 text-sm">
                 Back to Login
-              </a>
+              </Link>
             </div>
           </div>
         </div>

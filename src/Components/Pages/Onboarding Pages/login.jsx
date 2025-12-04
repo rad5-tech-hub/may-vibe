@@ -61,16 +61,14 @@ const Login = () => {
   return (
     <div className="login font-display">
       {/* Main Container */}
-      <div className='min-h-screen relative flex flex flex-col lg:flex-row items-center justify-center py-10'>        
+      <div className='min-h-screen relative flex flex-col lg:flex-row items-center justify-center py-10'>        
         <div className="relative z-10 w-[90%] max-w-7xl h-[90%] lg:h-[85vh] flex flex-col lg:flex-row rounded-xl overflow-hidden backdrop-blur-xl border border-white/10">
           
           {/* LEFT SIDE */}
           <div className="w-full lg:w-1/2 px-16 py-16 lg:py-0 flex flex-col justify-center text-white bg-white/5 backdrop-blur-xl">
             <h1 className="text-3xl lg:text-5xl font-bold mb-6">Let’s Get Started</h1>
             <p className="text-white text-xs lg:text-md leading-relaxed max-w-xl">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elementum ligula metus,
-              ut rhoncus metus ornare quis. Donec eleifend varius orci, et lobortis augue.
-              Praesent gravida turpis a ligula hendrerit finibus.
+              Access your global music dashboard — where every stream, every fan, and every earning is at your fingertips.
             </p>
           </div>
 
@@ -115,7 +113,7 @@ const Login = () => {
                 </div>
 
                 <div className='mb-10'>
-                  <Link to="/forgot-password" className="text-orange-500 hover:text-orange-400 italic text-xs">
+                  <Link to="/forgotPassword" className="text-orange-500 hover:text-orange-400 italic text-xs">
                     forgot password
                   </Link>
                 </div>
