@@ -57,12 +57,6 @@ const Signup = () => {
 
       const token = response.data.token;
 
-      if (!userId) {
-        toast.error("Account created but session failed. Please try again.");
-        console.error("No userId in response:", response.data);
-        return;
-      }
-
       // Save token for later use
       if (token) {
         localStorage.setItem("token", token);
@@ -171,7 +165,7 @@ const Signup = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-2 top-7 text-gray-400 hover:text-white transition"
+                    className="absolute right-2 top-7 text-gray-400 cursor-pointer hover:text-white transition"
                   >
                     {showPassword ? <FaEyeSlash className="w-5 h-5" /> : <FaEye className="w-5 h-5" />}
                   </button>

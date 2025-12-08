@@ -6,17 +6,15 @@ import { toast } from "sonner";
 import { FaFacebookF, FaApple, FaGoogle } from "react-icons/fa";
 import "../../../index.css";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const VerifyOTP = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
   const initialEmail = location.state?.email || "";
-  const userIdFromState = location.state?.userId;
+
   const [email, setEmail] = useState(initialEmail);
   const [isEmailEditable, setIsEmailEditable] = useState(!initialEmail);
-
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
@@ -55,29 +53,22 @@ const VerifyOTP = () => {
     }
 
     setLoading(true);
+
     try {
       await axios.post(`${BASE_URL}/api/v1/auth/register/otp`, {
         email: email.toLowerCase().trim(),
         otp: otpCode,
       });
 
-      if (!userIdFromState) {
-        toast.error("Session expired. Please sign up again.");
-        navigate("/signup", { replace: true });
-        return;
-      }
-
-      toast.success("Email verified! Taking you to complete your profile...");
+      // SUCCESS → Show custom message and redirect to login
+      toast.success("Email verified successfully! Login to complete your profile.");
 
       setTimeout(() => {
-        navigate("/welcome", {
-          state: { userId: userIdFromState }, // ← Pass it forward
-          replace: true,
-        });
-      }, 1200);
+        navigate("/login", { replace: true });
+      }, 1500); // Give user time to read the toast
 
     } catch (err) {
-      toast.error(err.response?.data?.message || "Invalid OTP");
+      toast.error(err.response?.data?.message || "Invalid or expired OTP");
     } finally {
       setLoading(false);
     }
@@ -93,7 +84,7 @@ const VerifyOTP = () => {
       await axios.post(`${BASE_URL}/api/v1/auth/register/otp/request`, {
         email: email.toLowerCase().trim(),
       });
-      toast.success("New OTP sent to your email!");
+      toast.success("New OTP sent!");
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to resend OTP");
     } finally {

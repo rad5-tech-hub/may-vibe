@@ -11,11 +11,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 const Login = () => {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -34,23 +30,34 @@ const Login = () => {
         password: formData.password,
       });
 
-      // Assuming your backend returns a token or user data
-      const { token, user } = response.data;
+      const { message, details } = response.data;
 
-      // Save token (example using localStorage – adjust based on your auth setup)
-      localStorage.setItem("token", token);
+      if (message !== "Login Successful" || !details) {
+        throw new Error("Invalid server response");
+      }
+
+      const user = details;
+
       localStorage.setItem("user", JSON.stringify(user));
 
       toast.success("Welcome back!");
 
-      // Redirect to dashboard after short delay
+      const hasCompletedOnboarding = user.completeOnboarding === true;
+
       setTimeout(() => {
-        navigate("/dashboard", { replace: true });
+        if (hasCompletedOnboarding) {
+          navigate("/dashboard", { replace: true });
+        } else {
+          navigate("/welcome", {
+            state: { userId: user.id },
+            replace: true,
+          });
+        }
       }, 1200);
     } catch (err) {
       const msg =
         err.response?.data?.message ||
-        err.response?.data?.error ||
+        err.message ||
         "Invalid email or password";
       toast.error(msg);
     } finally {
@@ -106,7 +113,7 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-2 top-7 text-gray-400 hover:text-white transition"
+                    className="absolute right-2 top-7 cursor-pointer text-gray-400 hover:text-white transition"
                   >
                     {showPassword ? <FaEyeSlash className="w-5 h-5" /> : <FaEye className="w-5 h-5" />}
                   </button>
