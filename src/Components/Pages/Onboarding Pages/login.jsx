@@ -25,7 +25,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${BASE_URL}/api/v1/auth/login`, {
+      const response = await axios.post(`${BASE_URL}/auth/login`, {
         email: formData.email.toLowerCase().trim(),
         password: formData.password,
       });

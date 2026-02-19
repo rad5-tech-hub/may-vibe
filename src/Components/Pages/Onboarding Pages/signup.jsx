@@ -38,7 +38,7 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${BASE_URL}/api/v1/auth/register`, {
+      const response = await axios.post(`${BASE_URL}/auth/sign-up`, {
         firstname: firstName.trim(),
         lastname: lastName.trim(),
         email: email.toLowerCase().trim(),

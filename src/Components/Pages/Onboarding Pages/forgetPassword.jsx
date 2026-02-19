@@ -43,7 +43,7 @@ const ForgotPassword = () => {
     setLoading(true);
 
     try {
-      await axios.post(`${BASE_URL}/api/v1/auth/register/forgot/complete`, {
+      await axios.post(`${BASE_URL}auth/forgot-url`, {
         otp,
         email,
         password,

@@ -55,7 +55,7 @@ const VerifyOTP = () => {
     setLoading(true);
 
     try {
-      await axios.post(`${BASE_URL}/api/v1/auth/register/otp`, {
+      await axios.post(`${BASE_URL}/auth/resend-otp`, {
         email: email.toLowerCase().trim(),
         otp: otpCode,
       });
@@ -101,7 +101,7 @@ const VerifyOTP = () => {
           <div className="w-full lg:w-1/2 px-5 lg:px-16 py-16 lg:py-0 flex flex-col justify-center text-white bg-white/5 backdrop-blur-xl">
             <h1 className="text-2xl lg:text-5xl font-bold mb-6">Verify Your Email</h1>
             <p className="text-white text-xs lg:text-md leading-relaxed max-w-xl">
-              We've sent a 6-digit code to your email. Enter it below to complete your registration.
+              We&apos;ve sent a 6-digit code to your email. Enter it below to complete your registration.
             </p>
           </div>
 

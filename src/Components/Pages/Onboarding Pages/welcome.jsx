@@ -240,7 +240,7 @@ const Welcome = () => {
                 onChange={handleImageUpload}
                 className="hidden"
               />
-              <h2 className="mt-10 text-4xl lg:text-5xl font-bold">Let's get you set up</h2>
+              <h2 className="mt-10 text-4xl lg:text-5xl font-bold">Let&apos;s get you set up</h2>
               <p className="mt-4 text-gray-300 text-sm lg:text-lg max-w-md">
                 Complete your profile to start uploading and earning on Mayvibe.
               </p>
