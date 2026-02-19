@@ -15,6 +15,25 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  // Simple JWT decode function (no external library needed)
+  const decodeJwt = (token) => {
+    try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
+      );
+
+      return JSON.parse(jsonPayload);
+    } catch (e) {
+      console.error("Failed to decode JWT", e);
+      return null;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -29,27 +48,30 @@ const Login = () => {
         email: formData.email.toLowerCase().trim(),
         password: formData.password,
       });
-
-      const { message, details } = response.data;
-
-      if (message !== "Login Successful" || !details) {
-        throw new Error("Invalid server response");
+      const token = response.data.token || response.data.accessToken;
+      if (!token) {
+        throw new Error("No authentication token received from server");
       }
+      // Save token
+      localStorage.setItem("token", token);
 
-      const user = details;
-
-      localStorage.setItem("user", JSON.stringify(user));
-
+      // Decode payload
+      const decoded = decodeJwt(token);
+      if (!decoded || !decoded.userId) {
+        throw new Error("Invalid authentication token");
+      }
+      // Save decoded user info (optional but useful)
+      localStorage.setItem("user", JSON.stringify(decoded));
       toast.success("Welcome back!");
 
-      const hasCompletedOnboarding = user.completeOnboarding === true;
-
+      // Use the field from your actual JWT payload
+      const isOnboarded = decoded.onBoarded === true;
       setTimeout(() => {
-        if (hasCompletedOnboarding) {
+        if (isOnboarded) {
           navigate("/dashboard", { replace: true });
         } else {
           navigate("/welcome", {
-            state: { userId: user.id },
+            state: { userId: decoded.userId },
             replace: true,
           });
         }

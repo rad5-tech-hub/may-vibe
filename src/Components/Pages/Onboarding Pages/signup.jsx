@@ -25,24 +25,18 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { firstName, lastName, email, phone, password } = formData;
+    const { fullName, email, password } = formData;
 
-    if (!firstName || !lastName || !email || !phone || !password) {
+    if (!fullName || !email || !password) {
       return toast.error("Please fill in all fields");
-    }
-
-    if (!/^0\d{10}$/.test(phone)) {
-      return toast.error("Please enter a valid Nigerian phone number (e.g. 09012345678)");
     }
 
     setLoading(true);
 
     try {
       const response = await axios.post(`${BASE_URL}/auth/sign-up`, {
-        firstname: firstName.trim(),
-        lastname: lastName.trim(),
+        fullname: fullName.trim(),
         email: email.toLowerCase().trim(),
-        phone: phone.trim(),
         password: password,
       });
       console.log(response);
@@ -105,24 +99,12 @@ const Signup = () => {
 
               <form onSubmit={handleSubmit} className="space-y-6 lg:space-y-4 w-full lg:w-[80%]">
                 <div>
-                  <label className="text-xs text-white">First Name</label>
+                  <label className="text-xs text-white">Full Name</label>
                   <input
                     type="text"
-                    value={formData.firstName}
+                    value={formData.fullName}
                     placeholder="John"
-                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                    className="w-full bg-transparent px-2 border-b border-white focus:border-orange-500 outline-none text-sm py-1"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs text-gray-300">Last Name</label>
-                  <input
-                    type="text"
-                    value={formData.lastName}
-                    placeholder="Doe"
-                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     className="w-full bg-transparent px-2 border-b border-white focus:border-orange-500 outline-none text-sm py-1"
                     required
                   />
@@ -135,18 +117,6 @@ const Signup = () => {
                     value={formData.email}
                     placeholder="@gmail.com"
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full bg-transparent px-2 border-b border-white focus:border-orange-500 outline-none text-sm py-1"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs text-gray-300">Phone Number</label>
-                  <input
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="090......"
                     className="w-full bg-transparent px-2 border-b border-white focus:border-orange-500 outline-none text-sm py-1"
                     required
                   />

@@ -5,6 +5,7 @@ import  Signup from './Components/Pages/Onboarding Pages/signup.jsx';
 import  Login from './Components/Pages/Onboarding Pages/login.jsx';
 import  Welcome from './Components/Pages/Onboarding Pages/welcome.jsx';
 import ForgotPassword from './Components/Pages/Onboarding Pages/forgetPassword.jsx';
+import ResetPassword from './Components/Pages/Onboarding Pages/resetPassword.jsx';
 import VerifyOTP from './Components/Pages/Onboarding Pages/verifyOTP.jsx';
 import Music from './Components/Pages/Dashboard/Music Upload/Music';
 import Homepage from './Components/Pages/Homepage/Homepage';
@@ -18,9 +19,10 @@ import Dashboard from './Components/Pages/Dashboard/dashboard';
 
 // Optional: A simple Not Found page
 const NotFound = () => (
-  <div style={{ padding: '2rem', textAlign: 'center' }}>
+  <div style={{ padding: '2rem', color: 'white', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyItems: 'center', alignItems: 'center', fontSize: '20px', fontWeight: 'bold', height: '100vh', backgroundColor: 'black' }}>
     <h1>404 - Page Not Found</h1>
     <p>The page you&apos;re looking for doesn&apos;t exist.</p>
+    <a href="/" className='mt-5 font-bold text-white p-3 bg-orange-600 '>Go Back to Home</a>
   </div>
 );
 
@@ -48,6 +50,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
+        <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/verifyOtp" element={<VerifyOTP />} />
 
         {/* Dashboard Routes */}
