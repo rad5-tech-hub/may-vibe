@@ -1,8 +1,8 @@
-import HeroImage from '../../../../Assets/HeroImage.png';
-import Sub1 from '../../../../Assets/Subscribers1.png';
-import Sub2 from '../../../../Assets/Subscribers2.png';
-import Sub3 from '../../../../Assets/Subscribers3.png';
-import musicWave from '../../../../Assets/music wave 1.png';
+import HeroImage from "../../../../assets/HeroImage.png";
+import Sub1 from '../../../../assets/Subscribers1.png';
+import Sub2 from '../../../../assets/Subscribers2.png';
+import Sub3 from '../../../../assets/Subscribers3.png';
+import musicWave from '../../../../assets/music wave 1.png';
 export default function Hero() {
 	return (
 		<section className="relative overflow-hidden bg-orange-50  pt-28 pb-16 md:pt-32 md:pb-24">
