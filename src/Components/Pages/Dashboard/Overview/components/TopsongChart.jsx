@@ -11,7 +11,7 @@ export default function TopSongChart() {
       </div>
 
       {/* Chart */}
-      <div className="h-40 relative bg-gradient-to-b from-orange-50/50 to-transparent rounded-lg">
+      <div className="h-40 relative bg-linear-to-b from-orange-50/50 to-transparent rounded-lg">
         <svg className="w-full h-full" viewBox="0 0 320 160" preserveAspectRatio="none">
           <defs>
             <linearGradient id="songGradient" x1="0%" y1="0%" x2="0%" y2="100%">
