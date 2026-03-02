@@ -1,6 +1,6 @@
 import StatCard from './components/StatsCard';
 import MonthlyListenersChart from './components/MonthlyListeners';
-import TopSongChart from './components/TopSongChart';
+import TopSongChart from './components/TopsongChart';
 import TopAlbumChart from './components/TopAlbum';
 import CurrentPlayingBar from './components/CurrentPlayingBar';
 import UploadButton from './components/UploadButton';
