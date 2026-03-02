@@ -7,7 +7,7 @@ export default function UploadButton() {
       {/* Main content: icon + text+buttons in a row, centered as a group */}
       <div className="flex items-center gap-6 text-white">
         {/* Icon – Left side */}
-        <div className="w-16 h-16 bg-white rounded-full flex-shrink-0 flex items-center justify-center shadow-lg">
+        <div className="w-16 h-16 bg-white rounded-full shrink-0 flex items-center justify-center shadow-lg">
           <svg
             className="w-9 h-9 text-orange-500"
             viewBox="0 0 24 24"
