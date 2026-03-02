@@ -9,7 +9,7 @@ export default function StatCard({
   hasDropdown = false 
 }) {
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm border border-gray-200 p-6">
+    <div className="bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm border border-gray-200 p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">

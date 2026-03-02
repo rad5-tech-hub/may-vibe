@@ -48,7 +48,7 @@ export default function MyReleases() {
                   type="checkbox"
                   className="w-4 h-4 text-orange-500 rounded border-gray-300 focus:ring-orange-500"
                 />
-                <div className="w-11 h-11 rounded-full overflow-hidden ring-2 ring-white shadow-md flex-shrink-0">
+                <div className="w-11 h-11 rounded-full overflow-hidden ring-2 ring-white shadow-md shrink-0">
                   <img
                     src={albumCovers[i]} // Mapped from real list
                     alt={item.title}
