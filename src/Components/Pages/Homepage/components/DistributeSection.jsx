@@ -6,7 +6,7 @@ export default function DistributeSection() {
         <p className="text-lg opacity-90 mb-10">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elementum ligula metus, ut rhoncus metus ornare quis. Donec eleifend varius orci, et lobortis augue. Praesent gravida turpis a ligula hendrerit finibus.
         </p>
-        <button className="px-10 py-4 border-2 border-white rounded-3xl hover:bg-white hover:text-orange-600 transition text-xl font-medium">
+        <button className="cursor-pointer px-10 py-4 border-2 border-white rounded-3xl hover:bg-white hover:text-orange-600 transition text-xl font-medium">
           Join Mayvibe
         </button>
       </div>

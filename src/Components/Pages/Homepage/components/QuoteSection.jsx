@@ -8,7 +8,7 @@ export default function QuoteSection() {
             “Music is your own experience, your thoughts, your wisdom. If you don’t live it, it won’t come out of your horn.”
           </p>
           <p className="mt-6 text-orange-400 font-medium">- Charlie Parker</p>
-          <button className="mt-10 px-10 py-3 border-2 border-white rounded-full hover:bg-white hover:text-black transition">
+          <button className="cursor-pointer mt-10 px-10 py-3 border-2 border-white rounded-full hover:bg-white hover:text-black transition">
             Join Now
           </button>
         </div>

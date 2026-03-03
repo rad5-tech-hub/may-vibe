@@ -34,7 +34,7 @@ export default function PricingSection() {
                 ${plan.price}
               </div>
               <button
-                className={`w-full py-3 rounded-full font-medium transition ${
+                className={`cursor-pointer w-full py-3 rounded-full font-medium transition ${
                   plan.popular
                     ? 'bg-white text-orange-600 hover:bg-gray-100'
                     : 'border-2 border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white'

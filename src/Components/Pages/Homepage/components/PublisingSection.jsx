@@ -26,7 +26,7 @@ export default function PublishingSection() {
                 px-10 py-4 
                 text-lg font-semibold 
                 bg-white text-gray-900 
-                rounded-full 
+                rounded-full cursor-pointer
                 hover:bg-gray-100 
                 transition-all duration-300
                 shadow-xl hover:shadow-2xl

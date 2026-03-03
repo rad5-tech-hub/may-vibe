@@ -29,7 +29,7 @@ export default function Navbar() {
             <div className="relative">
               <button
                 onClick={() => toggleDropdown('business')}
-                className="flex items-center gap-1 hover:text-orange-600 transition"
+                className="cursor-pointer flex items-center gap-1 hover:text-orange-600 transition"
               >
                 Business Solutions
                 <ChevronDown
@@ -59,7 +59,7 @@ export default function Navbar() {
             <div className="relative">
               <button
                 onClick={() => toggleDropdown('about')}
-                className="flex items-center gap-1 hover:text-orange-600 transition"
+                className="cursor-pointer flex items-center gap-1 hover:text-orange-600 transition"
               >
                 Who we are
                 <ChevronDown
@@ -169,10 +169,14 @@ export default function Navbar() {
 
             <div className="pt-6 space-y-3">
               <button className="w-full py-3.5 border border-gray-300 rounded-full font-medium">
-                Login
+                <Link to="/login">
+                  Login
+                </Link>
               </button>
               <button className="w-full py-3.5 bg-orange-600 text-white rounded-full font-medium hover:bg-orange-700 transition">
-                Get Started
+                <Link to="/signup">
+                  Get Started
+                </Link>
               </button>
             </div>
           </div>

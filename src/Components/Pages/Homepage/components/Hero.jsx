@@ -22,7 +22,7 @@ export default function Hero() {
 
 						{/* CTA + Social Proof */}
 						<div className="space-y-8">
-							<button className="px-9 py-4 bg-orange-600 text-white text-lg font-semibold rounded-full hover:bg-orange-700 transition shadow-lg hover:shadow-xl">
+							<button className="px-9 py-4 bg-orange-600 text-white text-lg font-semibold rounded-full hover:bg-orange-700 transition shadow-lg hover:shadow-xl cursor-pointer">
 								Join Mayvibe
 							</button>
 
