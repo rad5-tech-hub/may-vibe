@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { FaFacebookF, FaApple, FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 import "../../../index.css";
+import { getErrorMessage } from "../../../utils/errorHelper";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
@@ -77,10 +78,7 @@ const Login = () => {
         }
       }, 1200);
     } catch (err) {
-      const msg =
-        err.response?.data?.message ||
-        err.message ||
-        "Invalid email or password";
+      const msg = getErrorMessage(err, "Invalid email or password");
       toast.error(msg);
     } finally {
       setLoading(false);

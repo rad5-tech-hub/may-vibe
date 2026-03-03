@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { FaFacebookF, FaApple, FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 import "../../../index.css";
+import { getErrorMessage } from "../../../utils/errorHelper";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -70,7 +71,7 @@ const Signup = () => {
       }, 1500);
 
     } catch (err) {
-      const msg = err.response?.data?.message || err.response?.data?.error || "Signup failed.";
+      const msg = getErrorMessage(err, "Signup failed.");
       toast.error(msg);
     } finally {
       setLoading(false);

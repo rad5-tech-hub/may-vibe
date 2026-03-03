@@ -6,6 +6,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { FaFacebookF, FaApple, FaGoogle } from "react-icons/fa";
 import "../../../index.css";
+import { getErrorMessage } from "../../../utils/errorHelper";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -69,7 +70,8 @@ const VerifyOTP = () => {
       }, 1500); // Give user time to read the toast
 
     } catch (err) {
-      toast.error(err.response?.data?.message || "Invalid or expired OTP");
+      const msg = getErrorMessage(err, "Invalid or expired OTP");
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -87,7 +89,8 @@ const VerifyOTP = () => {
       });
       toast.success("New OTP sent!");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to resend OTP");
+      const msg = getErrorMessage(err, "Failed to resend OTP");
+      toast.error(msg);
     } finally {
       setResending(false);
     }

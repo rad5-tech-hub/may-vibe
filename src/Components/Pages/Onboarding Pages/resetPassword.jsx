@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../../../index.css";
+import { getErrorMessage } from "../../../utils/errorHelper";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -64,10 +65,7 @@ const ResetPassword = () => {
         navigate("/login", { replace: true });
       }, 1800);
     } catch (err) {
-      const msg =
-        err.response?.data?.message ||
-        err.response?.data?.error ||
-        "Failed to reset password";
+      const msg = getErrorMessage(err, "Failed to reset password");
 
       toast.error(msg);
 

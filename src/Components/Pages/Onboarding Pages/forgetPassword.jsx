@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 import "../../../index.css";
+import { getErrorMessage } from "../../../utils/errorHelper";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -29,7 +30,8 @@ const ForgotPassword = () => {
       //   state: { email: email.trim().toLowerCase() } 
       // });
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to send OTP");
+      const msg = getErrorMessage(err, "Failed to send OTP");
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
