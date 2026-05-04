@@ -76,7 +76,7 @@ const Welcome = () => {
     setUploadingImage(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.post(`${BASE_URL}/api/v1/images/upload`, data, {
+      const res = await axios.post(`${BASE_URL}/images/upload`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -108,7 +108,7 @@ const Welcome = () => {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        `${BASE_URL}/api/v1/auth/register/onboarding/${userId}`,
+        `${BASE_URL}/auth/register/onboarding/${userId}`,
         {
           username: username.trim(),
           bio: bio.trim(),
