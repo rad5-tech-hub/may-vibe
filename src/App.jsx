@@ -1,30 +1,22 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
-import  Signup from './Components/Pages/Onboarding Pages/signup.jsx';
-import  Login from './Components/Pages/Onboarding Pages/login.jsx';
-import  Welcome from './Components/Pages/Onboarding Pages/welcome.jsx';
-import ForgotPassword from './Components/Pages/Onboarding Pages/forgetPassword.jsx';
-import ResetPassword from './Components/Pages/Onboarding Pages/resetPassword.jsx';
-import VerifyOTP from './Components/Pages/Onboarding Pages/verifyOTP.jsx';
-import Music from './Components/Pages/Dashboard/Music Upload/Music';
-import Homepage from './Components/Pages/Homepage/Homepage';
-import Overview from './Components/Pages/Dashboard/Overview/overview';
-import RoyaltiesPage from './Components/Pages/Dashboard/Royalties/Royalties';
-import Support from './Components/Pages/Dashboard/Support &Academy/support';
-import Notifications from './Components/Pages/Dashboard/Notifications/notifications';
-import Profile from './Components/Pages/Dashboard/Profile/profile';
-import Releases from './Components/Pages/Dashboard/Releases/releases';
-import Dashboard from './Components/Pages/Dashboard/dashboard';
-
-// Optional: A simple Not Found page
-const NotFound = () => (
-  <div style={{ padding: '2rem', color: 'white', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyItems: 'center', alignItems: 'center', fontSize: '20px', fontWeight: 'bold', height: '100vh', backgroundColor: 'black' }}>
-    <h1>404 - Page Not Found</h1>
-    <p>The page you&apos;re looking for doesn&apos;t exist.</p>
-    <a href="/" className='mt-5 font-bold text-white p-3 bg-orange-600 '>Go Back to Home</a>
-  </div>
-);
+import  Signup from './Pages/Onboarding Pages/signup.jsx';
+import  Login from './Pages/Onboarding Pages/login.jsx';
+import  Welcome from './Pages/Onboarding Pages/welcome.jsx';
+import ForgotPassword from './Pages/Onboarding Pages/forgetPassword.jsx';
+import ResetPassword from './Pages/Onboarding Pages/resetPassword.jsx';
+import VerifyOTP from './Pages/Onboarding Pages/verifyOTP.jsx';
+import Music from './Pages/Dashboard/Music Upload/Music';
+import Homepage from './Pages/Homepage/Homepage';
+import Overview from './Pages/Dashboard/Overview/overview';
+import RoyaltiesPage from './Pages/Dashboard/Royalties/Royalties';
+import Support from './Pages/Dashboard/Support &Academy/support';
+import Notifications from './Pages/Dashboard/Notifications/notifications';
+import Profile from './Pages/Dashboard/Profile/profile';
+import Releases from './Pages/Dashboard/Releases/releases';
+import Dashboard from './Pages/Dashboard/dashboard';
+import NotFound from './Pages/NotFound/NotFound';
 
 function App() {
   return (

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FaUpload, FaTimes } from 'react-icons/fa';
-import one from '../../../../../assets/one.png'
+import one from '../../../../assets/one.png'
 
 const AudioUploadCard = () => {
   const [fileName, setFileName] = useState('');

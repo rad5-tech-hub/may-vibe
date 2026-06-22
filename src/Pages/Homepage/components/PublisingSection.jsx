@@ -1,4 +1,4 @@
-import PublishingImage from '../../../../assets/PublishingImage.png';
+import PublishingImage from '../../../assets/PublishingImage.png';
 
 export default function PublishingSection() {
   return (

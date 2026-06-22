@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 import { FaPlay, FaArrowRight, FaCamera } from "react-icons/fa";
-import "../../../index.css";
+import "../../index.css";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 

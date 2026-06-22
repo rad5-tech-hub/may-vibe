@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Play, MoreVertical, Edit, Eye, Trash2 } from "lucide-react";
 
 // Import your local images
-import Image1 from "../../../../../assets/Subscribers1.png";
-import Image2 from "../../../../../assets/Subscribers2.png";
-import Image3 from "../../../../../assets/Subscribers3.png";
+import Image1 from "../../../../assets/Subscribers1.png";
+import Image2 from "../../../../assets/Subscribers2.png";
+import Image3 from "../../../../assets/Subscribers3.png";
 
 // Import the modals
 import EditReleaseModal from "./editRelease";

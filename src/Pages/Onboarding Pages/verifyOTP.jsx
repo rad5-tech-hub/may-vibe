@@ -5,8 +5,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 import { FaFacebookF, FaApple, FaGoogle } from "react-icons/fa";
-import "../../../index.css";
-import { getErrorMessage } from "../../../utils/errorHelper";
+import "../../index.css";
+import { getErrorMessage } from "../../utils/errorHelper";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 

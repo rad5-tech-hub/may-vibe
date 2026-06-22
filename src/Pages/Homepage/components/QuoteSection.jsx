@@ -1,4 +1,4 @@
-import quote from '../../../../assets/MusicImage.png'
+import quote from '../../../assets/MusicImage.png'
 export default function QuoteSection() {
   return (
     <section className="relative h-100 bg-cover bg-center" style={{ backgroundImage: `url(${quote})` }}>

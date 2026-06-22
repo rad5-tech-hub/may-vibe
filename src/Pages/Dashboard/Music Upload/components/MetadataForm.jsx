@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import three from '../../../../../assets/three.png';
+import three from '../../../../assets/three.png';
 
 const MetadataForm = () => {
   const [isrcMode, setIsrcMode] = useState('auto'); // 'auto' or 'manual'

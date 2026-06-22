@@ -1,8 +1,8 @@
 // import React from "react";
 import { MoreVertical } from "lucide-react";
-import Image1 from '../../../../../assets/Subscribers1.png'
-import Image2 from '../../../../../assets/Subscribers2.png'
-import Image3 from '../../../../../assets/Subscribers3.png'
+import Image1 from '../../../../assets/Subscribers1.png'
+import Image2 from '../../../../assets/Subscribers2.png'
+import Image3 from '../../../../assets/Subscribers3.png'
 const releases = [
   { title: "UY Scuti", artist: "Junior", date: "14/07/2025", duration: "3:34" },
   { title: "Made In Lagos", artist: "Junior", date: "14/07/2025", duration: "2:08" },

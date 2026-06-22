@@ -1,6 +1,6 @@
-import Image1 from '../../../../../assets/Subscribers1.png'
-import Image2 from '../../../../../assets/Subscribers2.png'
-import Image3 from '../../../../../assets/Subscribers3.png'
+import Image1 from '../../../../assets/Subscribers1.png'
+import Image2 from '../../../../assets/Subscribers2.png'
+import Image3 from '../../../../assets/Subscribers3.png'
 
 export default function ProjectsSection() {
   const projects = [

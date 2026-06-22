@@ -1,7 +1,7 @@
 // src/pages/Profile.jsx or src/components/Profile.jsx
 import { useState } from 'react';
 import { FaCheck, FaTimes } from 'react-icons/fa';
-import profile from '../../../../assets/Frame.png';
+import profile from '../../../assets/Frame.png';
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);

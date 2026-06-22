@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
-import two from '../../../../../assets/two.png';
+import two from '../../../../assets/two.png';
 
 const ArtworkUploadCard = () => {
   const [image, setImage] = useState(null);
