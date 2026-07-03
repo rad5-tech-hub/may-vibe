@@ -1,7 +1,7 @@
 // src/pages/academy/components/AcademyHero.jsx
 import { Search, Play } from "lucide-react";
 
-export default function AcademyHero() {
+export default function Hero() {
   return (
     <section className="bg-[#FAF6F4] w-full py-16 lg:py-28 px-6 min-h-[600px] flex items-center font-display">
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">

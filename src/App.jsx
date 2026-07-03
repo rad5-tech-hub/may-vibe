@@ -19,6 +19,8 @@ import Dashboard from './Pages/Dashboard/dashboard';
 import NotFound from './Pages/NotFound/NotFound';
 import SimplePage from './Pages/SimplePages/SimplePage';
 import Academy from './Pages/Academy/Academy';
+import Contact from './Pages/Contact/Contact';
+import About from './Pages/About/About';
 
 
 function App() {
@@ -59,8 +61,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
 
         {/* Public Utility Pages */}
-        <Route path="/about" element={<SimplePage title="About Us" />} />
-        <Route path="/contact" element={<SimplePage title="Contact Us" />} />
+        <Route path="/about" element={<About title="About Us" />} />
+        <Route path="/contact" element={<Contact title="Contact Us" />} />
         <Route path="/faq" element={<SimplePage title="FAQ" />} />
         <Route path="/blog" element={<SimplePage title="Blog" />} />
         <Route path="/academy" element={<Academy title="Academy" />} />

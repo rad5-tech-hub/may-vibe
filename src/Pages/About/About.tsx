@@ -1,20 +1,14 @@
 import Navbar from "../components/Navbar";
 import MainFooter from "../components/MainFooter";
 import Hero from "./components/Hero";
-import Featured from "./components/Featured";
-import MoreVideos from "./components/MoreVideos";
-import FaqVideos from "./components/FaqVideos";
-import GetInTouch from "./components/GetInTouch";
+import AboutUs from "./components/AboutUs";
 
 const Homepage = () => {
   return (
     <div style={{ scrollBehavior: "smooth" }} className="font-display antialiased">
       <Navbar />
       <Hero />
-      <Featured />
-      <MoreVideos />
-      <FaqVideos />
-      <GetInTouch />
+      <AboutUs /> 
       <MainFooter />
     </div>
   );
