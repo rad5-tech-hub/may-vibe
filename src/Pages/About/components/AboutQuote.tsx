@@ -1,4 +1,5 @@
 // src/pages/about/components/QuoteSection.jsx
+import aboutquote from "../../../assets/aboutquote.png"
 
 export default function AboutQuote() {
   return (
@@ -7,7 +8,7 @@ export default function AboutQuote() {
       {/* Background Graphic Image Asset Layer */}
       <div className="absolute inset-0 z-0">
         <img 
-          src="/src/assets/aboutquote.png" 
+          src={aboutquote} 
           alt="Concert stage crowd background texture" 
           className="w-full h-full object-cover select-none pointer-events-none"
         />

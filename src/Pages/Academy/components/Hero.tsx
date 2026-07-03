@@ -1,5 +1,6 @@
 // src/pages/academy/components/AcademyHero.jsx
 import { Search, Play } from "lucide-react";
+import bg from "../../../assets/PublishingImage.png";
 
 export default function Hero() {
   return (
@@ -49,7 +50,7 @@ export default function Hero() {
             {/* Background Graphic Mockup Video Poster */}
             <div 
               className="absolute inset-0 bg-cover bg-center opacity-85 scale-100 group-hover:scale-[1.02] transition-transform duration-500"
-              style={{ backgroundImage: `url('/src/assets/PublishingImage.png')` }} 
+              style={{ backgroundImage: `url(${bg})` }} 
             />
             {/* Vignette Filter Overlay to darken matching image_6d34d6.png */}
             <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-black/60" />

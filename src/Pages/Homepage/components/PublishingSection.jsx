@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import bg from "../../../assets/PublishingImage.png";
 
 export default function PublishingSection() {
   const navigate = useNavigate();
@@ -6,7 +7,7 @@ export default function PublishingSection() {
   return (
     <section 
       className="w-full min-h-[560px] md:min-h-[640px] bg-cover bg-center relative flex items-center"
-      style={{ backgroundImage: `url('/src/assets/PublishingImage.png')` }}
+      style={{ backgroundImage: `url(${bg})` }}
     >
       <div className="absolute inset-0 bg-linear-to-r from-black via-black/80 to-transparent lg:via-black/60" />
 

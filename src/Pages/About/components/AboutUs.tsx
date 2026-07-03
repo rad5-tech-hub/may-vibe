@@ -1,4 +1,7 @@
 // src/Pages/About/components/AboutUs.jsx
+import aboutDisk from  "../../../assets/aboutdisk.png"
+import marque from  "../../../assets/marque.png"
+
 
 export default function AboutUs() {
   return (
@@ -12,7 +15,7 @@ export default function AboutUs() {
           </span>
           <div className="w-full h-full flex justify-center items-center">
             <img 
-              src="/src/assets/marque.png" 
+              src={marque}  
               alt="Major streaming platforms group logo reel" 
               className="w-full pointer-events-none select-none"
             />
@@ -77,7 +80,7 @@ export default function AboutUs() {
           <div className="lg:col-span-5 w-full flex justify-center lg:justify-end">
             <div className="w-full max-w-[460px] lg:max-w-none aspect-11/12 rounded-4xl overflow-hidden shadow-sm">
               <img 
-                src="/src/assets/aboutdisk.png" 
+                src={aboutDisk} 
                 alt="Vintage vinyl record disc on turntable close up visual" 
                 className="w-full h-full object-cover pointer-events-none select-none"
               />

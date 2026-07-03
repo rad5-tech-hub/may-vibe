@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import bg from "../../../assets/MusicImage.png";
 
 export default function QuoteSection() {
   const navigate = useNavigate();
@@ -6,7 +7,7 @@ export default function QuoteSection() {
   return (
     <section className="w-full relative min-h-[420px] overflow-hidden">
       <img
-        src="/src/assets/MusicImage.png"
+        src={bg}
         alt="Background"
         className="absolute inset-0 w-full h-full object-cover z-0"
       />

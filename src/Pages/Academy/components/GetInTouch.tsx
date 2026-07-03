@@ -1,5 +1,6 @@
 // src/pages/academy/components/GetInTouchSection.jsx
 import { Mail, MessageSquareCode, ChevronDown } from "lucide-react";
+import fluteman from "../../../assets/fluteman.png"
 
 export default function GetInTouch() {
   return (
@@ -169,7 +170,7 @@ export default function GetInTouch() {
             {/* Assets illustration container frame */}
             <div className="mt-5 relative w-full flex flex-col items-center">
               <img 
-                src="/src/assets/fluteman.png" 
+                src={fluteman} 
                 alt="Fluteman graphic illustration" 
                 className="h-80 object-cover  pointer-events-none select-none"
               />

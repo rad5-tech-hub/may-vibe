@@ -1,4 +1,5 @@
 // src/pages/about/components/AboutHero.jsx
+import aboutHero from "../../../assets/aboutHero.png"
 
 export default function AboutHero() {
   return (
@@ -43,7 +44,7 @@ export default function AboutHero() {
         {/* Right Column: Hero Graphic Platform Asset Window Container */}
         <div className="lg:col-span-4 flex items-end justify-center lg:justify-end self-end w-full h-full pt-4 lg:pt-0">
           <img 
-            src="/src/assets/aboutHero.png" 
+            src={aboutHero} 
             alt="Mayvibe distribution platform matrix data visualization panel" 
             className="w-full max-w-[500px] lg:max-w-none object-contain select-none pointer-events-none transform translate-y-4 lg:translate-y-24 scale-100 lg:scale-105"
           />
