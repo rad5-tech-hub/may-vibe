@@ -1,0 +1,213 @@
+import { useState, useRef, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { ChevronDown, Menu, X } from "lucide-react";
+
+import tower from "../../assets/tower.png";
+import globe from "../../assets/globe.png";
+import account from "../../assets/account.png";
+import advanced from "../../assets/advanced.png";
+import rights from "../../assets/rights.png";
+
+export default function Navbar() {
+  const navigate = useNavigate();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const dropdownRef = useRef(null);
+
+  const toggleDropdown = (menu) => {
+    setOpenDropdown(openDropdown === menu ? null : menu);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpenDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const navLinks = [
+    { name: "Who we are", path: "/about" },
+  ];
+
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md border-b border-gray-100 h-16 lg:h-20">
+      <div className="h-full flex items-center justify-between px-6 max-w-7xl mx-auto">
+        <Link to="/" className="text-[#FF6200] font-bold text-2xl lg:text-3xl tracking-tight cursor-pointer">
+          Mayvibe
+        </Link>
+
+        {/* Desktop Navigation */}
+        <div className="hidden lg:flex items-center gap-10">
+          <div className="flex items-center gap-10 text-sm font-medium text-black">
+            {/* Business Solutions Dropdown */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => toggleDropdown("business")}
+                className="flex items-center gap-1 hover:text-[#FF6200] transition cursor-pointer font-semibold"
+              >
+                Business Solutions
+                <ChevronDown size={16} className={`transition ${openDropdown === "business" ? "rotate-180" : ""}`} />
+              </button>
+
+              {openDropdown === "business" && (
+                <div className="absolute top-full -left-28 mt-5 w-[480px] bg-white rounded-3xl shadow-4xl border border-gray-200 px-5 py-4 z-50">
+                  <div className="grid grid-cols-1 gap-2">
+                    <div className="flex gap-5 group/item hover:bg-gray-50 py-2 rounded-2xl transition cursor-pointer">
+                      <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
+                        <img src={tower} alt="tower" className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-base">Advanced Music Distribution Infrastructure</h4>
+                        <p className="text-md text-gray-500 font-light">DDEX-compliant global delivery infrastructure</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-5 group/item hover:bg-gray-50 py-2 rounded-2xl transition cursor-pointer">
+                      <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
+                        <img src={globe} alt="globe" className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-base">Global DSP & Regional Platform Reach</h4>
+                        <p className="text-md text-gray-500 font-light">280+ platforms globally</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-5 group/item hover:bg-gray-50 py-2 rounded-2xl transition cursor-pointer">
+                      <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
+                        <img src={account} alt="account" className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-base">Accounting & Royalty Infrastructure</h4>
+                        <p className="text-md text-gray-500 font-light">Automated splits, statements & multi-currency</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-5 group/item hover:bg-gray-50 py-2 rounded-2xl transition cursor-pointer">
+                      <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
+                        <img src={advanced} alt="advanced" className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-base">Advanced Release Features</h4>
+                        <p className="text-md text-gray-500 font-light">Atmos, Apple Motion, hi-res & metadata</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-5 group/item hover:bg-gray-50 py-2 rounded-2xl transition cursor-pointer">
+                      <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
+                        <img src={rights} alt="rights" className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-base">Rights Protection & Compliance</h4>
+                        <p className="text-md text-gray-500 font-light">Copyright, fraud prevention & ACR</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.path}
+                className="hover:text-[#FF6200] transition cursor-pointer font-semibold"
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate("/login")}
+              className="bg-[#FF6200] text-white rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-orange-700 transition cursor-pointer"
+            >
+              Login
+            </button>
+            <button
+              onClick={() => navigate("/signup")}
+              className="border border-gray-800 text-gray-800 rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-gray-50 transition cursor-pointer"
+            >
+              Get Started
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile/Tablet Menu Button */}
+        <button onClick={() => setMobileOpen(!mobileOpen)} className="lg:hidden cursor-pointer">
+          {mobileOpen ? <X size={28} /> : <Menu size={28} />}
+        </button>
+      </div>
+
+      {/* Mobile/Tablet Menu */}
+      {mobileOpen && (
+        <div className="lg:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 px-6 py-6 shadow-lg">
+          <div className="flex flex-col gap-4">
+            <div>
+              <button
+                onClick={() => toggleDropdown("business")}
+                className="flex items-center gap-1 hover:text-[#FF6200] transition cursor-pointer font-semibold text-base"
+              >
+                Business Solutions
+                <ChevronDown size={16} className={`transition ${openDropdown === "business" ? "rotate-180" : ""}`} />
+              </button>
+              {openDropdown === "business" && (
+                <div className="mt-3 ml-2 space-y-3">
+                  <div className="flex gap-3 items-center cursor-pointer">
+                    <img src={tower} alt="tower" className="w-5 h-5" />
+                    <span className="text-sm">Advanced Music Distribution Infrastructure</span>
+                  </div>
+                  <div className="flex gap-3 items-center cursor-pointer">
+                    <img src={globe} alt="globe" className="w-5 h-5" />
+                    <span className="text-sm">Global DSP & Regional Platform Reach</span>
+                  </div>
+                  <div className="flex gap-3 items-center cursor-pointer">
+                    <img src={account} alt="account" className="w-5 h-5" />
+                    <span className="text-sm">Accounting & Royalty Infrastructure</span>
+                  </div>
+                  <div className="flex gap-3 items-center cursor-pointer">
+                    <img src={advanced} alt="advanced" className="w-5 h-5" />
+                    <span className="text-sm">Advanced Release Features</span>
+                  </div>
+                  <div className="flex gap-3 items-center cursor-pointer">
+                    <img src={rights} alt="rights" className="w-5 h-5" />
+                    <span className="text-sm">Rights Protection & Compliance</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.path}
+                onClick={() => setMobileOpen(false)}
+                className="hover:text-[#FF6200] transition cursor-pointer font-semibold text-base"
+              >
+                {link.name}
+              </Link>
+            ))}
+
+            <div className="flex flex-col gap-3 pt-2">
+              <button
+                onClick={() => { navigate("/login"); setMobileOpen(false); }}
+                className="bg-[#FF6200] text-white rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-orange-700 transition cursor-pointer w-full"
+              >
+                Login
+              </button>
+              <button
+                onClick={() => { navigate("/signup"); setMobileOpen(false); }}
+                className="border border-gray-800 text-gray-800 rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-gray-50 transition cursor-pointer w-full"
+              >
+                Get Started
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+}

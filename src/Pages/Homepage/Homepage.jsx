@@ -1,28 +1,25 @@
-import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import DistributeSection from './components/DistributeSection'
-import PricingSection from './components/PricingSection'
-import QuoteSection from './components/QuoteSection'
-import PublishingSection from './components/PublisingSection'
-import FloatingPillsSection from './components/FloatingPills'
-import FooterLinks from './components/FooterLinks'
-import Footer from './components/Footer'
+import Navbar from "../components/Navbar";
+import HeroSection from "./components/HeroSection";
+import DistributeBanner from "./components/DistributeBanner";
+import PricingSection from "./components/PricingSection";
+import QuoteSection from "./components/QuoteSection";
+import PublishingSection from "./components/PublishingSection";
+import FooterLinks from "./components/FooterLinks";
+import MainFooter from "../components/MainFooter";
 
 const Homepage = () => {
   return (
-    <>
-      <div className="min-h-screen bg-white text-gray-900  font-display">
-        <Navbar />
-        <Hero />
-        <DistributeSection />
-        <PricingSection />
-        <QuoteSection />
-        <PublishingSection />
-        <FloatingPillsSection />
-        <FooterLinks />
-        <Footer />
-      </div>
-    </>
-  )
-}
-export default Homepage
+    <div style={{ scrollBehavior: "smooth" }} className="font-display antialiased">
+      <Navbar />
+      <HeroSection />
+      <DistributeBanner />
+      <PricingSection />
+      <QuoteSection />
+      <PublishingSection />
+      <FooterLinks />
+      <MainFooter />
+    </div>
+  );
+};
+
+export default Homepage;

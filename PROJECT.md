@@ -1,299 +1,453 @@
-# Mayvibe — Music Distribution & Artist Management Platform
+# Mayvibe — Music Distribution Platform
 
-## Overview
+> A modern, full-featured music distribution platform for independent artists, with a focus on African and global talent. Artists can sign up, verify their identity, complete onboarding, upload music, distribute to digital stores, and track earnings — all from a single dashboard.
 
-Mayvibe is a full-featured web application that enables musicians to distribute their music across digital streaming platforms (DSPs), track earnings and royalties, manage releases, view analytics, and grow their audience. It is built as a **React 18 Single-Page Application** with a Node.js/Vite toolchain and a Tailwind CSS v4 design system.
+---
 
-> **Live API Base:** `https://mayvibe.bookbank.com.ng/` (configured via `.env`)
+## Table of Contents
+
+- [Tech Stack](#tech-stack)
+- [Architecture Overview](#architecture-overview)
+- [Key Features](#key-features)
+- [Folder Structure](#folder-structure)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [Authentication Flow](#authentication-flow)
+- [Pages & Routes](#pages--routes)
+- [API Integration](#api-integration)
+- [Design System](#design-system)
+- [Known Issues](#known-issues)
+- [Roadmap Ideas](#roadmap-ideas)
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology | Version |
-|---|---|---|
-| Framework | React | ^18.3.1 |
-| Build Tool | Vite | ^5.4.10 |
-| Plugin | @vitejs/plugin-react | ^4.3.3 |
-| CSS Framework | Tailwind CSS (via @tailwindcss/vite) | ^4.1.17 |
-| Routing | React Router DOM | ^7.9.6 |
-| HTTP Client | Axios | ^1.13.2 |
-| Animation | Framer Motion | ^12.23.24 |
-| Notifications | Sonner (Toast) | ^2.0.7 |
-| Icons | Lucide React + React Icons | ^0.554.0 / ^5.5.0 |
-| Date Picker | react-datepicker | ^8.10.0 |
-| Linting | ESLint (with React + Hooks plugins) | ^9.13.0 |
+### Frontend
+
+| Technology | Version | Purpose |
+|-----------|---------|---------|
+| React | ^18.3.1 | UI framework |
+| Vite | ^5.4.10 | Build tool & dev server |
+| React Router DOM | ^7.9.6 | Client-side routing |
+| Tailwind CSS | ^4.1.17 | Utility-first styling |
+| Axios | ^1.13.2 | HTTP client |
+| Sonner | ^2.0.7 | Toast notifications |
+| react-icons (Fa) | ^5.5.0 | Font Awesome icons (social, form toggles) |
+| lucide-react | ^0.554.0 | Modern icon set (dashboard, actions) |
+| react-datepicker | ^8.10.0 | Calendar date picker |
+| Google Fonts (Poppins) | — | Primary typeface |
+
+### Dev Tools
+
+| Tool | Purpose |
+|------|---------|
+| ESLint 9 | Linting |
+| `@tailwindcss/vite` | Tailwind CSS v4 Vite plugin (no PostCSS needed) |
 
 ---
 
-## Project Structure
+## Architecture Overview
+
+```
+index.html
+└── src/main.jsx
+    └── src/App.jsx
+        ├── <Toaster /> (Sonner — global notifications)
+        └── <Routes>
+            ├── Public Routes (Homepage, Signup, Login, etc.)
+            │   └── Direct React Router v7 routes
+            └── Dashboard Routes
+                ├── /dashboard → dashboard.jsx (Shell)
+                │   ├── Sidebar (lucide-react navigation)
+                │   ├── Header (search, bell, avatar)
+                │   └── Main content area
+                │       └── Switch(useState) → sub-page
+                └── Individual route per sub-page
+```
+
+### Key Architectural Decisions
+
+1. **Dashboard uses SPA-style navigation** — `useState('currentPage')` + `switch()` in `dashboard.jsx`. The browser URL does not change when navigating between Overview, Releases, Royalties, etc. Each sub-page also has its own direct route in `App.jsx` (e.g., `/dashboard/overview`), but the primary entry is through the sidebar shell.
+
+2. **No centralized API layer** — All Axios calls are made inline within components. There is no Axios instance, no interceptors, and no API service directory. Future refactoring should extract these into a `/src/services/` layer.
+
+3. **No auth context or route guards** — Authentication is handled entirely through `localStorage.getItem("token")` and an inline JWT decoder in `login.jsx`. There is no `<ProtectedRoute>` wrapper. Dashboard pages do not verify the user is authenticated.
+
+4. **Mock data dominance** — All charts, tables, lists, and stats in the dashboard currently use hardcoded data. No real API integrations exist for streaming numbers, earnings, or user content.
+
+5. **Two visual themes** — Public/auth pages use a **dark cinematic theme** with full-bleed background images, glassmorphism, and orange accents. Dashboard pages use a **light theme** with white background, gray cards, and orange accent highlights.
+
+---
+
+## Key Features
+
+### Implemented
+
+- **Artist Signup** — Full name, email, password with social login UI (Facebook, Apple, Google — frontend only)
+- **Email Verification** — 6-digit OTP input with auto-focus, resend capability
+- **Login** — JWT-based authentication with token decode, onboarding-aware redirect
+- **Password Reset** — Email-based OTP via `forgot-url` endpoint, token-based reset via `?token=...&email=...` URL params
+- **Artist Onboarding** — 3-step wizard: welcome screen → 3-step guide → profile setup (username, bio, genre with search, gender, profile photo upload, payment method)
+- **Image Upload** — Profile photo with file type validation, preview, and cloud upload via API
+- **Dashboard** — Sidebar navigation (8 sections), header with search/bell/avatar
+- **Overview** — Monthly listeners, top song, top album, current playing bar, projects, releases, payouts, royalties, referrals (all mock data)
+- **Music Upload** — Audio upload card, artwork upload card, metadata form (song title, artist, contributors, language, genre), ISRC auto/manual toggle, DSP multi-select, release date picker with review/publish modal
+- **Releases** — Release stats, analytics dashboard (monthly listeners, line chart, country chart), edit/view/delete modals
+- **Royalties** — Royalties overview, track earnings, DSP-level earnings table, earnings by country
+- **Payouts** — Balance cards, payout history
+- **Profile** — Edit profile with photo upload, personal info, country/region, bio, progress tracker
+- **Notifications** — User notifications and system notifications with color-coded indicators
+- **Support/Academy** — Contact form, FAQ, academy video, floating chat
+
+### Not Yet Implemented
+
+- Real payment/monetization integration
+- Actual music file distribution to stores
+- Storefront/artist public profile page
+- Admin panel
+- Real-time streaming data from DSPs
+
+---
+
+## Folder Structure
 
 ```
 mayvibe/
+├── .env                              # Environment variables
+├── .gitignore
+├── eslint.config.js                  # ESLint 9 flat config
+├── index.html                        # HTML entry point (Poppins font CDN)
+├── package.json
+├── vite.config.js                    # Vite + React + Tailwind v4 plugin
+├── README.md
+├── SKILL.md                          # AI agent skill file
+├── PROJECT.md                        # This file
 ├── public/
 │   └── vite.svg
-├── src/
-│   ├── assets/              # Static images (hero, profile, onboarding backgrounds)
-│   ├── Components/
-│   │   └── Pages/
-│   │       ├── Dashboard/   # Main authenticated app (10 section folders)
-│   │       ├── Homepage/    # Public landing page (9 sub-components)
-│   │       └── Onboarding Pages/  # Auth flow (6 pages)
-│   ├── utils/
-│   │   └── errorHelper.js   # Axios error message extractor
-│   ├── App.css              # Tailwind v4 import + @theme config
-│   ├── App.jsx              # Root router + Toaster
-│   ├── index.css            # Background images + react-datepicker theme
-│   └── main.jsx             # ReactDOM entry point
-├── .env                     # VITE_API_BASE_URL
-├── eslint.config.js         # ESLint flat config
-├── index.html               # HTML entry (Poppins font, Vite entry)
-├── package.json
-├── vite.config.js           # Vite + Tailwind + React plugins
-└── README.md
+└── src/
+    ├── main.jsx                      # React entry point
+    ├── App.jsx                       # Root: BrowserRouter + Toaster + Routes
+    ├── App.css                       # Tailwind import + @theme (Poppins font)
+    ├── index.css                     # Background image classes + calendar styles
+    ├── assets/                       # Static images (backgrounds, icons, mock data)
+    ├── utils/
+    │   └── errorHelper.js            # getErrorMessage() utility
+    └── Pages/
+        ├── Homepage/                 # Public landing page
+        │   ├── Homepage.jsx
+        │   └── components/           # Navbar, Hero, PricingSection, Footer, etc.
+        ├── NotFound/
+        │   └── NotFound.jsx          # 404 page
+        ├── Onboarding Pages/         # Auth & onboarding flow
+        │   ├── signup.jsx
+        │   ├── login.jsx
+        │   ├── verifyOTP.jsx
+        │   ├── welcome.jsx
+        │   ├── forgetPassword.jsx
+        │   └── resetPassword.jsx
+        └── Dashboard/                # Artist dashboard
+            ├── dashboard.jsx         # Shell (sidebar + header + content switch)
+            ├── sidebar.jsx           # Navigation menu
+            ├── PlaceholderPage.jsx
+            ├── Overview/             # Main dashboard overview
+            │   ├── overview.jsx
+            │   └── components/
+            ├── Music Upload/         # Upload flow
+            │   ├── Music.jsx
+            │   └── components/
+            ├── Releases/             # Release management
+            │   ├── releases.jsx
+            │   └── components/
+            ├── Royalties/            # Earnings tracking
+            │   ├── Royalties.jsx
+            │   └── components/
+            ├── Payouts/              # Payout management
+            │   ├── payouts.jsx
+            │   └── components/
+            ├── Profile/              # User profile
+            │   └── profile.jsx
+            ├── Notifications/        # Notification center
+            │   └── notifications.jsx
+            └── Support & Academy/    # Help center
+                ├── support.jsx
+                ├── ContactForm.jsx
+                ├── FAQSection.jsx
+                ├── AcademyVideo.jsx
+                └── FloatingChat.jsx
 ```
 
 ---
 
-## Routing Architecture
+## Getting Started
 
-Routes are defined in `src/App.jsx` using React Router DOM v7 `<Routes>`:
+### Prerequisites
 
-### Public Routes (no auth wall)
+- Node.js >= 18
+- npm >= 9
 
-| Path | Component | File |
-|---|---|---|
-| `/` | `<Homepage />` | `Homepage.jsx` |
-| `/signup` | `<Signup />` | `signup.jsx` |
-| `/login` | `<Login />` | `login.jsx` |
-| `/welcome` | `<Welcome />` | `welcome.jsx` |
-| `/forgotPassword` | `<ForgotPassword />` | `forgetPassword.jsx` |
-| `/resetPassword` | `<ResetPassword />` | `resetPassword.jsx` |
-| `/verifyOtp` | `<VerifyOTP />` | `verifyOTP.jsx` |
+### Installation
 
-### Dashboard Routes (nested under `/dashboard/*`)
+```bash
+# Clone the repository
+git clone <repo-url>
+cd mayvibe
 
-| Path | Component | File |
-|---|---|---|
-| `/dashboard/overview` | `<Overview />` | `Overview/overview.jsx` |
-| `/dashboard/releases` | `<Releases />` | `Releases/releases.jsx` |
-| `/dashboard/music-upload` | `<Music />` | `Music Upload/Music.jsx` |
-| `/dashboard/royalties` | `<RoyaltiesPage />` | `Royalties/Royalties.jsx` |
-| `/dashboard/support` | `<Support />` | `Support &Academy/support.jsx` |
-| `/dashboard/notifications` | `<Notifications />` | `Notifications/notifications.jsx` |
-| `/dashboard/profile` | `<Profile />` | `Profile/profile.jsx` |
-| `/dashboard` | `<Dashboard />` | `dashboard.jsx` |
+# Install dependencies
+npm install
 
-The `<Dashboard />` component (`dashboard.jsx`) uses a **client-side SPA pattern** with `useState` to toggle between sub-views via a `currentPage` state variable and a `switch` statement. This means navigation within the dashboard works without page reload. The `<Sidebar />` component is rendered alongside a shared `<header>` with search and notification icons.
+# Start development server
+npm run dev
+```
 
-### Fallback
+The dev server starts at `http://localhost:5173` by default.
 
-Any unmatched route renders a `404 - Page Not Found` inline component with a link back to `/`.
+### Available Scripts
+
+| Script | Command | Purpose |
+|--------|---------|---------|
+| `dev` | `vite` | Start development server with HMR |
+| `build` | `vite build` | Production build to `dist/` |
+| `preview` | `vite preview` | Preview the production build locally |
+| `lint` | `eslint .` | Run ESLint on all files |
 
 ---
 
-## Homepage (Public Landing Page)
+## Environment Variables
 
-The homepage is a single-page marketing site composed of 9 sections rendered sequentially in `Homepage.jsx`:
+Create a `.env` file in the project root with:
 
-| Section | Component | Highlights |
-|---|---|---|
-| **Navbar** | `Navbar.jsx` | Fixed sticky nav, "Business Solutions" + "Who We Are" dropdowns, Login/Get Started CTAs. Mobile accordion menu. |
-| **Hero** | `Hero.jsx` | "Music is power — Amplify it" headline, CTA, social proof ("20K+ Active Subscribers"), artist image + music wave graphic. |
-| **Distribute** | `DistributeSection.jsx` | Orange callout band — "Distribute Music" headline + Join Mayvibe button. |
-| **Pricing** | `PricingSection.jsx` | 3-tier: Starter ($99), Standard ($150, "BEST VALUE"), Premium ($390). Hover scale, feature checklists. |
-| **Quote** | `QuoteSection.jsx` | Full-bleed background image with "Music is your own experience..." — Charlie Parker quote + Join Now CTA. |
-| **Publishing** | `PublisingSection.jsx` | Dark-overlay background image, "Publishing" headline, description, Join Now button. |
-| **Floating Pills** | `FloatingPills.jsx` | Orange pill badges (Playlist Pitching, Academy, Blog, etc.) + Charlie Parker quote with Quote icons. |
-| **Footer Links** | `FooterLinks.jsx` | 4-column grid: Top Features, Useful Links, Legal, Contact (address, email, phone). |
-| **Footer** | `Footer.jsx` | Copyright notice — "Mayvibe Technologies Global Limited". |
+```env
+VITE_API_BASE_URL=https://mayvibe.bookbank.com.ng/
+```
+
+All Vite environment variables must be prefixed with `VITE_`. They are accessed via `import.meta.env.VITE_*` in code.
 
 ---
 
-## Authentication Flow (Onboarding Pages)
+## Authentication Flow
 
-### Signup (`signup.jsx`)
-- Collects: full name, email, password
-- Password visibility toggle (`FaEye`/`FaEyeSlash`)
-- Posts to `${BASE_URL}/auth/sign-up`
-- Saves token to `localStorage`
-- Redirects to `/verifyOtp` with email + userId + token in router state
-- Social login buttons (Facebook, Apple, Google) — UI only, no logic wired
+```
+[Signup] ──POST /auth/sign-up──→ [Save token to localStorage]
+    │                                   │
+    │                                   ▼
+    │                            [Verify OTP Page]
+    │                              POST /auth/verify
+    │                                   │
+    │                                   ▼
+    └─────────── [Login Page] ←─── "Email verified" toast
+                      │
+                      ▼
+              POST /auth/login
+                      │
+                      ▼
+              Decode JWT locally
+                      │
+                      ├── onBoarded=true  → /dashboard
+                      └── onBoarded=false → /welcome (onboarding)
+                                              │
+                                              ├── Step 1: Welcome screen
+                                              ├── Step 2: 3-step guide
+                                              └── Step 3: Profile setup
+                                                      │
+                                              POST /auth/register/onboarding/{userId}
+                                                      │
+                                                      ▼
+                                              /dashboard
+```
 
-### Login (`login.jsx`)
-- Collects: email, password
-- Client-side JWT decoder to extract `userId` + `onBoarded` fields
-- Posts to `${BASE_URL}/auth/login`
-- Routes onboarded users to `/dashboard`, others to `/welcome`
-- "Forgot password" link to `/forgotPassword`
+### Password Reset Flow
 
-### Email Verification (`verifyOTP.jsx`)
-- 6-digit OTP input (individual boxes with auto-focus/focus-trap)
-- Posts to `${BASE_URL}/auth/verify`
-- Resend OTP via `${BASE_URL}auth/resend-otp` (note: missing `/` after `BASE_URL`)
-- On success, redirects to `/login`
+```
+[Forgot Password] ──POST /auth/forgot-url──→ Email with magic link
+                                                   │
+                                                   ▼
+                                    /resetPassword?token=XXX&email=YYY
+                                                   │
+                                        PATCH /auth/reset-password
+                                                   │
+                                                   ▼
+                                               /login
+```
 
-### Forgot Password (`forgetPassword.jsx`)
-- Email input → posts to `${BASE_URL}/auth/forgot-url`
-- OTP sent notification (navigation to reset page is commented out)
+### Token Handling
 
-### Reset Password (`resetPassword.jsx`)
-- Reads `token` and `email` from URL search params
-- Shows error state if token is missing (Request New Reset Link)
-- Posts to `${BASE_URL}/auth/reset-password` with email + token + password + confirmPassword
-- Password visibility toggles for both fields
-- Redirects to `/login` on success
-
-### Welcome/Onboarding (`welcome.jsx`)
-- 3-step wizard:
-  1. "Welcome to Mayvibe" splash with Get Started CTA
-  2. Quick tutorial video placeholders + 3-step guide (Upload → Distribute → Earn)
-  3. Profile setup form: username, bio, genre (searchable dropdown from 21 genres), gender, profile photo (upload to `${BASE_URL}/images/upload`), optional payment method
-- Submits via `${BASE_URL}/auth/register/onboarding/${userId}`
-- Requires `userId` from location state; redirects to `/login` if missing
-
-### Error Handling Utility (`utils/errorHelper.js`)
-- `getErrorMessage(err, defaultMessage)` — extracts `response.data.message` → `response.data.error` → `err.message` → default
-
----
-
-## Dashboard
-
-### Layout (`dashboard.jsx` + `sidebar.jsx`)
-
-The dashboard uses a fixed sidebar + top header layout:
-- **Sidebar**: 8 nav items (Overview, Upload Music, My Releases, Royalties, Payouts, Profile, Notifications, Support/Academy) with active orange highlight, mobile overlay, sign-out button
-- **Header**: Hamburger menu (mobile), search icon, bell with notification dot, user avatar + name
-- **Body**: Content area that renders the selected page component
-
-### Overview (`overview.jsx`)
-
-Central analytics hub composed of:
-
-| Component | Description |
-|---|---|
-| `StatsCard` | Wrapper card with title, value, change indicator, optional badge and dropdown |
-| `MonthlyListeners` | Dynamic bar chart (32 bars, auto-cycles through 5 growth patterns every 8s) |
-| `TopSongChart` | SVG line chart for "God is good (ft. Donseih Beat)" — 123M+ plays |
-| `TopAlbumChart` | SVG line chart for "5ive" — 54M+ plays |
-| `CurrentPlayingBar` | Mini player card with play button, song/album info, duration |
-| `UploadButton` | Orange gradient upload CTA with Upload/Cancel actions |
-| `ProjectSection` | Circular album artwork grid (5 projects) |
-| `MyReleases` | Track table: checkbox, cover, title, artist, date, duration, more menu |
-| `Payouts` | Payout history list: ID, amount, date (desktop grid + mobile vertical layout) |
-| `RoyaltiesSection` | Animated bar chart (12 months, auto-cycles 4 datasets every 8s), payment info, live indicator |
-| `ReferralDashboard` | Referral wallet ($3,500), SVG line chart, invite by email, share link + social buttons |
-
-### Music Upload (`Music.jsx`)
-
-Multi-step upload flow:
-1. **AudioUploadCard** — Drag/click to upload audio (Mp3, WAV, M4A, max 40MB)
-2. **ArtworkUploadCard** — Image upload with preview (JPG, PNG, max 40MB)
-3. **MetadataForm** — Song title, artist, contributors, language, genre + ISRC (auto/manual) + DSP multi-select (Apple Music, Spotify, Boomplay, Deezer, Audiomack)
-4. **ReleaseDatePicker** — Calendar date picker (custom themed react-datepicker) + AM/PM time selector → Review & Publish modal
-
-### Releases (`releases.jsx`)
-
-Full release management with:
-- **ReleaseStats** — Table with cover art, title, artist, status badges (draft/pending/rejected/live), streams, revenue, play button + action menu
-- **AnalyticsDashboard** — Top song/album line charts, monthly listeners bar chart, countries donut chart (auto-rotating, 6 countries)
-- **EditReleaseModal** — Inline editing for song title, artist, contributors, language, genre, release date
-- **ViewReleaseModal** — Full release details view
-- **DeleteReleaseModal** — Confirmation dialog for removal
-
-### Royalties (`Royalties.jsx`)
-
-Dedicated royalties page with:
-- Shared `RoyaltiesSection` (animated chart + payment info)
-- `Payouts` component (history table)
-- `TrackEarnings` — Table: album title, total earnings, this month, ROC (rate of change with trend arrows), DSP earnings
-- `DSPEarningsTable` — Per-DSP breakdown (Spotify, Apple Music, etc.) with plays, revenue, share
-- `EarningsByCountry` — Country-based earnings breakdown
-
-### Payouts (`payouts.jsx`)
-- **BalanceCards** — Total balance ($24,092.75), income ($4,500), payment method (Flutterwave) + Withdraw button
-- **PayoutHistory** — Transaction list (ID, amount, date)
-- **RoyaltiesSection** — Chart with most recent/next payment info
-
-### Profile (`profile.jsx`)
-- Avatar upload (800x800px recommended, JPG/PNG)
-- Personal info (name, stage name, email) with edit toggle
-- Country & region input
-- Bio text area
-- Profile completion progress card (40%, 7-step checklist with check/cross icons, SVG donut chart)
-
-### Notifications (`notifications.jsx`)
-> No file read available — see directory listing only.
-
-### Support & Academy (`support.jsx`)
-- **ContactForm** — Textarea + Send Message button
-- **FAQSection** — Accordion FAQ (7 items, all the same question with toggle answers)
-- **AcademyVideo** — Gradient video placeholder with play button
-- **FloatingChat** — Fixed bottom-right chat bubble button
+- Token is saved to `localStorage` under the key `"token"`
+- User info (decoded JWT) is saved under `"user"` as JSON
+- No refresh token mechanism is currently implemented
+- No auth interceptor — every API call that needs auth manually reads `localStorage.getItem("token")` and sets the `Authorization: Bearer {token}` header
 
 ---
 
-## Styling Approach
+## Pages & Routes
 
-### Tailwind CSS v4
-- `@import "tailwindcss"` in `App.css` with `@theme` defining `--font-display: "Poppins", sans-serif`
-- The `font-display` class is used across virtually all components
+### Public Routes
 
-### Background Images
-- `index.css` defines `.signup`, `.login`, `.welcome` classes with background-image + overlay blend modes
-- Onboarding pages import `index.css` to use these background classes
+| Path | Component | Description |
+|------|-----------|-------------|
+| `/` | Homepage | Landing page with hero, features, pricing, footer |
+| `/signup` | Signup | Registration form (fullName, email, password) + social login UI |
+| `/verifyOtp` | VerifyOTP | 6-digit OTP input, resend button, redirects to login on success |
+| `/login` | Login | Email + password, JWT decode, onboarding-aware redirect |
+| `/forgotPassword` | ForgotPassword | Email input → sends OTP via `/auth/forgot-url` |
+| `/resetPassword` | ResetPassword | Reads `?token=` and `?email=` from URL, new password + confirm |
+| `/welcome` | Welcome | 3-step onboarding wizard (guarded: requires userId in location.state) |
+| `*` | NotFound | 404 fallback page |
 
-### Custom Calendar Theme
-- `index.css` contains extensive react-datepicker overrides under `.custom-calendar`:
-  - Transparent background, no borders
-  - Grid layout for day names and weeks
-  - Orange selected-day ring effect
-  - Responsive font sizing with `clamp()`
-  - Hover/grid line styles
+### Dashboard Routes
 
-### Color Palette
-- **Primary:** Orange-500/600 (`#f97316` / `#ea580c`)
-- **Neutral:** Gray-50 through Gray-900 for backgrounds, text, borders
-- **Success:** Green-600 (`#16a34a`)
-- **Error:** Red-600 (`#dc2626`)
+| Path | Component | Description |
+|------|-----------|-------------|
+| `/dashboard` | Dashboard | Shell with sidebar + header, defaults to Overview |
+| `/dashboard/overview` | Overview | Full overview page (also rendered inside shell) |
+| `/dashboard/music-upload` | Music | Upload audio + artwork + metadata + release date |
+| `/dashboard/releases` | Releases | Release stats + analytics + modals |
+| `/dashboard/royalties` | RoyaltiesPage | Earnings overview, track earnings, DSP table, country breakdown |
+| `/dashboard/payouts` | Payouts | Balance cards + payout history |
+| `/dashboard/profile` | Profile | Edit profile, personal info, bio, progress tracker |
+| `/dashboard/notifications` | Notifications | User + system notifications, payout status list |
+| `/dashboard/support` | Support | Contact form, FAQ, academy video, floating chat |
 
 ---
 
 ## API Integration
 
-All API calls point to `VITE_API_BASE_URL` from `.env`:
+### Base URL
 
-| Endpoint | Method | Used In |
-|---|---|---|
-| `/auth/sign-up` | POST | signup.jsx |
-| `/auth/login` | POST | login.jsx |
-| `/auth/verify` | POST | verifyOTP.jsx |
-| `/auth/resend-otp` | POST | verifyOTP.jsx |
-| `/auth/forgot-url` | POST | forgetPassword.jsx |
-| `/auth/reset-password` | PATCH | resetPassword.jsx |
-| `/auth/register/onboarding/:userId` | POST | welcome.jsx |
-| `/images/upload` | POST | welcome.jsx |
+```
+https://mayvibe.bookbank.com.ng/
+```
 
-**Bug note:** `verifyOTP.jsx` calls `${BASE_URL}auth/resend-otp` — missing `/` between the base URL and path.
+Configured via `VITE_API_BASE_URL` in `.env`. Accessed in code as:
+
+```js
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+```
+
+### Endpoints
+
+| Method | Endpoint | Auth | Body / Params | Response |
+|--------|----------|------|---------------|----------|
+| POST | `/auth/sign-up` | No | `{ fullname, email, password }` | `{ token, userId }` |
+| POST | `/auth/verify` | No | `{ email, otp }` | Success confirmation |
+| POST | `/auth/resend-otp` | No | `{ email }` | Success confirmation |
+| POST | `/auth/login` | No | `{ email, password }` | `{ token, accessToken }` |
+| POST | `/auth/forgot-url` | No | `{ email }` | Sends reset email |
+| PATCH | `/auth/reset-password` | No | `{ email, token, password, confirmPassword }` | Success confirmation |
+| POST | `/images/upload` | Bearer | `multipart/form-data: { image }` | `{ url, imageUrl, data.url }` |
+| POST | `/auth/register/onboarding/{userId}` | Bearer | `{ username, bio, genre, gender, profilePhoto, paymentMethod }` | Success confirmation |
+
+### Error Handling
+
+All API errors are processed through `getErrorMessage(err, fallbackMessage)` from `src/utils/errorHelper.js`. It checks the response in this order:
+
+1. `err.response.data.message`
+2. `err.response.data.error`
+3. `err.message`
+4. `fallbackMessage` parameter
+
+### Image Upload
+
+- Accepts: JPG, JPEG, PNG, WebP
+- Sends: `multipart/form-data` with field name `"image"`
+- Auth: Bearer token required
+- Response URL extraction (in priority order): `res.data.url → res.data.imageUrl → res.data.data.url`
 
 ---
 
-## Available Scripts
+## Design System
 
-| Command | Action |
-|---|---|
-| `npm run dev` | Start Vite dev server |
-| `npm run build` | Production build to `dist/` |
-| `npm run preview` | Preview production build |
-| `npm run lint` | ESLint across the project |
+### Colors
+
+| Token | Usage |
+|-------|-------|
+| `#f97316` (orange-500) | Primary accent, active sidebar, links, badges, buttons |
+| `#ea580c` (orange-600) | Button hover states, strong accents |
+| `#fb923c` (orange-400) | Border accents, secondary highlights |
+| `#fed7aa` (orange-200) | Chart bars, light backgrounds |
+| `#ffffff` | Dashboard backgrounds, text |
+| `#f9fafb` (gray-50) | Card backgrounds in dashboard |
+| `#111827` (gray-900) | Dark backgrounds in auth pages |
+
+### Typography
+
+- **Font Family**: Poppins (Google Fonts, weights 100–900)
+- **CSS Variable**: `--font-display` defined in `@theme` of `App.css`
+- **Usage**: Apply `className="font-display"` to root element of every page
+- **Headings**: Auth pages use `text-3xl lg:text-5xl font-bold`. Dashboard headings use `text-4xl font-bold text-gray-900`.
+
+### Common Class Patterns
+
+| Pattern | Where |
+|---------|-------|
+| `bg-white/5 backdrop-blur-xl` | Auth page left panel |
+| `bg-black/40 backdrop-blur-xl` | Auth page right panel (form) |
+| `bg-orange-600 hover:bg-orange-500` | Primary buttons |
+| `w-full bg-transparent border-b border-white focus:border-orange-500 outline-none text-sm py-1` | Auth form inputs |
+| `bg-gray-50 rounded-3xl shadow-sm border border-gray-200 p-6` | Dashboard cards |
+| `fixed inset-0 z-50 bg-black/50 backdrop-blur-sm` | Modal overlays |
+| `grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8` | Responsive grid layouts |
+| `max-w-7xl mx-auto` | Content width constraint |
+
+### Background Images (CSS Classes in `index.css`)
+
+| Class | Image | Blend Mode |
+|-------|-------|------------|
+| `.signup` | `signup.png` | `overlay` with `rgb(56,56,56)` |
+| `.login` | `login.png` | `overlay` with `rgb(56,56,56)` |
+| `.welcome` | `welcome.png` | None (full image) |
+
+### Responsive Breakpoints
+
+- **Default**: Mobile-first
+- **`sm:`** — 640px+
+- **`md:`** — 768px+
+- **`lg:`** — 1024px+
+- **`xl:`** — 1280px+
 
 ---
 
-## Noteworthy Implementation Details
+## Known Issues
 
-1. **SPA Dashboard Navigation** — Uses `useState` + conditional rendering instead of nested router routes. This avoids full page reloads but means browser URL doesn't change for sub-views.
-2. **Animated Charts** — `MonthlyListeners` and `RoyaltiesSection` use `useEffect` intervals to cycle through hardcoded datasets every 8 seconds, simulating real-time data.
-3. **JWT Decoding** — `login.jsx` includes an inline Base64 JWT decoder to extract `userId` and `onBoarded` fields without any external library.
-4. **Modal Architecture** — Three release modals (Edit, View, Delete) with backdrop click-to-close and event propagation stopping.
-5. **Responsive Patterns** — Components use `grid-cols-*` and `hidden/sm:block/lg:grid` patterns extensively. Mobile-first with `-translate-x-full` sidebar overlay approach.
-6. **Sonner Toaster** — Configured at the app root (`App.jsx`) with rich colors, close button, expand mode, and 4-second duration.
+1. **Missing slash in verifyOTP.jsx** (line 87): `${BASE_URL}auth/resend-otp` should be `${BASE_URL}/auth/resend-otp`. This causes a malformed URL.
+2. **SidebarItem.jsx is empty** — 0-byte file in `Dashboard/components/`. Not imported anywhere but should be removed or implemented.
+3. **Framer Motion unused** — Package is in `package.json` but never imported. All animations use CSS transitions.
+4. **Dashboard navigation doesn't update URL** — Using `useState` + `switch` means browser back/forward buttons don't navigate dashboard sub-pages.
+5. **No protected routes** — Dashboard pages are directly accessible via URL without any auth check.
+6. **Forgot password navigation**: `resetPassword.jsx` redirects to `/forgot-password` (hyphenated) on error, but the actual route is `/forgotPassword` (camelCase). This will show a 404 page.
+7. **Commented-out navigation** in `forgetPassword.jsx`: After sending OTP, the redirect to `/resetpassword` is commented out. User has to manually navigate.
+8. **All dashboard data is mock** — No real API integrations for streaming numbers, earnings, releases, etc.
+9. **Social login buttons are UI only** — Facebook, Apple, Google buttons have no backend wiring.
+10. **No TypeScript** — The project uses plain JavaScript with basic PropTypes.
+
+---
+
+## Roadmap Ideas
+
+### Near-Term
+
+- [ ] Extract API calls into a centralized service layer (`src/services/`)
+- [ ] Add Axios interceptor for automatic Bearer token injection
+- [ ] Implement `<ProtectedRoute>` wrapper for dashboard routes
+- [ ] Replace mock dashboard data with real API responses
+- [ ] Fix missing `/` in verifyOTP.jsx resend endpoint
+- [ ] Remove empty `SidebarItem.jsx` file
+
+### Medium-Term
+
+- [ ] Real music file upload & distribution pipeline to DSPs (Spotify, Apple Music, Boomplay, etc.)
+- [ ] Payment/payout integration (PayPal, bank transfer, mobile money)
+- [ ] Real-time streaming analytics from DSP APIs
+- [ ] Artist public profile/storefront page
+- [ ] Admin dashboard for platform management
+- [ ] Add react-helmet-async for per-page SEO metadata
+- [ ] Internationalization (i18n) support
+
+### Long-Term
+
+- [ ] Mobile app (React Native)
+- [ ] Collaborative features (collaborators, splits)
+- [ ] AI-powered music promotion tools
+- [ ] Direct fan subscriptions / tipping
+- [ ] Publishing administration & royalties collection
+- [ ] Integration with African mobile money services (M-Pesa, Airtel Money, etc.)

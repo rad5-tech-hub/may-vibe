@@ -17,6 +17,9 @@ import Profile from './Pages/Dashboard/Profile/profile';
 import Releases from './Pages/Dashboard/Releases/releases';
 import Dashboard from './Pages/Dashboard/dashboard';
 import NotFound from './Pages/NotFound/NotFound';
+import SimplePage from './Pages/SimplePages/SimplePage';
+import Academy from './Pages/Academy/Academy';
+
 
 function App() {
   return (
@@ -54,6 +57,16 @@ function App() {
         <Route path="/dashboard/notifications" element={<Notifications />} />
         <Route path="/dashboard/profile" element={<Profile />} />
         <Route path="/dashboard" element={<Dashboard />} />
+
+        {/* Public Utility Pages */}
+        <Route path="/about" element={<SimplePage title="About Us" />} />
+        <Route path="/contact" element={<SimplePage title="Contact Us" />} />
+        <Route path="/faq" element={<SimplePage title="FAQ" />} />
+        <Route path="/blog" element={<SimplePage title="Blog" />} />
+        <Route path="/academy" element={<Academy title="Academy" />} />
+        <Route path="/terms" element={<SimplePage title="Terms of Service" />} />
+        <Route path="/privacy" element={<SimplePage title="Privacy Policy" />} />
+        <Route path="/store" element={<SimplePage title="Mayvibe Store" />} />
 
         {/* Fallback for unknown routes */}
         <Route path="*" element={<NotFound />} />

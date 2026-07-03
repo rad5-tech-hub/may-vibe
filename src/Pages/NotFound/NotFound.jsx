@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Home, Search, Frown } from 'lucide-react';
-import Navbar from '../Homepage/components/Navbar';
-import Footer from '../Homepage/components/Footer';
+import Navbar from '../components/Navbar';
+import MainFooter from '../components/MainFooter';
 
 const NotFound = () => {
   return (
@@ -48,7 +48,7 @@ const NotFound = () => {
         </div>
       </main>
 
-      <Footer />
+      <MainFooter />
     </div>
   );
 };
