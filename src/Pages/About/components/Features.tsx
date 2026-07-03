@@ -1,53 +1,63 @@
 // src/pages/about/components/TopFeaturesSection.jsx
+import tower from "../../../assets/tower.png";
+import royalty from "../../../assets/royalty.png";
+import artist from "../../../assets/artist.png";
+import release from "../../../assets/release.png";
+import playlist from "../../../assets/playlist.png";
+import book from "../../../assets/book.png";
+import rights from "../../../assets/rights.png";
+import customer from "../../../assets/customer.png";
+import multi from "../../../assets/multi.png";
+import professional from "../../../assets/professional.png";
 
 const featuresData = [
   {
-    iconName: "tower.png",
+    iconName: tower,
     title: "Global Music Distribution",
     desc: "Reach 280+ DSPs across every continent instantly."
   },
   {
-    iconName: "royalty.png",
+    iconName: royalty,
     title: "Royalty tracking & earnings management",
     desc: "Transparent earnings system that lets you track every stream, earnings and payouts."
   },
   {
-    iconName: "artist.png",
+    iconName: artist,
     title: "Artist dashboard & analytics",
     desc: "Deep insights into streams, fans, and performance trends."
   },
   {
-    iconName: "release.png", // Extrapolated from release & metadata management text
+    iconName: release, 
     title: "Release & metadata management",
     desc: "Professional release operations to keep metadata, scheduling & delivery flawless."
   },
   {
-    iconName: "playlist.png", // Extrapolated from playlist pitching & promotional text
+    iconName: playlist, 
     title: "Playlist pitching & promotional support",
     desc: "Editorial pitching and promotional support for your releases."
   },
   {
-    iconName: "book.png",
+    iconName: book,
     title: "Music business & artist education",
     desc: "Business education built specifically for African artists."
   },
   {
-    iconName: "rights.png",
+    iconName: rights,
     title: "Rights protection & compliance systems",
     desc: "Content & creative rights protection systems."
   },
   {
-    iconName: "customer.png",
+    iconName: customer,
     title: "Customer support & release assistance",
     desc: "Dedicated release assistance and account management."
   },
   {
-    iconName: "multi.png", // Extrapolated from multi-platform monetization text
+    iconName: multi,
     title: "Multi-platform monetization",
     desc: "Scalable systems built to maximize revenue across various earning streams."
   },
   {
-    iconName: "professional.png", // Extrapolated from professional release operations text
+    iconName: professional,
     title: "Professional release operations",
     desc: "Professional-grade release workflows and delivery operations."
   }
@@ -87,7 +97,7 @@ export default function Features() {
                   {/* Styled Subtle Background Container Box Wrap around Image Asset */}
                   <div className="w-11 h-11 bg-[#FCEBE6] rounded-xl flex items-center justify-center mb-5 shrink-0 border border-orange-100/30">
                     <img 
-                      src={`/src/assets/${feature.iconName}`} 
+                      src={feature.iconName} 
                       alt={`${feature.title} item icon`} 
                       className="w-5 h-5 object-contain pointer-events-none select-none"
                       onError={(e) => {
