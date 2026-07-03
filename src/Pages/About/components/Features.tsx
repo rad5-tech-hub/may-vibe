@@ -1,0 +1,117 @@
+// src/pages/about/components/TopFeaturesSection.jsx
+
+const featuresData = [
+  {
+    iconName: "tower.png",
+    title: "Global Music Distribution",
+    desc: "Reach 280+ DSPs across every continent instantly."
+  },
+  {
+    iconName: "royalty.png",
+    title: "Royalty tracking & earnings management",
+    desc: "Transparent earnings system that lets you track every stream, earnings and payouts."
+  },
+  {
+    iconName: "artist.png",
+    title: "Artist dashboard & analytics",
+    desc: "Deep insights into streams, fans, and performance trends."
+  },
+  {
+    iconName: "release.png", // Extrapolated from release & metadata management text
+    title: "Release & metadata management",
+    desc: "Professional release operations to keep metadata, scheduling & delivery flawless."
+  },
+  {
+    iconName: "playlist.png", // Extrapolated from playlist pitching & promotional text
+    title: "Playlist pitching & promotional support",
+    desc: "Editorial pitching and promotional support for your releases."
+  },
+  {
+    iconName: "book.png",
+    title: "Music business & artist education",
+    desc: "Business education built specifically for African artists."
+  },
+  {
+    iconName: "rights.png",
+    title: "Rights protection & compliance systems",
+    desc: "Content & creative rights protection systems."
+  },
+  {
+    iconName: "customer.png",
+    title: "Customer support & release assistance",
+    desc: "Dedicated release assistance and account management."
+  },
+  {
+    iconName: "multi.png", // Extrapolated from multi-platform monetization text
+    title: "Multi-platform monetization",
+    desc: "Scalable systems built to maximize revenue across various earning streams."
+  },
+  {
+    iconName: "professional.png", // Extrapolated from professional release operations text
+    title: "Professional release operations",
+    desc: "Professional-grade release workflows and delivery operations."
+  }
+];
+
+export default function Features() {
+  return (
+    <section className="bg-white w-full py-20 px-6">
+      <div className="max-w-7xl mx-auto w-full">
+        
+        {/* Top Header Labels Matrix */}
+        <div className="flex flex-col items-center text-center mb-16">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="w-5 h-0.5 bg-[#FF6200]" />
+            <span className="text-[#FF6200] text-xs font-bold tracking-widest uppercase">
+              Our Top Features
+            </span>
+            <span className="w-5 h-0.5 bg-[#FF6200]" />
+          </div>
+          <h2 className="text-[#111111] text-4xl sm:text-[42px] font-bold tracking-tight leading-tight max-w-2xl">
+            Everything You Need To Run Your Music Career
+          </h2>
+        </div>
+
+        {/* Outer Grid Block Wrapper Frame */}
+        <div className="bg-[#FAF9F9]/40 border border-gray-100 rounded-4xl p-2 sm:p-6 shadow-2xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 divide-y divide-gray-200/60 lg:divide-y-0">
+            {featuresData.map((feature, index) => {
+              // Structural dynamic calculation to place vertical custom borders inside row configurations
+              const borderRightClass = "border-gray-200/60 lg:border-r last:border-r-0";
+              
+              return (
+                <div 
+                  key={index} 
+                  className={`p-6 sm:p-8 flex flex-col items-start text-left min-h-[250px] transition duration-150 hover:bg-white/80 ${borderRightClass}`}
+                >
+                  {/* Styled Subtle Background Container Box Wrap around Image Asset */}
+                  <div className="w-11 h-11 bg-[#FCEBE6] rounded-xl flex items-center justify-center mb-5 shrink-0 border border-orange-100/30">
+                    <img 
+                      src={`/src/assets/${feature.iconName}`} 
+                      alt={`${feature.title} item icon`} 
+                      className="w-5 h-5 object-contain pointer-events-none select-none"
+                      onError={(e) => {
+                        // Soft fallback dynamic handler if naming variance happens
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  </div>
+
+                  {/* Feature Card Text Node Blocks */}
+                  <h3 className="text-black text-sm font-semibold leading-snug mb-3 tracking-tight">
+                    {feature.title}
+                  </h3>
+                  
+                  <p className="text-gray-500 text-[13px] font-normal leading-relaxed">
+                    {feature.desc}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+}

@@ -1,7 +1,10 @@
 import Navbar from "../components/Navbar";
-import MainFooter from "../components/MainFooter";
+import Footer from "../components/Footer";
 import Hero from "./components/Hero";
 import AboutUs from "./components/AboutUs";
+import Features from "./components/Features";
+import PlatformVision from "./components/PlatformVision";
+import AboutQuote from "./components/AboutQuote";
 
 const Homepage = () => {
   return (
@@ -9,7 +12,10 @@ const Homepage = () => {
       <Navbar />
       <Hero />
       <AboutUs /> 
-      <MainFooter />
+      <Features />
+      <PlatformVision />
+      <AboutQuote />
+      <Footer />
     </div>
   );
 };
