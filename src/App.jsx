@@ -21,6 +21,11 @@ import SimplePage from './Pages/SimplePages/SimplePage';
 import Academy from './Pages/Academy/Academy';
 import Contact from './Pages/Contact/Contact';
 import About from './Pages/About/About';
+import Advanced from './Pages/AdvancedMusic/Advanced';
+import GlobalDSP from './Pages/GlobalDSP/GlobalDSP';
+import AccountingRoyalty from './Pages/AccountingRoyalty/AccountingRoyalty';
+import AdvancedRelease from './Pages/AdvancedRelease/AdvancedRelease';
+import RightsProtection from './Pages/RightsProtection/RightsProtection';
 
 
 function App() {
@@ -69,6 +74,13 @@ function App() {
         <Route path="/terms" element={<SimplePage title="Terms of Service" />} />
         <Route path="/privacy" element={<SimplePage title="Privacy Policy" />} />
         <Route path="/store" element={<SimplePage title="Mayvibe Store" />} />
+
+        {/* Business Solution Pages */}
+        <Route path="/advanced-music" element={<Advanced />} />
+        <Route path="/global-dsp" element={<GlobalDSP />} />
+        <Route path="/accounting-royalty" element={<AccountingRoyalty />} />
+        <Route path="/advanced-release" element={<AdvancedRelease />} />
+        <Route path="/rights-protection" element={<RightsProtection />} />
 
         {/* Fallback for unknown routes */}
         <Route path="*" element={<NotFound />} />

@@ -54,56 +54,66 @@ export default function Navbar() {
 
               {openDropdown === "business" && (
                 <div className="absolute top-full -left-28 mt-5 w-[480px] bg-white rounded-3xl shadow-4xl border border-gray-200 px-5 py-4 z-50">
-                  <div className="grid grid-cols-1 gap-2">
-                    <div className="flex gap-5 group/item hover:bg-gray-50 py-2 rounded-2xl transition cursor-pointer">
-                      <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
-                        <img src={tower} alt="tower" className="w-6 h-6" />
+                    <div className="grid grid-cols-1 gap-2">
+                    <Link to="/advanced-music" onClick={() => setOpenDropdown(null)} className="block">
+                      <div className="flex gap-5 group/item hover:bg-gray-50 py-2 rounded-2xl transition cursor-pointer">
+                        <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
+                          <img src={tower} alt="tower" className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-base">Advanced Music Distribution Infrastructure</h4>
+                          <p className="text-md text-gray-500 font-light">DDEX-compliant global delivery infrastructure</p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-base">Advanced Music Distribution Infrastructure</h4>
-                        <p className="text-md text-gray-500 font-light">DDEX-compliant global delivery infrastructure</p>
-                      </div>
-                    </div>
+                    </Link>
 
-                    <div className="flex gap-5 group/item hover:bg-gray-50 py-2 rounded-2xl transition cursor-pointer">
-                      <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
-                        <img src={globe} alt="globe" className="w-6 h-6" />
+                    <Link to="/global-dsp" onClick={() => setOpenDropdown(null)} className="block">
+                      <div className="flex gap-5 group/item hover:bg-gray-50 py-2 rounded-2xl transition cursor-pointer">
+                        <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
+                          <img src={globe} alt="globe" className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-base">Global DSP & Regional Platform Reach</h4>
+                          <p className="text-md text-gray-500 font-light">280+ platforms globally</p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-base">Global DSP & Regional Platform Reach</h4>
-                        <p className="text-md text-gray-500 font-light">280+ platforms globally</p>
-                      </div>
-                    </div>
+                    </Link>
 
-                    <div className="flex gap-5 group/item hover:bg-gray-50 py-2 rounded-2xl transition cursor-pointer">
-                      <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
-                        <img src={account} alt="account" className="w-6 h-6" />
+                    <Link to="/accounting-royalty" onClick={() => setOpenDropdown(null)} className="block">
+                      <div className="flex gap-5 group/item hover:bg-gray-50 py-2 rounded-2xl transition cursor-pointer">
+                        <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
+                          <img src={account} alt="account" className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-base">Accounting & Royalty Infrastructure</h4>
+                          <p className="text-md text-gray-500 font-light">Automated splits, statements & multi-currency</p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-base">Accounting & Royalty Infrastructure</h4>
-                        <p className="text-md text-gray-500 font-light">Automated splits, statements & multi-currency</p>
-                      </div>
-                    </div>
+                    </Link>
 
-                    <div className="flex gap-5 group/item hover:bg-gray-50 py-2 rounded-2xl transition cursor-pointer">
-                      <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
-                        <img src={advanced} alt="advanced" className="w-6 h-6" />
+                    <Link to="/advanced-release" onClick={() => setOpenDropdown(null)} className="block">
+                      <div className="flex gap-5 group/item hover:bg-gray-50 py-2 rounded-2xl transition cursor-pointer">
+                        <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
+                          <img src={advanced} alt="advanced" className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-base">Advanced Release Features</h4>
+                          <p className="text-md text-gray-500 font-light">Atmos, Apple Motion, hi-res & metadata</p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-base">Advanced Release Features</h4>
-                        <p className="text-md text-gray-500 font-light">Atmos, Apple Motion, hi-res & metadata</p>
-                      </div>
-                    </div>
+                    </Link>
 
-                    <div className="flex gap-5 group/item hover:bg-gray-50 py-2 rounded-2xl transition cursor-pointer">
-                      <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
-                        <img src={rights} alt="rights" className="w-6 h-6" />
+                    <Link to="/rights-protection" onClick={() => setOpenDropdown(null)} className="block">
+                      <div className="flex gap-5 group/item hover:bg-gray-50 py-2 rounded-2xl transition cursor-pointer">
+                        <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
+                          <img src={rights} alt="rights" className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-base">Rights Protection & Compliance</h4>
+                          <p className="text-md text-gray-500 font-light">Copyright, fraud prevention & ACR</p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-base">Rights Protection & Compliance</h4>
-                        <p className="text-md text-gray-500 font-light">Copyright, fraud prevention & ACR</p>
-                      </div>
-                    </div>
+                    </Link>
                   </div>
                 </div>
               )}
@@ -156,26 +166,26 @@ export default function Navbar() {
               </button>
               {openDropdown === "business" && (
                 <div className="mt-3 ml-2 space-y-3">
-                  <div className="flex gap-3 items-center cursor-pointer">
+                  <Link to="/advanced-music" onClick={() => setMobileOpen(false)} className="flex gap-3 items-center cursor-pointer">
                     <img src={tower} alt="tower" className="w-5 h-5" />
                     <span className="text-sm">Advanced Music Distribution Infrastructure</span>
-                  </div>
-                  <div className="flex gap-3 items-center cursor-pointer">
+                  </Link>
+                  <Link to="/global-dsp" onClick={() => setMobileOpen(false)} className="flex gap-3 items-center cursor-pointer">
                     <img src={globe} alt="globe" className="w-5 h-5" />
                     <span className="text-sm">Global DSP & Regional Platform Reach</span>
-                  </div>
-                  <div className="flex gap-3 items-center cursor-pointer">
+                  </Link>
+                  <Link to="/accounting-royalty" onClick={() => setMobileOpen(false)} className="flex gap-3 items-center cursor-pointer">
                     <img src={account} alt="account" className="w-5 h-5" />
                     <span className="text-sm">Accounting & Royalty Infrastructure</span>
-                  </div>
-                  <div className="flex gap-3 items-center cursor-pointer">
+                  </Link>
+                  <Link to="/advanced-release" onClick={() => setMobileOpen(false)} className="flex gap-3 items-center cursor-pointer">
                     <img src={advanced} alt="advanced" className="w-5 h-5" />
                     <span className="text-sm">Advanced Release Features</span>
-                  </div>
-                  <div className="flex gap-3 items-center cursor-pointer">
+                  </Link>
+                  <Link to="/rights-protection" onClick={() => setMobileOpen(false)} className="flex gap-3 items-center cursor-pointer">
                     <img src={rights} alt="rights" className="w-5 h-5" />
                     <span className="text-sm">Rights Protection & Compliance</span>
-                  </div>
+                  </Link>
                 </div>
               )}
             </div>
