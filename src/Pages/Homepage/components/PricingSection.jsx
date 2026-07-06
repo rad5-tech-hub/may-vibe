@@ -205,14 +205,14 @@ export default function PricingSection() {
                 </ul>
               </div>
               <div className="flex justify-end w-full">
-                <span className={`text-xs font-semibold cursor-pointer underline decoration-dotted underline-offset-2 ${isHD ? "text-white/80 hover:text-white" : "text-orange-600 hover:text-orange-700"}`}>
+                <span onClick={() => navigate("/contact")} className={`text-xs font-semibold cursor-pointer underline decoration-dotted underline-offset-2 ${isHD ? "text-white/80 hover:text-white" : "text-orange-600 hover:text-orange-700"}`}>
                   See more
                 </span>
               </div>
             </div>
           ))}
 
-          {/* Artiste Pro Card */}
+            {/* Artiste Pro Card */}
           <div className={`relative rounded-3xl p-6 md:p-8 flex flex-col justify-between border shadow-md transition-all duration-300 ${
             isHD
               ? "bg-white text-black border-[#FF6200]"
@@ -281,7 +281,7 @@ export default function PricingSection() {
               </ul>
             </div>
             <div className="flex justify-end w-full">
-              <span className={`text-xs font-semibold cursor-pointer underline decoration-dotted underline-offset-2 ${
+              <span onClick={() => navigate("/contact")} className={`text-xs font-semibold cursor-pointer underline decoration-dotted underline-offset-2 ${
                 isHD ? "text-orange-600 hover:text-orange-700" : "text-white/80 hover:text-white"
               }`}>
                 See more
@@ -332,6 +332,7 @@ export default function PricingSection() {
                 Contact Us
               </button>
               <button
+                onClick={() => navigate("/contact")}
                 className={`px-20 py-2 rounded-full font-bold text-sm tracking-wide text-center border transition-all cursor-pointer ${
                   isHD
                     ? "border-white text-white hover:bg-white/10"

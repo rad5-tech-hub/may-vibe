@@ -1,6 +1,8 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
+import ScrollToTop from './Pages/components/ScrollToTop';
+import PageTransition from './Pages/components/PageTransition';
 import  Signup from './Pages/Onboarding Pages/signup.jsx';
 import  Login from './Pages/Onboarding Pages/login.jsx';
 import  Welcome from './Pages/Onboarding Pages/welcome.jsx';
@@ -31,6 +33,7 @@ import RightsProtection from './Pages/RightsProtection/RightsProtection';
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       {/* Sonner Toaster - Place it once at the root */}
       <Toaster
         position="top-right"
@@ -45,46 +48,48 @@ function App() {
         }}
       />
 
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Homepage />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/welcome" element={<Welcome />} />
-        <Route path="/forgotPassword" element={<ForgotPassword />} />
-        <Route path="/resetPassword" element={<ResetPassword />} />
-        <Route path="/verifyOtp" element={<VerifyOTP />} />
+      <PageTransition>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Homepage />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/welcome" element={<Welcome />} />
+          <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/resetPassword" element={<ResetPassword />} />
+          <Route path="/verifyOtp" element={<VerifyOTP />} />
 
-        {/* Dashboard Routes */}
-        <Route path="/dashboard/overview" element={<Overview />} />
-        <Route path="/dashboard/releases" element={<Releases />} />
-        <Route path="/dashboard/music-upload" element={<Music />} />
-        <Route path="/dashboard/royalties" element={<RoyaltiesPage />} />
-        <Route path="/dashboard/support" element={<Support />} />
-        <Route path="/dashboard/notifications" element={<Notifications />} />
-        <Route path="/dashboard/profile" element={<Profile />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+          {/* Dashboard Routes */}
+          <Route path="/dashboard/overview" element={<Overview />} />
+          <Route path="/dashboard/releases" element={<Releases />} />
+          <Route path="/dashboard/music-upload" element={<Music />} />
+          <Route path="/dashboard/royalties" element={<RoyaltiesPage />} />
+          <Route path="/dashboard/support" element={<Support />} />
+          <Route path="/dashboard/notifications" element={<Notifications />} />
+          <Route path="/dashboard/profile" element={<Profile />} />
+          <Route path="/dashboard" element={<Dashboard />} />
 
-        {/* Public Utility Pages */}
-        <Route path="/about" element={<About title="About Us" />} />
-        <Route path="/contact" element={<Contact title="Contact Us" />} />
-        <Route path="/faq" element={<SimplePage title="FAQ" />} />
-        <Route path="/blog" element={<SimplePage title="Blog" />} />
-        <Route path="/academy" element={<Academy title="Academy" />} />
-        <Route path="/terms" element={<SimplePage title="Terms of Service" />} />
-        <Route path="/privacy" element={<SimplePage title="Privacy Policy" />} />
-        <Route path="/store" element={<SimplePage title="Mayvibe Store" />} />
+          {/* Public Utility Pages */}
+          <Route path="/about" element={<About title="About Us" />} />
+          <Route path="/contact" element={<Contact title="Contact Us" />} />
+          <Route path="/faq" element={<SimplePage title="FAQ" />} />
+          <Route path="/blog" element={<SimplePage title="Blog" />} />
+          <Route path="/academy" element={<Academy title="Academy" />} />
+          <Route path="/terms" element={<SimplePage title="Terms of Service" />} />
+          <Route path="/privacy" element={<SimplePage title="Privacy Policy" />} />
+          <Route path="/store" element={<SimplePage title="Mayvibe Store" />} />
 
-        {/* Business Solution Pages */}
-        <Route path="/advanced-music" element={<Advanced />} />
-        <Route path="/global-dsp" element={<GlobalDSP />} />
-        <Route path="/accounting-royalty" element={<AccountingRoyalty />} />
-        <Route path="/advanced-release" element={<AdvancedRelease />} />
-        <Route path="/rights-protection" element={<RightsProtection />} />
+          {/* Business Solution Pages */}
+          <Route path="/advanced-music" element={<Advanced />} />
+          <Route path="/global-dsp" element={<GlobalDSP />} />
+          <Route path="/accounting-royalty" element={<AccountingRoyalty />} />
+          <Route path="/advanced-release" element={<AdvancedRelease />} />
+          <Route path="/rights-protection" element={<RightsProtection />} />
 
-        {/* Fallback for unknown routes */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          {/* Fallback for unknown routes */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </PageTransition>
     </Router>
   );
 }

@@ -1,6 +1,9 @@
 // src/components/global/Footer.jsx
+import { useNavigate } from "react-router-dom";
 
 export default function Footer() {
+  const navigate = useNavigate();
+
   return (
     <footer className="w-full bg-[#110A05] relative py-20 px-6 overflow-hidden">
       
@@ -29,7 +32,7 @@ export default function Footer() {
         {/* Action Button Link Block */}
         <div className="mb-16">
           <button
-            onClick={() => console.log("Start Publishing Triggered")}
+            onClick={() => navigate("/signup")}
             className="bg-[#FF6200] text-white font-bold text-sm sm:text-base px-8 py-3.5 rounded-xl shadow-lg hover:bg-orange-600 transition duration-150 active:scale-98 cursor-pointer"
           >
             Start Publishing

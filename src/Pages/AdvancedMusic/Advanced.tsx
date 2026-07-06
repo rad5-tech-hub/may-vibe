@@ -1,12 +1,16 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-// import Hero from "./components/Hero";
+import AdvancedMusicHero from "./components/Hero";
+import AdvancedMusicFeatures from "./components/Featured";
+import AdvancedMusicOverview from "./components/Overview";
 
 const Homepage = () => {
   return (
-    <div style={{ scrollBehavior: "smooth" }} className="font-display antialiased">
+    <div className="font-display antialiased">
       <Navbar />
-      {/* <Hero /> */}
+      <AdvancedMusicHero />
+      <AdvancedMusicOverview />
+      <AdvancedMusicFeatures />
       <Footer />
     </div>
   );

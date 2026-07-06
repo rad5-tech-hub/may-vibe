@@ -1,7 +1,10 @@
 // src/pages/about/components/AboutHero.jsx
+import { useNavigate } from "react-router-dom";
 import aboutHero from "../../../assets/aboutHero.png"
 
 export default function AboutHero() {
+  const navigate = useNavigate();
+
   return (
     <section className="bg-[#FAF6F4] w-full py-16 lg:py-24 px-6 min-h-[620px] flex items-center overflow-hidden">
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center pb-5">
@@ -33,7 +36,7 @@ export default function AboutHero() {
           {/* Main Direct Call to Action Button */}
           <div className="mt-8">
             <button 
-              onClick={() => console.log("Join Mayvibe Triggered")}
+              onClick={() => navigate("/signup")}
               className="bg-[#FF6200] text-white font-bold text-base px-10 py-4 rounded-2xl shadow-md hover:bg-orange-600 transition duration-150 active:scale-98 cursor-pointer"
             >
               Join Mayvibe

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { ChevronDown, Menu, X } from "lucide-react";
 
 import tower from "../../assets/tower.png";
@@ -10,9 +10,13 @@ import rights from "../../assets/rights.png";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRef = useRef(null);
+  const businessPaths = ["/advanced-music", "/global-dsp", "/accounting-royalty", "/advanced-release", "/rights-protection"];
+  const isBusinessActive = businessPaths.includes(location.pathname);
+  const isAboutActive = location.pathname === "/about";
 
   const toggleDropdown = (menu) => {
     setOpenDropdown(openDropdown === menu ? null : menu);
@@ -46,9 +50,9 @@ export default function Navbar() {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => toggleDropdown("business")}
-                className="flex items-center gap-1 hover:text-[#FF6200] transition cursor-pointer font-semibold"
+                className={`flex items-center gap-1 hover:text-[#FF6200] transition cursor-pointer font-semibold ${isBusinessActive ? "text-[#FF6200]" : ""}`}
               >
-                Business Solutions
+                <span className={`${isBusinessActive ? "border-b-2 border-[#FF6200] pb-0.5" : ""}`}>Business Solutions</span>
                 <ChevronDown size={16} className={`transition ${openDropdown === "business" ? "rotate-180" : ""}`} />
               </button>
 
@@ -123,7 +127,7 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 to={link.path}
-                className="hover:text-[#FF6200] transition cursor-pointer font-semibold"
+                className={`hover:text-[#FF6200] transition cursor-pointer font-semibold ${link.path === "/about" && isAboutActive ? "text-[#FF6200] border-b-2 border-[#FF6200]" : ""}`}
               >
                 {link.name}
               </Link>
@@ -159,9 +163,9 @@ export default function Navbar() {
             <div>
               <button
                 onClick={() => toggleDropdown("business")}
-                className="flex items-center gap-1 hover:text-[#FF6200] transition cursor-pointer font-semibold text-base"
+                className={`flex items-center gap-1 hover:text-[#FF6200] transition cursor-pointer font-semibold text-base ${isBusinessActive ? "text-[#FF6200]" : ""}`}
               >
-                Business Solutions
+                <span className={`${isBusinessActive ? "border-b-2 border-[#FF6200]" : ""}`}>Business Solutions</span>
                 <ChevronDown size={16} className={`transition ${openDropdown === "business" ? "rotate-180" : ""}`} />
               </button>
               {openDropdown === "business" && (
@@ -195,7 +199,7 @@ export default function Navbar() {
                 key={link.name}
                 to={link.path}
                 onClick={() => setMobileOpen(false)}
-                className="hover:text-[#FF6200] transition cursor-pointer font-semibold text-base"
+                className={`hover:text-[#FF6200] transition cursor-pointer font-semibold text-base ${link.path === "/about" && isAboutActive ? "text-[#FF6200] border-b-2 border-[#FF6200] w-fit" : ""}`}
               >
                 {link.name}
               </Link>

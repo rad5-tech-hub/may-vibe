@@ -40,11 +40,11 @@ export default function MainFooter() {
               Business Solutions
             </h4>
             <ul className="space-y-4 text-[18px] font-normal text-black leading-snug">
-              <li className="cursor-pointer hover:text-[#FF6200] transition-colors">Advanced Music Distribution Infrastructure</li>
-              <li className="cursor-pointer hover:text-[#FF6200] transition-colors">Global DSP & Regional Platform Reach</li>
-              <li className="cursor-pointer hover:text-[#FF6200] transition-colors">Accounting & Royalty Infrastructure</li>
-              <li className="cursor-pointer hover:text-[#FF6200] transition-colors">Advanced Release Features</li>
-              <li className="cursor-pointer hover:text-[#FF6200] transition-colors">Rights Protection & Compliance</li>
+              <li onClick={() => navigate("/advanced-music")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Advanced Music Distribution Infrastructure</li>
+              <li onClick={() => navigate("/global-dsp")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Global DSP & Regional Platform Reach</li>
+              <li onClick={() => navigate("/accounting-royalty")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Accounting & Royalty Infrastructure</li>
+              <li onClick={() => navigate("/advanced-release")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Advanced Release Features</li>
+              <li onClick={() => navigate("/rights-protection")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Rights Protection & Compliance</li>
             </ul>
           </div>
 
@@ -57,7 +57,7 @@ export default function MainFooter() {
               <li onClick={() => navigate("/")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Home</li>
               <li onClick={() => navigate("/about")} className="cursor-pointer hover:text-[#FF6200] transition-colors">About</li>
               <li onClick={() => navigate("/contact")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Contact/Support</li>
-              <li onClick={() => navigate("/faq")} className="cursor-pointer hover:text-[#FF6200] transition-colors">FAQ</li>
+              <li onClick={() => navigate("/contact#faq")} className="cursor-pointer hover:text-[#FF6200] transition-colors">FAQ</li>
               <li onClick={() => navigate("/blog")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Blog</li>
               <li onClick={() => navigate("/academy")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Academy</li>
             </ul>

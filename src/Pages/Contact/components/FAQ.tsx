@@ -122,7 +122,7 @@ export default function FAQ() {
   };
 
   return (
-    <section className="bg-white w-full py-20 px-6">
+    <section id="faq" className="bg-white w-full py-20 px-6">
       <div className="max-w-7xl mx-auto w-full">
         
         {/* Upper Meta Heading Matrix */}

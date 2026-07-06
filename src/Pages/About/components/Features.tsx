@@ -92,10 +92,10 @@ export default function Features() {
               return (
                 <div 
                   key={index} 
-                  className={`p-6 sm:p-8 flex flex-col items-start text-left min-h-[250px] transition duration-150 hover:bg-white/80 ${borderRightClass}`}
+                  className={`p-6 sm:p-8 flex flex-col items-start text-left min-h-[250px] transition duration-150 bg-[#FFFBFA]  ${borderRightClass}`}
                 >
                   {/* Styled Subtle Background Container Box Wrap around Image Asset */}
-                  <div className="w-11 h-11 bg-[#FCEBE6] rounded-xl flex items-center justify-center mb-5 shrink-0 border border-orange-100/30">
+                  <div className="w-11 h-11 bg-[#FCEBE6] rounded-xl flex items-center justify-center mb-5 shrink-0 border border-orange-400">
                     <img 
                       src={feature.iconName} 
                       alt={`${feature.title} item icon`} 

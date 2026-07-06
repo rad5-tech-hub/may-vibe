@@ -9,7 +9,7 @@ import MainFooter from "../components/MainFooter";
 
 const Homepage = () => {
   return (
-    <div style={{ scrollBehavior: "smooth" }} className="font-display antialiased">
+    <div className="font-display antialiased">
       <Navbar />
       <HeroSection />
       <DistributeBanner />

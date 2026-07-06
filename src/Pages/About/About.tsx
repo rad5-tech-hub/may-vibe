@@ -8,7 +8,7 @@ import AboutQuote from "./components/AboutQuote";
 
 const Homepage = () => {
   return (
-    <div style={{ scrollBehavior: "smooth" }} className="font-display antialiased">
+    <div className="font-display antialiased">
       <Navbar />
       <Hero />
       <AboutUs /> 

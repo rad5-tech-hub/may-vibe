@@ -9,7 +9,7 @@ export default function FooterLinks() {
     { name: "Support / Contact", path: "/contact" },
   ];
   const pillsRow2 = [
-    { name: "FAQ", path: "/faq" },
+    { name: "FAQ", path: "/contact#faq" },
     { name: "Mayvibe store", path: "/store" },
   ];
 

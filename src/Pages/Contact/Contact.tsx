@@ -6,7 +6,7 @@ import GetInTouch from "../Academy/components/GetInTouch";
 
 const Homepage = () => {
   return (
-    <div style={{ scrollBehavior: "smooth" }} className="font-display antialiased">
+    <div className="font-display antialiased">
       <Navbar />
       <Hero />
       <FAQ />
