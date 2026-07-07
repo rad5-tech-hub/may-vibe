@@ -85,9 +85,9 @@ const Signup = () => {
           
           {/* LEFT SIDE */}
           <div className="w-full lg:w-1/2 px-16 py-16 lg:py-0 flex flex-col justify-center text-white bg-white/5 backdrop-blur-xl">
-            <h1 className="text-3xl lg:text-5xl font-bold mb-6">Let’s Get Started</h1>
+            <h1 className="text-3xl lg:text-4xl font-bold mb-6">Distribute Your Sound To The World</h1>
             <p className="text-white text-xs lg:text-md leading-relaxed max-w-xl">
-               Join thousands of artists using Mayvibe to unlock global reach, real earnings, and full control over your music career. Everything you need to succeed starts here.
+              Release your music globally, track your royalties transparently, and build your career with professional distribution tools designed for independent artists.
             </p>
           </div>
 

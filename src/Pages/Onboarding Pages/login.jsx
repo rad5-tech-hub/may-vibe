@@ -93,9 +93,9 @@ const Login = () => {
           
           {/* LEFT SIDE */}
           <div className="w-full lg:w-1/2 px-16 py-16 lg:py-0 flex flex-col justify-center text-white bg-white/5 backdrop-blur-xl">
-            <h1 className="text-3xl lg:text-5xl font-bold mb-6">Let’s Get Started</h1>
+            <h1 className="text-3xl lg:text-4xl font-bold mb-6">Welcome Back To Your Music Career</h1>
             <p className="text-white text-xs lg:text-md leading-relaxed max-w-xl">
-              Access your global music dashboard,where every stream, every fan, and every earning is at your fingertips.
+              Access your releases, track royalties, manage your catalog, and continue growing your music career globally with Mayvibe.
             </p>
           </div>
 
@@ -106,7 +106,7 @@ const Login = () => {
             <div className="absolute left-0 top-0 bottom-0 w-px bg-white/20" />
 
             <div className='w-full flex flex-col justify-center py-10 lg:py-0'>            
-              <h2 className="text-3xl font-extrabold mb-10">Welcome Back To Your Music Career</h2>
+              <h2 className="text-3xl font-extrabold mb-10">Login</h2>
 
               <form onSubmit={handleSubmit} className="w-full lg:w-[80%]">
                 <div className='mb-8'>
