@@ -19,7 +19,7 @@ const faqDataset = {
     },
     {
       q: "How long does it take for my music to go live on platforms?",
-      a: "Delivery typically takes 24–72 hours after approval, but we recommend submitting at least 7 days before your desired release date to account for platform ingestion times — especially for Spotify and Apple Music editorial pitching."
+      a: "Delivery typically takes 24–72 hours after approval, but we recommend submitting at least 7 days before your desired release date to account for platform ingestion times,especially for Spotify and Apple Music editorial pitching."
     },
     {
       q: "Which platforms does Mayvibe distribute to?",
@@ -41,7 +41,7 @@ const faqDataset = {
     },
     {
       q: "Can I cancel my subscription at any time?",
-      a: "Yes. You can cancel your subscription at any time from your account settings. Your plan remains active until the end of your current billing period. Note that cancelling may affect live releases — review our cancellation policy before proceeding."
+      a: "Yes. You can cancel your subscription at any time from your account settings. Your plan remains active until the end of your current billing period. Note that cancelling may affect live releases,review our cancellation policy before proceeding."
     },
     {
       q: "How do I update my payment method?",
@@ -69,7 +69,7 @@ const faqDataset = {
   "release-issues": [
     {
       q: "Why was my release rejected?",
-      a: "Common reasons include incorrect or incomplete metadata, artwork that doesn't meet platform specs (minimum 3000×3000px, JPG or PNG), audio quality issues, or rights confirmation failures. You will receive a rejection reason — fix the flagged issue and resubmit."
+      a: "Common reasons include incorrect or incomplete metadata, artwork that doesn't meet platform specs (minimum 3000×3000px, JPG or PNG), audio quality issues, or rights confirmation failures. You will receive a rejection reason,fix the flagged issue and resubmit."
     },
     {
       q: "My music is live but not appearing on a specific platform. What do I do?",
@@ -83,7 +83,7 @@ const faqDataset = {
   "rights-compliance": [
     {
       q: "Do I keep ownership of my music on Mayvibe?",
-      a: "Yes. 100%. Mayvibe is a distribution platform — we do not claim any ownership of your masters or compositions. You retain full control and copyright of your music at all times."
+      a: "Yes. 100%. Mayvibe is a distribution platform,we do not claim any ownership of your masters or compositions. You retain full control and copyright of your music at all times."
     },
     {
       q: "Someone uploaded my music without my permission. What do I do?",

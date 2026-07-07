@@ -1,5 +1,41 @@
 // src/pages/global-dsp/components/GlobalDspPlatformGrid.jsx
 import { Radio, Download, Share2, Award, Activity } from "lucide-react";
+import musicmap from "../../../assets/musicmap.png";
+import spotify from "../../../assets/spotify.png";
+import applemusic from "../../../assets/applemusic.png";
+import amazonmusic from "../../../assets/amazonmusic.png";
+import youtubemusic from "../../../assets/youtubemusic.png";
+import tiktok from "../../../assets/tiktok.png";
+import deezer from "../../../assets/deezer.png";
+import tidal from "../../../assets/tidal.png";
+import boomplay from "../../../assets/boomplay.png";
+import audiomack from "../../../assets/audiomack.png";
+import anghami from "../../../assets/anghami.png";
+import jiosaavn from "../../../assets/jiosaavn.png";
+import kkbox from "../../../assets/kkbox.png";
+import facebook from "../../../assets/facebook.png";
+import instagram from "../../../assets/instagram.png";
+import snapchat from "../../../assets/snapchat.png";
+import shazam from "../../../assets/shazam.png";
+
+const platformLogoMap = {
+  "spotify.png": spotify,
+  "applemusic.png": applemusic,
+  "amazonmusic.png": amazonmusic,
+  "youtubemusic.png": youtubemusic,
+  "tiktok.png": tiktok,
+  "deezer.png": deezer,
+  "tidal.png": tidal,
+  "boomplay.png": boomplay,
+  "audiomack.png": audiomack,
+  "anghami.png": anghami,
+  "jiosaavn.png": jiosaavn,
+  "kkbox.png": kkbox,
+  "facebook.png": facebook,
+  "instagram.png": instagram,
+  "snapchat.png": snapchat,
+  "shazam.png": shazam,
+};
 
 const platformAssets = [
   { name: "Spotify", fileName: "spotify.png" },
@@ -49,7 +85,7 @@ export default function GlobalDspPlatformGrid() {
           {/* Right World Map Composition Graphic Viewport */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end">
             <img 
-              src="/src/assets/musicmap.png" 
+              src={musicmap} 
               alt="World geographic network distribution map" 
               className="w-full max-w-[380px] lg:max-w-[420px] object-contain pointer-events-none select-none"
             />
@@ -65,7 +101,7 @@ export default function GlobalDspPlatformGrid() {
             >
               <div className="w-8 h-8 flex items-center justify-center shrink-0">
                 <img 
-                  src={`/src/assets/${platform.fileName}`} 
+                  src={platformLogoMap[platform.fileName]} 
                   alt={`${platform.name} branding logo`} 
                   className="w-full h-full object-contain select-none pointer-events-none"
                 />

@@ -80,7 +80,7 @@ export default function MainFooter() {
               Contact
             </h4>
             <p className="text-[18px] font-normal text-black leading-relaxed max-w-[200px]">
-              House 3, Road 11, Maryland Estate Lekki, Lagos State.
+              Lekki, Lagos State.
             </p>
           </div>
         </div>

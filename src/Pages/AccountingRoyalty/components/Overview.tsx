@@ -1,4 +1,5 @@
 // src/pages/accounting/components/AccountingOverview.jsx
+import accountingoverview from "../../../assets/accountingoverview.png";
 
 export default function AccountingOverview() {
   return (
@@ -19,7 +20,7 @@ export default function AccountingOverview() {
           </h2>
           
           <p className="text-[#444444] text-[15px] sm:text-base font-normal leading-relaxed max-w-2xl mb-8">
-            Managing music revenue shouldn't be complicated. Mayvibe provides structured royalty and accounting infrastructure that helps artists, labels, and collaborators track earnings, manage royalty splits, monitor expenses, and maintain financial transparency. Our systems are built to support efficient operations, accurate reporting, and scalable growth across every stage of the music business.
+            Tracking what you've earned shouldn't take a finance degree. Mayvibe gives you clear earnings tracking, automatic royalty splits, and simple expense tracking,built to grow with you, whether you're releasing your first single or running your own label.
           </p>
 
           {/* Subheading Badges Matrix matching image_ddf6b8.png layout */}
@@ -39,7 +40,7 @@ export default function AccountingOverview() {
         {/* Right Side Overview UI Preview Frame */}
         <div className="lg:col-span-5 flex justify-center lg:justify-end">
           <img 
-            src="/src/assets/accountingoverview.png" 
+            src={accountingoverview} 
             alt="Mayvibe application interface showcasing royalties metrics data graphs and track lists details" 
             className="w-full max-w-[480px] lg:max-w-[520px] object-contain pointer-events-none select-none"
           />

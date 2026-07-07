@@ -1,49 +1,70 @@
+import ddexAdvanced from "../../../assets/ddexAdvanced.png";
+import advancedAdvanced from "../../../assets/advancedAdvanced.png";
+import realtimeAdvanced from "../../../assets/realAdvanced.png";
+import lyricsAdvanced from "../../../assets/lyricsAdvanced.png";
+import dolbyAdvanced from "../../../assets/dolbyAdvanced.png";
+import appleAdvanced from "../../../assets/appleAdvanced.png";
+import hiAdvanced from "../../../assets/hiAdvanced.png";
+import platformAdvanced from "../../../assets/platformAdvanced.png";
+import professionalAdvanced from "../../../assets/professionalAdvanced.png";
+
+const iconMap = {
+  "ddexAdvanced.png": ddexAdvanced,
+  "advancedAdvanced.png": advancedAdvanced,
+  "realAdvanced.png": realtimeAdvanced,
+  "lyricsAdvanced.png": lyricsAdvanced,
+  "dolbyAdvanced.png": dolbyAdvanced,
+  "appleAdvanced.png": appleAdvanced,
+  "hiAdvanced.png": hiAdvanced,
+  "platformAdvanced.png": platformAdvanced,
+  "professionalAdvanced.png": professionalAdvanced,
+};
 
 const advancedFeatures = [
   {
     icon: "ddexAdvanced.png",
     title: "DDEX-compliant distribution workflows",
-    desc: "Align with global music industry standards, standardize digital supply chain infrastructure & eliminate ingestion delays."
+    desc: "Get your music everywhere, faster. We follow the same global standards major labels use, so your release moves through every platform without delays or rejections."
   },
   {
     icon: "advancedAdvanced.png", // matches the first word "Advanced release scheduling"
     title: "Advanced release scheduling",
-    desc: "Command your release timeline. Lock in specific launch targets across global storefronts seamlessly, ensuring your music drops exactly when you want."
+    desc: "Drop your music exactly when you want, everywhere at once. Lock in your release date and we'll make sure it lands on every platform right on time,no early leaks, no late surprises."
   },
   {
-    icon: "realtimeAdvanced.png", // fallback structure standard matching title start
+    icon: "realAdvanced.png",
     title: "Real-time release tracking",
-    desc: "Eliminate the waiting game. Monitor your music live from the exact second it enters our system, tracking its progress across global ingestion queues."
+    desc: "No more wondering if it worked. Watch your release move from upload to live, step by step, so you always know exactly where your music stands."
   },
   {
     icon: "lyricsAdvanced.png",
     title: "Lyrics delivery",
-    desc: "Sync, format and push timestamped words directly onto listeners' lock screens & streaming karaoke modes worldwide."
+    desc: "Let fans sing along anywhere. Your lyrics show up perfectly timed on lock screens and karaoke modes worldwide,no extra work on your end."
   },
   {
     icon: "dolbyAdvanced.png",
     title: "Dolby Atmos support",
-    desc: "Go beyond stereo. Deliver dimensional, spatial sound formats exactly as the artists intend."
+    desc: "Go beyond stereo. Mix and deliver your music in dimensional, spatial sound,exactly the way you imagined it."
   },
   {
     icon: "appleAdvanced.png",
     title: "Apple Motion Artworks",
-    desc: "Elevate your visual presence on the store. Transform static release imagery into striking motion art that captures listener attention right on the storefront display."
+    desc: "Make your cover art move. Turn your artwork into striking motion visuals that stop scrollers and pull listeners in the moment they land on your page."
   },
   {
     icon: "hiAdvanced.png",
     title: "Hi-resolution audio delivery",
-    desc: "Zero compression. Ship high-fidelity lossless studio master files exactly as they sounded on the mixing desk."
+    desc: "Your mix, untouched. We deliver your music lossless and uncompressed, so it sounds exactly the way it did the day you finished it in the studio."
   },
   {
     icon: "platformAdvanced.png",
     title: "Platform-specific release optimization",
-    desc: "Custom formatting rules configured dynamically for Spotify, Apple Music & localized DSP architectures to maximize algorithmic playlist support."
+    desc: "We auto-format your release for Spotify, Apple Music, and every platform's quirks,giving you the best shot at landing on algorithmic playlists, without you having to learn the rules yourself."
   },
   {
     icon: "professionalAdvanced.png",
     title: "Professional metadata management",
-    desc: "Own your creative data, organize publishing rights, contributor roles & territory codes from a unified system built to meet modern ingestion rules."
+    desc: "Keep full ownership of your credits, splits, and rights,organized the way labels do it, without needing a label."
   }
 ];
 
@@ -76,7 +97,7 @@ export default function AdvancedMusicFeatures() {
               {/* Subtle Rounded Shaded Icon Wrapper */}
               <div className="w-10 h-10 bg-[#F35A1F1A] rounded-md flex items-center justify-center mb-4  border border-amber-600 shrink-0">
                 <img 
-                  src={`/src/assets/${item.icon}`} 
+                  src={iconMap[item.icon]} 
                   alt={`${item.title} icon overlay`} 
                   className="w-5 h-5 object-contain pointer-events-none select-none"
                 />

@@ -42,7 +42,7 @@ export default function GetInTouch() {
                 <label className="block text-sm font-bold text-black mb-2">Email Address</label>
                 <input 
                   type="email" 
-                  placeholder="Enter your full name" // Kept exact duplicate placeholder from screenshot
+                  placeholder="Enter your email address"
                   className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-orange-500 transition-colors"
                 />
               </div>

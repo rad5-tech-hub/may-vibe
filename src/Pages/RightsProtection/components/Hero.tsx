@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import rightshero from "../../../assets/rightshero.png";
 
 export default function RightsHero() {
   const navigate = useNavigate();
 
   return (
     <section className="bg-[#FAF6F4] w-full py-16 lg:py-24 px-6 min-h-[580px] flex items-center overflow-hidden">
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 items-center">
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 items-center py-5">
         
         {/* Left Layout Column */}
         <div className="lg:col-span-7 flex flex-col justify-center">
@@ -34,7 +35,7 @@ export default function RightsHero() {
         {/* Right Graphic Frame */}
         <div className="lg:col-span-5 flex justify-center lg:justify-end">
           <img 
-            src="/src/assets/rightshero.png" 
+            src={rightshero} 
             alt="Gavel inside headphones conceptual branding layout" 
             className="w-full object-contain select-none pointer-events-none"
           />

@@ -11,7 +11,7 @@ export default function DistributeBanner() {
         </h2>
         <p className="mt-4 text-white text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
           Distribute your music worldwide with Mayvibe. From Spotify to Apple Music and beyond, 
-          your sound travels globally — while your earnings land directly in your local bank.
+          your sound travels globally;while your earnings land directly in your local bank.
         </p>
         <button
           onClick={() => navigate("/signup")}

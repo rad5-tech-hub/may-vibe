@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import advancedhero from "../../../assets/advancedhero.png";
 
 export default function AdvancedHero() {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function AdvancedHero() {
     <div className="w-full flex flex-col">
       {/* Main Hero Background Panel */}
       <section className="bg-[#FAF6F4] w-full py-16 lg:py-20 px-6 min-h-[540px] flex items-center overflow-hidden">
-        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center py-5">
           
           {/* Typography */}
           <div className="lg:col-span-7 flex flex-col justify-center">
@@ -29,7 +30,7 @@ export default function AdvancedHero() {
             </h1>
 
             <p className="mt-6 text-[#444444] text-[15px] sm:text-base font-normal max-w-xl leading-relaxed">
-              Enhance release quality, improve platform compatibility, and deliver richer music experiences across digital service prodivers through advanced audio, metadata, and presentation capabilities.
+              Make every release sound and look as good as the song deserves — with spatial audio, animated artwork, and metadata that's accurate everywhere your music lands.
             </p>
 
             <div className="mt-8">
@@ -42,7 +43,7 @@ export default function AdvancedHero() {
           {/* Right Vector Illustration */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end">
             <img 
-              src="/src/assets/advancedhero.png" 
+              src={advancedhero} 
               alt="Advanced Release features dashboard visual artwork matrix" 
               className="w-full max-w-[480px] object-contain select-none pointer-events-none"
             />

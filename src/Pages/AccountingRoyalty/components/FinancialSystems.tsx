@@ -1,28 +1,46 @@
 
+import automated from "../../../assets/automated.png";
+import artistAccounting from "../../../assets/artistAccounting.png";
+import expense from "../../../assets/expense.png";
+import contributor from "../../../assets/contributor.png";
+import invoicing from "../../../assets/invoicing.png";
+import multicurrency from "../../../assets/multicurrency.png";
+import financial from "../../../assets/financial.png";
+
+const iconMap = {
+  "automated.png": automated,
+  "artistAccounting.png": artistAccounting,
+  "expense.png": expense,
+  "contributor.png": contributor,
+  "invoicing.png": invoicing,
+  "multicurrency.png": multicurrency,
+  "financial.png": financial,
+};
+
 const features = [
   {
     title: "Automated royalty split management",
-    description: "Automatically allocate earnings among artists, producers, songwriters, collaborators, and rights holders based on predefined ownership percentages.",
+    description: "Earnings split automatically between you, your producers, songwriters, and collaborators;based on the percentages you set.",
     iconName: "automated.png"
   },
   {
     title: "Artist earnings statements",
-    description: "Provide artists with organized earnings reports that clearly outline revenue sources, deductions, royalties, and payouts.",
+    description: "Get clear earnings statements showing exactly where your money came from;streams, royalties, deductions, and payouts, all in one place.",
     iconName: "artistAccounting.png"
   },
   {
     title: "Expense management by release",
-    description: "Track and organize expenses associated with individual releases, campaigns, and projects.",
+    description: "Track what you spend on each release, so you always know your real return on every project.",
     iconName: "expense.png"
   },
   {
     title: "Contributor accounting",
-    description: "Manage financial relationships across all project contributors through centralized accounting records.",
+    description: "Keep every collaborator's payments organized in one place, no matter how many people worked on a release.",
     iconName: "contributor.png"
   },
   {
     title: "Invoicing support",
-    description: "Generate and manage invoices while maintaining organized payment records for artists, vendors, and business partners.",
+    description: "Send and track invoices for your music work;handy if you also work with labels, brands, or sync deals.",
     iconName: "invoicing.png"
   },
   {
@@ -32,7 +50,7 @@ const features = [
   },
   {
     title: "Financial reporting visibility",
-    description: "Access structured reporting tools that help stakeholders understand revenue performance and financial activity.",
+    description: "See exactly how your music is performing financially, in reports built for you, not for accountants.",
     iconName: "financial.png"
   }
 ];
@@ -61,7 +79,7 @@ export default function FinancialSystems() {
             {[features[0], features[3], features[6]].map((item, idx) => (
               <div key={idx} className="flex flex-col items-start space-y-3.5">
                 <div className="w-7 h-7 flex items-center justify-center shrink-0">
-                  <img src={`/src/assets/${item.iconName}`} alt="" className="w-full h-full object-contain select-none pointer-events-none" />
+                  <img src={iconMap[item.iconName]} alt="" className="w-full h-full object-contain select-none pointer-events-none" />
                 </div>
                 <h4 className="text-black font-bold text-[15px] sm:text-base tracking-tight leading-tight">{item.title}</h4>
                 <p className="text-gray-500 text-xs sm:text-[13px] font-normal leading-relaxed">{item.description}</p>
@@ -74,7 +92,7 @@ export default function FinancialSystems() {
             {[features[1], features[4]].map((item, idx) => (
               <div key={idx} className="flex flex-col items-start space-y-3.5">
                 <div className="w-7 h-7 flex items-center justify-center shrink-0">
-                  <img src={`/src/assets/${item.iconName}`} alt="" className="w-full h-full object-contain select-none pointer-events-none" />
+                  <img src={iconMap[item.iconName]} alt="" className="w-full h-full object-contain select-none pointer-events-none" />
                 </div>
                 <h4 className="text-black font-bold text-[15px] sm:text-base tracking-tight leading-tight">{item.title}</h4>
                 <p className="text-gray-500 text-xs sm:text-[13px] font-normal leading-relaxed">{item.description}</p>
@@ -87,7 +105,7 @@ export default function FinancialSystems() {
             {[features[2], features[5]].map((item, idx) => (
               <div key={idx} className="flex flex-col items-start space-y-3.5">
                 <div className="w-7 h-7 flex items-center justify-center shrink-0">
-                  <img src={`/src/assets/${item.iconName}`} alt="" className="w-full h-full object-contain select-none pointer-events-none" />
+                  <img src={iconMap[item.iconName]} alt="" className="w-full h-full object-contain select-none pointer-events-none" />
                 </div>
                 <h4 className="text-black font-bold text-[15px] sm:text-base tracking-tight leading-tight">{item.title}</h4>
                 <p className="text-gray-500 text-xs sm:text-[13px] font-normal leading-relaxed">{item.description}</p>

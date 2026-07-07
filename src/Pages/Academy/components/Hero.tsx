@@ -5,7 +5,7 @@ import bg from "../../../assets/PublishingImage.png";
 export default function Hero() {
   return (
     <section className="bg-[#FAF6F4] w-full py-16 lg:py-28 px-6 min-h-[600px] flex items-center font-display">
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center py-5">
         
         {/* Left Column: Typography & Search Input */}
         <div className="lg:col-span-6 flex flex-col justify-center">
@@ -32,7 +32,7 @@ export default function Hero() {
           <div className="mt-10 max-w-xl w-full flex items-center ">
             <input
               type="text"
-              placeholder="Search videos and tutorials — e.g. 'How do I submit a release?'"
+              placeholder="Search videos and tutorials, e.g. 'How do I submit a release?'"
               className="w-full pl-4 pr-2 text-gray-800 placeholder-gray-400 text-sm focus:outline-none bg-white rounded-l-2xl border border-gray-200/80 shadow-sm p-3 transition-colors"
             />
             <button 

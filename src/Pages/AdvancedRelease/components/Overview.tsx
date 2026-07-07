@@ -1,4 +1,5 @@
 // src/pages/advanced-release/components/AdvancedOverview.jsx
+import advancedreleaseoverview from "../../../assets/advancedreleaseoverview.png";
 
 export default function AdvancedOverview() {
   return (
@@ -20,10 +21,7 @@ export default function AdvancedOverview() {
           
           <div className="space-y-6 max-w-2xl text-[#444444] text-[15px] sm:text-base font-normal leading-relaxed">
             <p>
-              Mayvibe provides advanced release features designed to help artists, labels, and rights holders maximize the quality, visibility, and performance of their releases across digital streaming platforms. From immersive audio formats and animated artwork experiences to enhanced metadata management and platform-specific optimization, our infrastructure supports modern release standards expected by today's streaming ecosystem.
-            </p>
-            <p>
-              These capabilities help improve release presentation, maintain metadata accuracy, support rights visibility, and create better listening experiences for audiences worldwide.
+              Your music should arrive exactly the way you made it — full audio quality, accurate credits, and artwork that does it justice everywhere it's heard. Mayvibe's release tools make sure nothing gets lost between your studio and your listener's headphones.
             </p>
           </div>
         </div>
@@ -31,7 +29,7 @@ export default function AdvancedOverview() {
         {/* Happy Listener Graphic Layout Frame */}
         <div className="lg:col-span-5 flex justify-center lg:justify-end">
           <img 
-            src="/src/assets/advancedreleaseoverview.png" 
+            src={advancedreleaseoverview} 
             alt="Smiling woman wearing high fidelity headphones listening to high res music" 
             className="w-full object-contain pointer-events-none select-none"
           />

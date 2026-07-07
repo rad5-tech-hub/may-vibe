@@ -64,7 +64,7 @@ const Notifications = () => {
                   { type: 'maintenance', text: 'Scheduled system maintenance', date: '11:11 AM, 08/10/2025' },
                   { type: 'offer', text: '10% Discount offer for this month', date: '11:11 AM, 08/10/2025' },
                   { type: 'default', text: 'New DSPs now available', date: '11:11 AM, 08/10/2025' },
-                  { type: 'default', text: 'DSP update — mayvibe is removing spotify from dsp list...', date: '11:11 AM, 08/10/2025' },
+                  { type: 'default', text: 'DSP update:mayvibe is removing spotify from dsp list...', date: '11:11 AM, 08/10/2025' },
                   { type: 'default', text: 'You can now suggest DSPs you want to see on mayvibe...', date: '11:11 AM, 08/10/2025' },
                 ].map((notif, i) => (
                   <div key={i} className="px-6 py-5 sm:px-8 sm:py-6 hover:bg-gray-50 transition">

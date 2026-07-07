@@ -9,11 +9,18 @@ const standardData = [
     subtitle: "Perfect for artistes releasing one single within a year.",
     price: "₦13,200",
     features: [
-      "1 Main Artist",
-      "One-off single release within a year",
-      "Distribution to all major DSPs including Spotify, Apple Music, Boomplay, Audiomack, Amazon Music, YouTube Music, TikTok & Instagram and other DSPs worldwide",
-      "Copyright Protection",
-      "DDEX Delivery",
+      "Unlimited uploads & streaming delivery",
+      "Delivery to 280+ global platforms and regional DSPs",
+      "Real-time automated release validation & metadata error scanning",
+      "100% distribution royalty payouts back to the rights holder",
+      "Keep 100% of your ownership rights & publishing control",
+      "Automated daily trends & advanced stream location insights",
+      "Free standard updates, metadata edits, and platform takedowns",
+      "DDEX-compliant supply chain distribution architecture",
+      "Free standard ISRC and UPC codes assignment",
+      "Platform-specific ingestion format optimization rules",
+      "Instant automated financial tracking statement visibility",
+      "24/7 dedicated email support channel clearance",
     ],
   },
   {
@@ -22,11 +29,12 @@ const standardData = [
     subtitle: "For artistes releasing an EP of up to 6 tracks.",
     price: "₦35,000",
     features: [
-      "1 Main Artist",
-      "One-off EP release (1–6 tracks) within a year",
-      "Distribution to all major DSPs including Spotify, Apple Music, Boomplay, Audiomack, Amazon Music, YouTube Music, TikTok & Instagram and other DSPs worldwide",
-      "Copyright Protection",
-      "Real-time analytics",
+      "Everything included in the Single Release tier",
+      "Dynamic multiple track sequencing arrangement workflows",
+      "Advanced metadata assignments individual to each separate track segment",
+      "Multi-artist and featured contributor credit role configurations",
+      "Extended multi-track platform presentation optimization",
+      "Consolidated multi-track financial performance analytics reporting",
     ],
   },
   {
@@ -35,11 +43,12 @@ const standardData = [
     subtitle: "Ideal for full album projects.",
     price: "₦55,000",
     features: [
-      "1 Main Artist",
-      "One-off album release (1–12 tracks) within a year",
-      "Distribution to all major DSPs including Spotify, Apple Music, Boomplay, Audiomack, Amazon Music, YouTube Music, TikTok & Instagram and other DSPs worldwide",
-      "Copyright Protection",
-      "Real-time analytics",
+      "Everything included in the EP Release tier",
+      "Extended track capacity for up to 30 audio files per container",
+      "Custom continuous play layout & dynamic continuous track formatting rules",
+      "Comprehensive cross-album metadata credit injection profiles",
+      "Premium priority global ingestion queue management processing",
+      "Optimized large-format bundle packaging across major storefront spaces",
     ],
   },
 ];
@@ -99,7 +108,12 @@ const enterpriseFeatures = [
 export default function PricingSection() {
   const navigate = useNavigate();
   const [isHD, setIsHD] = useState(false);
+  const [expandedCards, setExpandedCards] = useState({});
   const activeTierCards = isHD ? hdData : standardData;
+
+  const toggleExpand = (key) => {
+    setExpandedCards((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
 
   return (
     <section className="bg-white py-16 px-4 md:px-8 selection:bg-orange-200">
@@ -191,7 +205,10 @@ export default function PricingSection() {
                 </button>
 
                 <ul className="mt-8 space-y-3.5 pb-6">
-                  {card.features.map((feat, idx) => (
+                  {(expandedCards[card.title]
+                    ? card.features
+                    : card.features.slice(0, 5)
+                  ).map((feat, idx) => (
                     <li key={idx} className="flex gap-3 text-[13px] leading-relaxed items-start">
                       <CircleCheck
                         className={`mt-0.5 shrink-0 ${isHD ? "text-white" : "text-[#FF6200]"}`}
@@ -204,11 +221,16 @@ export default function PricingSection() {
                   ))}
                 </ul>
               </div>
-              <div className="flex justify-end w-full">
-                <span onClick={() => navigate("/contact")} className={`text-xs font-semibold cursor-pointer underline decoration-dotted underline-offset-2 ${isHD ? "text-white/80 hover:text-white" : "text-orange-600 hover:text-orange-700"}`}>
-                  See more
-                </span>
-              </div>
+              {card.features.length > 5 && (
+                <div className="flex justify-end w-full">
+                  <span
+                    onClick={() => toggleExpand(card.title)}
+                    className={`text-xs font-semibold cursor-pointer underline decoration-dotted underline-offset-2 ${isHD ? "text-white/80 hover:text-white" : "text-orange-600 hover:text-orange-700"}`}
+                  >
+                    {expandedCards[card.title] ? "Show less" : "See more"}
+                  </span>
+                </div>
+              )}
             </div>
           ))}
 
@@ -251,40 +273,53 @@ export default function PricingSection() {
               </button>
 
               <ul className="mt-8 space-y-3.5 pb-6">
-                <li className="flex gap-3 text-[13px] leading-relaxed items-start">
-                  <CircleCheck className={`mt-0.5 shrink-0 ${isHD ? "text-[#FF6200]" : "text-white"}`} size={16} />
-                  <span className={isHD ? "text-gray-700" : "text-white/90"}>1 Main Artist</span>
-                </li>
-                <li className="flex gap-3 text-[13px] leading-relaxed items-start">
-                  <CircleCheck className={`mt-0.5 shrink-0 ${isHD ? "text-[#FF6200]" : "text-white"}`} size={16} />
-                  <span className={isHD ? "text-gray-700" : "text-white/90"}>
-                    {isHD 
-                      ? "Limited releases of Singles, EPs & Albums within a year" 
-                      : "Unlimited releases (Singles, EPs & Albums) within a year"
-                    }
-                  </span>
-                </li>
-                <li className="flex gap-3 text-[13px] leading-relaxed items-start">
-                  <CircleCheck className={`mt-0.5 shrink-0 ${isHD ? "text-[#FF6200]" : "text-white"}`} size={16} />
-                  <span className={isHD ? "text-gray-700" : "text-white/90"}>
-                    Distribution to all major DSPs including Spotify, Apple Music, Boomplay, Audiomack, Amazon Music, YouTube Music, TikTok & Instagram and other DSPs worldwide
-                  </span>
-                </li>
-                <li className="flex gap-3 text-[13px] leading-relaxed items-start">
-                  <CircleCheck className={`mt-0.5 shrink-0 ${isHD ? "text-[#FF6200]" : "text-white"}`} size={16} />
-                  <span className={isHD ? "text-gray-700" : "text-white/90"}>Copyright Protection</span>
-                </li>
-                <li className="flex gap-3 text-[13px] leading-relaxed items-start">
-                  <CircleCheck className={`mt-0.5 shrink-0 ${isHD ? "text-[#FF6200]" : "text-white"}`} size={16} />
-                  <span className={isHD ? "text-gray-700" : "text-white/90"}>Real-time analytics</span>
-                </li>
+                {(expandedCards["Artiste Pro"]
+                  ? [
+                      "1 Main Artist",
+                      "Unlimited releases of Singles, EPs & Albums within a year",
+                      "Distribution to all major DSPs including Spotify, Apple Music, Boomplay, Audiomack, Amazon Music, YouTube Music, TikTok & Instagram and other DSPs worldwide",
+                      "Copyright Protection",
+                      "Real-time analytics",
+                      "Dolby Atmos & Spatial Audio support",
+                      "Hi-Res Audio delivery",
+                      "Apple Motion Artwork support",
+                      "Lyrics delivery to DSPs",
+                      "Marketing support",
+                      "Standard metadata QC",
+                      "Release scheduling",
+                      "Free ISRC & UPC codes",
+                      "YouTube Content ID",
+                      "Email support",
+                      "Digital splits for collaborators",
+                      "Pre-save links",
+                      "Early access to Mayvibe Publishing",
+                      "WhatsApp support",
+                      "Access to playlisting opportunities",
+                      "Priority QC",
+                      "Keep 100% of your royalties",
+                    ]
+                  : [
+                      "1 Main Artist",
+                      "Unlimited releases of Singles, EPs & Albums within a year",
+                      "Distribution to all major DSPs including Spotify, Apple Music, Boomplay, Audiomack, Amazon Music, YouTube Music, TikTok & Instagram and other DSPs worldwide",
+                      "Copyright Protection",
+                      "Real-time analytics",
+                    ]
+                ).map((feat, idx) => (
+                  <li key={idx} className="flex gap-3 text-[13px] leading-relaxed items-start">
+                    <CircleCheck className={`mt-0.5 shrink-0 ${isHD ? "text-[#FF6200]" : "text-white"}`} size={16} />
+                    <span className={isHD ? "text-gray-700" : "text-white/90"}>{feat}</span>
+                  </li>
+                ))}
               </ul>
             </div>
             <div className="flex justify-end w-full">
-              <span onClick={() => navigate("/contact")} className={`text-xs font-semibold cursor-pointer underline decoration-dotted underline-offset-2 ${
-                isHD ? "text-orange-600 hover:text-orange-700" : "text-white/80 hover:text-white"
+              <span
+                onClick={() => toggleExpand("Artiste Pro")}
+                className={`text-xs font-semibold cursor-pointer underline decoration-dotted underline-offset-2 ${
+                  isHD ? "text-orange-600 hover:text-orange-700" : "text-white/80 hover:text-white"
               }`}>
-                See more
+                {expandedCards["Artiste Pro"] ? "Show less" : "See more"}
               </span>
             </div>
           </div>

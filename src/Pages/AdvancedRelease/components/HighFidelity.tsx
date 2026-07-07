@@ -1,3 +1,5 @@
+import hires from "../../../assets/hi-res.png";
+import extended from "../../../assets/extended.png";
 
 export default function HighFidelityMetadata() {
   const badges = [
@@ -19,17 +21,14 @@ export default function HighFidelityMetadata() {
             
             <div className="space-y-5 text-gray-300 text-[14px] sm:text-[15px] font-normal leading-relaxed max-w-2xl">
               <p>
-                Mayvibe provides advanced release features designed to help artists, labels, and rights holders maximize the quality, visibility, and performance of their releases across digital streaming platforms. From immersive audio formats and animated artwork experiences to enhanced metadata management and platform-specific optimization, our infrastructure supports modern release standards expected by today's streaming ecosystem.
-              </p>
-              <p>
-                These capabilities help improve release presentation, maintain metadata accuracy, support rights visibility, and create better listening experiences for audiences worldwide.
+                Your mix, untouched. Mayvibe delivers your music lossless and uncompressed — up to 192kHz — so it sounds exactly the way it did the day you finished it in the studio.
               </p>
             </div>
           </div>
 
           <div className="lg:col-span-5 flex justify-center lg:justify-end">
             <img 
-              src="/src/assets/hi-res.png" 
+              src={hires} 
               alt="Colorful silhouette profile listening to high resolution pristine clear audio streams" 
               className="w-full object-contain"
             />
@@ -48,7 +47,7 @@ export default function HighFidelityMetadata() {
             </h3>
             
             <p className="text-gray-600 text-[14px] sm:text-[15px] font-normal leading-relaxed max-w-xl mb-6">
-              Mayvibe supports extended metadata and contributor management systems designed to improve release organization, rights visibility, and digital service provider compliance.
+              Keep every credit, code, and contributor organized in one place — so your rights are clear, your team gets recognized, and your release sails through every platform's requirements.
             </p>
 
             <span className="text-[#111111] font-bold text-sm tracking-tight mb-4 block">
@@ -71,7 +70,7 @@ export default function HighFidelityMetadata() {
           {/* WAV Flowchart Nodes Layout Frame */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end">
             <img 
-              src="/src/assets/extended.png" 
+              src={extended} 
               alt="WAV document component tracking publisher, track title, songwriter metadata attributes map node map" 
               className="w-full object-contain"
             />

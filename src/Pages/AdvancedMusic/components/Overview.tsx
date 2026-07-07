@@ -1,3 +1,4 @@
+import advancedOverview from "../../../assets/advancedOverview.png";
 
 export default function AdvancedMusicOverview() {
   return (
@@ -18,14 +19,14 @@ export default function AdvancedMusicOverview() {
           </h2>
 
           <p className="text-gray-700 text-[15px] sm:text-base font-normal leading-relaxed max-w-2xl">
-            Mayvibe provides advanced music distribution infrastructure designed to meet modern international delivery standards. Artists and labels can distribute music globally through a professional DDEX-compliant delivery system that supports advanced release operations, metadata management, release scheduling, and platform-specific delivery enhancements from one centralized dashboard.
+            Mayvibe gives independent artists the same release quality major labels rely on,without needing a major label. Distribute your music globally through a DDEX-compliant system built to international standards, with release scheduling, rights management, and platform-specific optimization, all from one simple dashboard.
           </p>
         </div>
 
         {/* Right Side Image Column */}
         <div className="lg:col-span-5 flex justify-center lg:justify-end">
           <img 
-            src="/src/assets/advancedOverview.png" 
+            src={advancedOverview} 
             alt="DSP streaming wheel network architecture display" 
             className="w-full max-w-[420px] object-contain pointer-events-none select-none"
           />

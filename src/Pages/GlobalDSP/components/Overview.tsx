@@ -1,4 +1,5 @@
 // src/pages/global-dsp/components/GlobalDspOverview.jsx
+import advancedOverview from "../../../assets/advancedOverview.png";
 
 export default function GlobalDspOverview() {
   return (
@@ -8,7 +9,7 @@ export default function GlobalDspOverview() {
         {/* Left Side Graphic Container Frame */}
         <div className="lg:col-span-5 flex justify-center lg:justify-start order-2 lg:order-1">
           <img 
-            src="/src/assets/advancedOverview.png" 
+            src={advancedOverview} 
             alt="Centralized streaming circular dashboard network visualization wheel" 
             className="w-full max-w-[360px] sm:max-w-[400px] object-contain pointer-events-none select-none"
           />

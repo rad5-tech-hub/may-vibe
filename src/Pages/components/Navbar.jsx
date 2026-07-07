@@ -14,6 +14,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRef = useRef(null);
+  const mobileMenuRef = useRef(null);
   const businessPaths = ["/advanced-music", "/global-dsp", "/accounting-royalty", "/advanced-release", "/rights-protection"];
   const isBusinessActive = businessPaths.includes(location.pathname);
   const isAboutActive = location.pathname === "/about";
@@ -24,6 +25,9 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
+      if (mobileMenuRef.current && mobileMenuRef.current.contains(e.target)) {
+        return;
+      }
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setOpenDropdown(null);
       }
@@ -158,7 +162,7 @@ export default function Navbar() {
 
       {/* Mobile/Tablet Menu */}
       {mobileOpen && (
-        <div className="lg:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 px-6 py-6 shadow-lg">
+        <div ref={mobileMenuRef} className="lg:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 px-6 py-6 shadow-lg">
           <div className="flex flex-col gap-4">
             <div>
               <button

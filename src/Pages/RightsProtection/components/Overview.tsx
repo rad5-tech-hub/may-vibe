@@ -1,3 +1,4 @@
+import rightsoverview from "../../../assets/rightsoverview.png";
 
 export default function RightsOverview() {
   return (
@@ -30,7 +31,7 @@ export default function RightsOverview() {
         {/* Right Side Visual Graphic frame */}
         <div className="lg:col-span-5 flex justify-center lg:justify-end">
           <img 
-            src="/src/assets/rightsoverview.png" 
+            src={rightsoverview} 
             alt="Padlock protection and audio visualizer shield representation" 
             className="w-full object-contain pointer-events-none select-none"
           />

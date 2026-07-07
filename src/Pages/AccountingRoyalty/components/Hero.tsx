@@ -1,12 +1,13 @@
 // src/pages/accounting/components/AccountingHero.jsx
 import { useNavigate } from "react-router-dom";
+import accountinghero from "../../../assets/accountinghero.png";
 
 export default function AccountingHero() {
   const navigate = useNavigate();
 
   return (
     <section className="bg-[#FAF6F4] w-full py-16 lg:py-24 px-6 min-h-[600px] flex items-center overflow-hidden">
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center py-5">
         
         {/* Left Typography Column */}
         <div className="lg:col-span-7 flex flex-col justify-center">
@@ -17,12 +18,12 @@ export default function AccountingHero() {
           </div>
 
           <h1 className="text-[#111111] text-4xl sm:text-5xl lg:text-[54px] font-black tracking-tight leading-[1.12]">
-            Accounting & Royalty <br />
-            <span className="text-[#FF6200]">Infrastructure</span>
+            Your Money. <br />
+            <span className="text-[#FF6200]">Clearly Accounted For.</span>
           </h1>
 
           <p className="mt-6 text-[#444444] text-[15px] sm:text-base font-normal max-w-xl leading-relaxed">
-            Mayvibe provides structured royalty, accounting, and financial management infrastructure designed to help artists, collaborators, labels, and rights holders manage revenue with greater transparency, accuracy, and operational efficiency.
+            Know exactly what you earned, where it came from, and when you'll get paid. Mayvibe gives artists, collaborators, and labels clear, accurate royalty tracking,no spreadsheets, no guesswork.
           </p>
 
           <div className="mt-8">
@@ -38,7 +39,7 @@ export default function AccountingHero() {
         {/* Right Dashboard Graphic Frame */}
         <div className="lg:col-span-5 flex justify-center lg:justify-end">
           <img 
-            src="/src/assets/accountinghero.png" 
+            src={accountinghero} 
             alt="Earnings Overview dashboard analytics widget panel view" 
             className="w-full max-w-[440px] object-contain select-none pointer-events-none "
           />

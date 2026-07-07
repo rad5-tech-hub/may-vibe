@@ -1,4 +1,6 @@
 // src/pages/advanced-release/components/CorePremiumFeatures.jsx
+import dolby from "../../../assets/dolby.png";
+import applemotion from "../../../assets/applemotion.png";
 
 export default function CorePremiumFeatures() {
   return (
@@ -24,17 +26,14 @@ export default function CorePremiumFeatures() {
               
               <div className="space-y-5 text-left text-gray-600 text-[14px] sm:text-[15px] font-normal leading-relaxed max-w-2xl">
                 <p>
-                  Mayvibe provides advanced release features designed to help artists, labels, and rights holders maximize the quality, visibility, and performance of their releases across digital streaming platforms. From immersive audio formats and animated artwork experiences to enhanced metadata management and platform-specific optimization, our infrastructure supports modern release standards expected by today's streaming ecosystem.
-                </p>
-                <p>
-                  These capabilities help improve release presentation, maintain metadata accuracy, support rights visibility, and create better listening experiences for audiences worldwide.
+                  Go beyond stereo. Mix and deliver your music in dimensional, spatial sound — giving listeners on supported platforms the immersive depth your music deserves, exactly the way you imagined it in the studio.
                 </p>
               </div>
             </div>
 
             <div className="lg:col-span-5 flex justify-center lg:justify-end">
               <img 
-                src="/src/assets/dolby.png" 
+                src={dolby} 
                 alt="Musician singing inside spatial audio wave layout vector graphic" 
                 className="w-full object-contain"
               />
@@ -51,7 +50,7 @@ export default function CorePremiumFeatures() {
           {/* Double Phone Comparison Frame */}
           <div className="lg:col-span-5 flex justify-center lg:justify-start order-2 lg:order-1">
             <img 
-              src="/src/assets/applemotion.png" 
+              src={applemotion} 
               alt="Normal static cover artwork vs Apple Motion Artworks phone UI screen displays mockups side by side" 
               className="w-full object-contain"
             />
@@ -65,10 +64,7 @@ export default function CorePremiumFeatures() {
             
             <div className="space-y-5 text-gray-600 text-[14px] sm:text-[15px] font-normal leading-relaxed max-w-xl">
               <p>
-                Mayvibe supports Apple Motion Artworks, allowing artists to upload animated artwork experiences for supported Apple Music releases.
-              </p>
-              <p>
-                Motion artwork enhances release presentation by introducing movement and visual storytelling directly within the streaming environment, helping releases stand out and create stronger audience engagement.
+                Bring your cover art to life. Upload animated artwork for Apple Music and give your release the kind of visual presence that makes listeners stop scrolling and pay attention.
               </p>
             </div>
           </div>

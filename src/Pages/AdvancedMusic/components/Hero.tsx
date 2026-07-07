@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import mic from "../../../assets/mic.png";
 
 export default function AdvancedMusicHero() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function AdvancedMusicHero() {
           </h1>
 
           <p className="mt-6 text-[#444444] text-[15px] sm:text-base font-normal max-w-xl leading-relaxed">
-            Architected for independent music sovereignty. Mayvibe bridges the gap between African creators and global streaming networks using advanced digital supply chain infrastructure. Effortlessly manage automated distribution workflows, lyrics delivery, Dolby Atmos synchronization, and platform optimization from one centralized system.
+            Built for artists who want to own their sound, on their own terms. Mayvibe gets your music from your studio to every major streaming platform worldwide,handling lyrics delivery, Dolby Atmos mixes, and platform formatting, so you can focus on making music, not managing logistics.
           </p>
 
           <div className="mt-8">
@@ -37,7 +38,7 @@ export default function AdvancedMusicHero() {
         {/* Right Asset Frame */}
         <div className="lg:col-span-5 flex justify-center lg:justify-end">
           <img 
-            src="/src/assets/mic.png" 
+            src={mic} 
             alt="Classic silver studio microphone" 
             className="w-full max-w-[320px] lg:max-w-[380px] object-contain select-none pointer-events-none"
           />

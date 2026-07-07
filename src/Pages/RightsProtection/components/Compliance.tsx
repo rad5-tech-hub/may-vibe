@@ -1,4 +1,20 @@
 
+import metadataIcon from "../../../assets/metadata.png";
+import rightsIcon from "../../../assets/rights.png";
+import aicontent from "../../../assets/aicontent.png";
+import artificial from "../../../assets/artificial.png";
+import contentIcon from "../../../assets/content.png";
+import releaseIcon from "../../../assets/release.png";
+
+const iconMap = {
+  "metadata.png": metadataIcon,
+  "rights.png": rightsIcon,
+  "aicontent.png": aicontent,
+  "artificial.png": artificial,
+  "content.png": contentIcon,
+  "release.png": releaseIcon,
+};
+
 const features = [
   {
     iconName: "metadata.png",
@@ -61,7 +77,7 @@ export default function ComplianceSystems() {
               {/* Subtle Rounded Shaded Icon Wrapper */}
               <div className="w-10 h-10 bg-[#F35A1F1A] rounded-md flex items-center justify-center mb-4 border border-amber-600 shrink-0">
                 <img 
-                  src={`/src/assets/${item.iconName}`} 
+                  src={iconMap[item.iconName]} 
                   alt={`${item.title} icon overlay`} 
                   className="w-5 h-5 object-contain pointer-events-none select-none"
                 />

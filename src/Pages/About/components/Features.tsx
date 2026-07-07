@@ -14,12 +14,12 @@ const featuresData = [
   {
     iconName: tower,
     title: "Global Music Distribution",
-    desc: "Reach 280+ DSPs across every continent instantly."
+    desc: "Reach 280+ streaming platforms across every continent, instantly."
   },
   {
     iconName: royalty,
     title: "Royalty tracking & earnings management",
-    desc: "Transparent earnings system that lets you track every stream, earnings and payouts."
+    desc: "See every stream, every payout, and everything you've earned — all in one transparent dashboard."
   },
   {
     iconName: artist,
@@ -29,7 +29,7 @@ const featuresData = [
   {
     iconName: release, 
     title: "Release & metadata management",
-    desc: "Professional release operations to keep metadata, scheduling & delivery flawless."
+    desc: "Keep your metadata, scheduling, and delivery flawless — so nothing holds your release back."
   },
   {
     iconName: playlist, 
@@ -44,22 +44,22 @@ const featuresData = [
   {
     iconName: rights,
     title: "Rights protection & compliance systems",
-    desc: "Content & creative rights protection systems."
+    desc: "Real protection for your content and your creative rights."
   },
   {
     iconName: customer,
     title: "Customer support & release assistance",
-    desc: "Dedicated release assistance and account management."
+    desc: "Real support when you need it — for your releases and your account."
   },
   {
     iconName: multi,
     title: "Multi-platform monetization",
-    desc: "Scalable systems built to maximize revenue across various earning streams."
+    desc: "Earn from every angle — streaming, downloads, and more — all working together to grow your income."
   },
   {
     iconName: professional,
     title: "Professional release operations",
-    desc: "Professional-grade release workflows and delivery operations."
+    desc: "Every release handled with the same care and process major labels use — so yours never falls through the cracks."
   }
 ];
 

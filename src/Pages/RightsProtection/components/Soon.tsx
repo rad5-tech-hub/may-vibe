@@ -1,3 +1,4 @@
+import soonacr from "../../../assets/soonacr.png";
 
 export default function ComingSoonAcr() {
   return (
@@ -7,7 +8,7 @@ export default function ComingSoonAcr() {
         {/* Left Side ACR Network Visualization Frame */}
         <div className="lg:col-span-5 flex justify-center lg:justify-start order-2 lg:order-1">
           <img 
-            src="/src/assets/soonacr.png" 
+            src={soonacr} 
             alt="Automatic Content Recognition digital circuitry graphic asset visual representation" 
             className="w-full object-contain pointer-events-none select-none"
           />
