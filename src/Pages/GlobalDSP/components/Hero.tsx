@@ -5,7 +5,7 @@ export default function GlobalDspHero() {
   const navigate = useNavigate();
 
   return (
-    <section className="bg-[#FAF6F4] w-full py-16 lg:py-24 px-6 min-h-[580px] flex items-center overflow-hidden">
+    <section className="bg-[#FAF6F4] w-full py-16 lg:py-24 px-6 min-h-[600px] flex items-center overflow-hidden">
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center py-5">
         
         {/* Left Typography Matrix */}

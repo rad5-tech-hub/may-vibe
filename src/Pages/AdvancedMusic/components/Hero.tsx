@@ -6,7 +6,7 @@ export default function AdvancedMusicHero() {
 
   return (
     <section className="bg-[#FAF6F4] w-full py-16 lg:py-24 px-6 min-h-[600px] flex items-center overflow-hidden">
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center py-5 lg:py-0">
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center py-5">
         
         {/* Left Content Matrix */}
         <div className="lg:col-span-7 flex flex-col justify-center">
@@ -16,7 +16,7 @@ export default function AdvancedMusicHero() {
             </span>
           </div>
 
-          <h1 className="text-[#111111] text-3xl lg:text-5xl font-bold tracking-tight leading-[1.15]">
+          <h1 className="text-[#111111] text-3xl lg:text-[54px] font-bold tracking-tight leading-[1.12]">
             Advanced Music <br />
             <span className="text-[#FF6200]">Distribution Infrastructure</span>
           </h1>

@@ -5,11 +5,11 @@ export default function RightsHero() {
   const navigate = useNavigate();
 
   return (
-    <section className="bg-[#FAF6F4] w-full py-16 lg:py-24 px-6 min-h-[580px] flex items-center overflow-hidden">
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 items-center py-5">
+    <section className="bg-[#FAF6F4] w-full py-16 lg:py-24 px-6 min-h-[600px] flex items-center overflow-hidden">
+      <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row gap-12 lg:gap-8 items-center py-5">
         
         {/* Left Layout Column */}
-        <div className="lg:col-span-7 flex flex-col justify-center">
+        <div className="lg:w-7/12 flex flex-col justify-center">
           <div className="w-fit bg-[#FCEBE6] rounded-full px-4 py-1.5 flex items-center mb-6">
             <span className="text-[#FF6200] text-xs font-black tracking-wider uppercase">
               • Business Solutions
@@ -33,7 +33,7 @@ export default function RightsHero() {
         </div>
 
         {/* Right Graphic Frame */}
-        <div className="lg:col-span-5 flex justify-center lg:justify-end">
+        <div className="lg:w-5/12 flex justify-center lg:justify-end">
           <img 
             src={rightshero} 
             alt="Gavel inside headphones conceptual branding layout" 

@@ -86,6 +86,23 @@ export default function MainFooter() {
         </div>
 
         </div>
+
+        {/* Mobile Social */}
+        <div className="lg:hidden text-center mt-6">
+          <h4 className="font-bold text-[#FF6200] tracking-wide mb-5">Follow Us</h4>
+          <div className="flex justify-center gap-3 text-gray-500">
+            <a href="#" className="hover:text-black transition duration-200" aria-label="Twitter">
+              <FaTwitter size={20} fill="currentColor" className="text-gray-400 hover:text-gray-600" />
+            </a>
+            <a href="#" className="hover:text-black transition duration-200" aria-label="Instagram">
+              <FaInstagram size={20} className="text-gray-400 hover:text-gray-600" />
+            </a>
+            <a href="#" className="hover:text-black transition duration-200" aria-label="YouTube">
+              <FaYoutube size={20} fill="currentColor" className="text-gray-400 hover:text-gray-400 border-none" />
+            </a>
+          </div>
+        </div>
+
         {/* Legal Disclaimer and Copyright Area */}
         <div className="pt-6 text-center border-none">
           <div className="text-black font-normal text-[15px] tracking-tight">

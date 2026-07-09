@@ -54,7 +54,7 @@ export default function HeroSection() {
               alt="Artist"
               className="h-full max-h-120 md:h-140 md:max-h-140 lg:h-160 lg:max-h-160 object-cover"
             />
-            <div className="absolute bottom-0 md:bottom-10 left-1/2 md:-left-30 -translate-x-1/2 md:translate-x-0 hidden md:block">
+            <div className="absolute bottom-0 md:bottom-10 left-1/2 md:-left-30 -translate-x-1/2 md:translate-x-0 block">
               <img 
                 src={musicWave} 
                 alt="Music Wave" 

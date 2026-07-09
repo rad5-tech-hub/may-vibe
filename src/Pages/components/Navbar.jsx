@@ -69,7 +69,7 @@ export default function Navbar() {
                           <img src={tower} alt="tower" className="w-6 h-6" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-base">Advanced Music Distribution Infrastructure</h4>
+                          <h4 className={`font-semibold text-base ${location.pathname === "/advanced-music" ? "text-[#FF6200]" : ""}`}>Advanced Music Distribution Infrastructure</h4>
                           <p className="text-md text-gray-500 font-light">DDEX-compliant global delivery infrastructure</p>
                         </div>
                       </div>
@@ -81,7 +81,7 @@ export default function Navbar() {
                           <img src={globe} alt="globe" className="w-6 h-6" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-base">Global DSP & Regional Platform Reach</h4>
+                          <h4 className={`font-semibold text-base ${location.pathname === "/global-dsp" ? "text-[#FF6200]" : ""}`}>Global DSP & Regional Platform Reach</h4>
                           <p className="text-md text-gray-500 font-light">280+ platforms globally</p>
                         </div>
                       </div>
@@ -93,7 +93,7 @@ export default function Navbar() {
                           <img src={account} alt="account" className="w-6 h-6" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-base">Accounting & Royalty Infrastructure</h4>
+                          <h4 className={`font-semibold text-base ${location.pathname === "/accounting-royalty" ? "text-[#FF6200]" : ""}`}>Accounting & Royalty Infrastructure</h4>
                           <p className="text-md text-gray-500 font-light">Automated splits, statements & multi-currency</p>
                         </div>
                       </div>
@@ -105,7 +105,7 @@ export default function Navbar() {
                           <img src={advanced} alt="advanced" className="w-6 h-6" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-base">Advanced Release Features</h4>
+                          <h4 className={`font-semibold text-base ${location.pathname === "/advanced-release" ? "text-[#FF6200]" : ""}`}>Advanced Release Features</h4>
                           <p className="text-md text-gray-500 font-light">Atmos, Apple Motion, hi-res & metadata</p>
                         </div>
                       </div>
@@ -117,7 +117,7 @@ export default function Navbar() {
                           <img src={rights} alt="rights" className="w-6 h-6" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-base">Rights Protection & Compliance</h4>
+                          <h4 className={`font-semibold text-base ${location.pathname === "/rights-protection" ? "text-[#FF6200]" : ""}`}>Rights Protection & Compliance</h4>
                           <p className="text-md text-gray-500 font-light">Copyright, fraud prevention & ACR</p>
                         </div>
                       </div>
@@ -173,26 +173,61 @@ export default function Navbar() {
                 <ChevronDown size={16} className={`transition ${openDropdown === "business" ? "rotate-180" : ""}`} />
               </button>
               {openDropdown === "business" && (
-                <div className="mt-3 ml-2 space-y-3">
-                  <Link to="/advanced-music" onClick={() => setMobileOpen(false)} className="flex gap-3 items-center cursor-pointer">
-                    <img src={tower} alt="tower" className="w-5 h-5" />
-                    <span className="text-sm">Advanced Music Distribution Infrastructure</span>
+                <div className="mt-3 ml-2 space-y-1">
+                  <Link to="/advanced-music" onClick={() => setMobileOpen(false)} className="block">
+                    <div className="flex gap-4 items-start py-2 px-2 rounded-2xl hover:bg-gray-50">
+                      <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
+                        <img src={tower} alt="tower" className="w-6 h-6" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <h4 className={`font-semibold text-sm ${location.pathname === "/advanced-music" ? "text-[#FF6200]" : "text-black"}`}>Advanced Music Distribution Infrastructure</h4>
+                        <p className="text-xs text-gray-500 font-light">DDEX-compliant global delivery infrastructure</p>
+                      </div>
+                    </div>
                   </Link>
-                  <Link to="/global-dsp" onClick={() => setMobileOpen(false)} className="flex gap-3 items-center cursor-pointer">
-                    <img src={globe} alt="globe" className="w-5 h-5" />
-                    <span className="text-sm">Global DSP & Regional Platform Reach</span>
+                  <Link to="/global-dsp" onClick={() => setMobileOpen(false)} className="block">
+                    <div className="flex gap-4 items-start py-2 px-2 rounded-2xl hover:bg-gray-50">
+                      <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
+                        <img src={globe} alt="globe" className="w-6 h-6" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <h4 className={`font-semibold text-sm ${location.pathname === "/global-dsp" ? "text-[#FF6200]" : "text-black"}`}>Global DSP & Regional Platform Reach</h4>
+                        <p className="text-xs text-gray-500 font-light">280+ platforms globally</p>
+                      </div>
+                    </div>
                   </Link>
-                  <Link to="/accounting-royalty" onClick={() => setMobileOpen(false)} className="flex gap-3 items-center cursor-pointer">
-                    <img src={account} alt="account" className="w-5 h-5" />
-                    <span className="text-sm">Accounting & Royalty Infrastructure</span>
+                  <Link to="/accounting-royalty" onClick={() => setMobileOpen(false)} className="block">
+                    <div className="flex gap-4 items-start py-2 px-2 rounded-2xl hover:bg-gray-50">
+                      <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
+                        <img src={account} alt="account" className="w-6 h-6" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <h4 className={`font-semibold text-sm ${location.pathname === "/accounting-royalty" ? "text-[#FF6200]" : "text-black"}`}>Accounting & Royalty Infrastructure</h4>
+                        <p className="text-xs text-gray-500 font-light">Automated splits, statements & multi-currency</p>
+                      </div>
+                    </div>
                   </Link>
-                  <Link to="/advanced-release" onClick={() => setMobileOpen(false)} className="flex gap-3 items-center cursor-pointer">
-                    <img src={advanced} alt="advanced" className="w-5 h-5" />
-                    <span className="text-sm">Advanced Release Features</span>
+                  <Link to="/advanced-release" onClick={() => setMobileOpen(false)} className="block">
+                    <div className="flex gap-4 items-start py-2 px-2 rounded-2xl hover:bg-gray-50">
+                      <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
+                        <img src={advanced} alt="advanced" className="w-6 h-6" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <h4 className={`font-semibold text-sm ${location.pathname === "/advanced-release" ? "text-[#FF6200]" : "text-black"}`}>Advanced Release Features</h4>
+                        <p className="text-xs text-gray-500 font-light">Atmos, Apple Motion, hi-res & metadata</p>
+                      </div>
+                    </div>
                   </Link>
-                  <Link to="/rights-protection" onClick={() => setMobileOpen(false)} className="flex gap-3 items-center cursor-pointer">
-                    <img src={rights} alt="rights" className="w-5 h-5" />
-                    <span className="text-sm">Rights Protection & Compliance</span>
+                  <Link to="/rights-protection" onClick={() => setMobileOpen(false)} className="block">
+                    <div className="flex gap-4 items-start py-2 px-2 rounded-2xl hover:bg-gray-50">
+                      <div className="w-11 h-11 bg-orange-50 border border-orange-300 rounded-lg flex items-center justify-center shrink-0">
+                        <img src={rights} alt="rights" className="w-6 h-6" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <h4 className={`font-semibold text-sm ${location.pathname === "/rights-protection" ? "text-[#FF6200]" : "text-black"}`}>Rights Protection & Compliance</h4>
+                        <p className="text-xs text-gray-500 font-light">Copyright, fraud prevention & ACR</p>
+                      </div>
+                    </div>
                   </Link>
                 </div>
               )}

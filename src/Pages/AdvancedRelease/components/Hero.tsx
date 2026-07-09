@@ -13,7 +13,7 @@ export default function AdvancedHero() {
   return (
     <div className="w-full flex flex-col">
       {/* Main Hero Background Panel */}
-      <section className="bg-[#FAF6F4] w-full py-16 lg:py-20 px-6 min-h-[540px] flex items-center overflow-hidden">
+      <section className="bg-[#FAF6F4] w-full py-16 lg:py-24 px-6 min-h-[600px] flex items-center overflow-hidden">
         <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center py-5">
           
           {/* Typography */}
