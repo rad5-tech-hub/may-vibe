@@ -36,10 +36,10 @@ export default function MainFooter() {
         <div className="flex-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 items-start w-full">
           {/* Business Solutions Column */}
           <div>
-            <h4 className="font-bold text-[#FF6200] text-[18px] tracking-wide mb-5">
+            <h4 className="font-bold text-[#FF6200] lg:text-[18px] tracking-wide mb-5">
               Business Solutions
             </h4>
-            <ul className="space-y-4 text-[18px] font-normal text-black leading-snug">
+            <ul className="space-y-4 lg:text-[18px] font-normal text-black leading-snug">
               <li onClick={() => navigate("/advanced-music")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Advanced Music Distribution Infrastructure</li>
               <li onClick={() => navigate("/global-dsp")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Global DSP & Regional Platform Reach</li>
               <li onClick={() => navigate("/accounting-royalty")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Accounting & Royalty Infrastructure</li>
@@ -50,10 +50,10 @@ export default function MainFooter() {
 
           {/* Useful Links Column */}
           <div>
-            <h4 className="font-bold text-[#FF6200] text-[18px] tracking-wide mb-5">
+            <h4 className="font-bold text-[#FF6200] lg:text-[18px] tracking-wide mb-5">
               Useful Links
             </h4>
-            <ul className="space-y-4 text-[18px] font-normal text-black leading-snug">
+            <ul className="space-y-4 lg:text-[18px] font-normal text-black leading-snug">
               <li onClick={() => navigate("/")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Home</li>
               <li onClick={() => navigate("/about")} className="cursor-pointer hover:text-[#FF6200] transition-colors">About</li>
               <li onClick={() => navigate("/contact")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Contact/Support</li>
@@ -65,10 +65,10 @@ export default function MainFooter() {
 
           {/* Legal Column */}
           <div>
-            <h4 className="font-bold text-[#FF6200] text-[18px] tracking-wide mb-5">
+            <h4 className="font-bold text-[#FF6200] lg:text-[18px] tracking-wide mb-5">
               Legal
             </h4>
-            <ul className="space-y-4 text-[18px] font-normal text-black leading-snug">
+            <ul className="space-y-4 lg:text-[18px] font-normal text-black leading-snug">
               <li onClick={() => navigate("/terms")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Terms</li>
               <li onClick={() => navigate("/privacy")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Privacy</li>
             </ul>
@@ -76,10 +76,10 @@ export default function MainFooter() {
 
           {/* Contact Column */}
           <div>
-            <h4 className="font-bold text-[#FF6200] text-[18px] tracking-wide mb-5">
+            <h4 className="font-bold text-[#FF6200] lg:text-[18px] tracking-wide mb-5">
               Contact
             </h4>
-            <p className="text-[18px] font-normal text-black leading-relaxed max-w-[200px]">
+            <p className="lg:text-[18px] font-normal text-black leading-relaxed max-w-[200px]">
               Lekki, Lagos State.
             </p>
           </div>
@@ -91,7 +91,7 @@ export default function MainFooter() {
           <div className="text-black font-normal text-[15px] tracking-tight">
             © 2026 Mayvibe Limited
           </div>
-          <p className="mt-3 text-black text-[13.5px] font-normal leading-relaxed max-w-[920px] mx-auto opacity-85">
+          <p className="mt-3 text-black text-xs lg:text-[13.5px] font-normal leading-relaxed max-w-[920px] mx-auto opacity-85">
             Mayvibe is Africa's foremost music Streaming, promotion/distribution network that enables artistes raise fund for their music career through monetization of their content and funding.
           </p>
         </div>

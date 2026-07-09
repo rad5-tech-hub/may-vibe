@@ -9,18 +9,18 @@ export default function HeroSection() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative overflow-hidden bg-[#FDF5F2] pt-28 pb-16 md:pt-32 md:pb-0">
-      <div className="max-w-7xl mx-auto px-6 md:px-8">
-        <div className="grid md:grid-cols-2 gap-12 lg:gap-3 items-center">
+    <section className="relative overflow-hidden bg-[#FDF5F2] pt-28 md:pt-32 md:pb-0">
+      <div className="max-w-7xl mx-auto px-6 md:px-6">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-0 items-start justify-between">
           
           {/* Left Content */}
-          <div className="space-y-8 order-2 md:order-1">
-            <h1 className="text-5xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-normal leading-normal md:leading-tight lg:leading-tight">
+          <div className="space-y-8">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-none">
               Get Heard, Get Paid<br />
               <span>Everywhere Your Fans Are.</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-gray-800 max-w-lg font-normal w-60%">
+            <p className="text-md md:text-xl text-gray-800 max-w-lg font-normal ">
               Break borders with Mayvibe. We deliver your songs to 280+ platforms globally and pay you securely in your local currency.
             </p>
 
@@ -28,7 +28,7 @@ export default function HeroSection() {
             <div className="space-y-8">
               <button
                 onClick={() => navigate("/signup")}
-                className="px-9 py-4 bg-orange-600 text-white text-lg font-semibold rounded-[20px] hover:bg-orange-700 transition shadow-lg hover:shadow-xl cursor-pointer"
+                className="px-9 py-2 md:py-3 bg-orange-600 text-white text-lg font-semibold rounded-xl hover:bg-orange-700 transition shadow-lg hover:shadow-xl cursor-pointer"
               >
                 Join Mayvibe
               </button>
@@ -48,13 +48,13 @@ export default function HeroSection() {
           </div>
 
           {/* Right Image + Waveform */}
-          <div className="relative order-1 md:order-2 flex justify-center md:justify-end">
+          <div className="relative flex justify-center md:justify-end">
             <img
               src={HeroImage}
               alt="Artist"
-              className="w-full max-w-lg lg:max-w-3xl xl:max-w-3xl object-cover"
+              className="h-full max-h-120 md:h-140 md:max-h-140 lg:h-160 lg:max-h-160 object-cover"
             />
-            <div className="absolute -bottom-8 md:bottom-10 left-1/2 md:left-8 -translate-x-1/2 md:translate-x-0 hidden md:block">
+            <div className="absolute bottom-0 md:bottom-10 left-1/2 md:-left-30 -translate-x-1/2 md:translate-x-0 hidden md:block">
               <img 
                 src={musicWave} 
                 alt="Music Wave" 

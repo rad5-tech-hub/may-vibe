@@ -20,11 +20,11 @@ export default function CorePremiumFeatures() {
 
           <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             <div className="lg:col-span-7 flex flex-col justify-center">
-              <h3 className="text-[#111111] text-3xl sm:text-[38px] font-bold tracking-tight mb-6">
+              <h3 className="text-[#111111] text-3xl lg:text-[38px] font-bold tracking-tight mb-6">
                 Dolby Atmos & <span className="text-[#FF6200]">Spatial Audio</span>
               </h3>
               
-              <div className="space-y-5 text-left text-gray-600 text-[14px] sm:text-[15px] font-normal leading-relaxed max-w-2xl">
+              <div className="space-y-5 text-left text-gray-600 text-[14px] lg:text-[15px] font-normal leading-relaxed max-w-2xl">
                 <p>
                   Go beyond stereo. Mix and deliver your music in dimensional, spatial sound — giving listeners on supported platforms the immersive depth your music deserves, exactly the way you imagined it in the studio.
                 </p>
@@ -62,7 +62,7 @@ export default function CorePremiumFeatures() {
               Apple <span className="text-[#FF6200]">Motion Artworks</span>
             </h3>
             
-            <div className="space-y-5 text-gray-600 text-[14px] sm:text-[15px] font-normal leading-relaxed max-w-xl">
+            <div className="space-y-5 text-gray-600 text-[14px] lg:text-[15px] font-normal leading-relaxed max-w-xl">
               <p>
                 Bring your cover art to life. Upload animated artwork for Apple Music and give your release the kind of visual presence that makes listeners stop scrolling and pay attention.
               </p>

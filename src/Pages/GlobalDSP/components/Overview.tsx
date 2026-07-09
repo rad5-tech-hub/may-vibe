@@ -17,11 +17,11 @@ export default function GlobalDspOverview() {
 
         {/* Right Side Content Matrix Typography */}
         <div className="lg:col-span-7 flex flex-col justify-center order-1 lg:order-2">
-          <h2 className="text-[#111111] text-3xl sm:text-[40px] font-black tracking-tight leading-tight mb-5">
+          <h2 className="text-[#111111] text-3xl sm:text-[40px] font-bold tracking-tight leading-tight mb-5">
             One dashboard. Every platform.
           </h2>
           
-          <p className="text-gray-600 text-[15px] sm:text-base font-normal leading-relaxed max-w-2xl">
+          <p className="text-gray-600 text-[15px] lg:text-base font-normal leading-relaxed max-w-2xl">
             Distribute your music to 280+ global platforms and connect with fans around the world. Whether your audience is on Spotify in London, Boomplay in Lagos, JioSaavn in Mumbai, or KKBOX in Taipei. Mayvibe gets your music there.
           </p>
         </div>

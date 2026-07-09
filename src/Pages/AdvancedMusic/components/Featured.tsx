@@ -82,7 +82,7 @@ export default function AdvancedMusicFeatures() {
             </span>
             <span className="w-5 h-0.5 bg-[#FF6200]" />
           </div>
-          <h2 className="text-[#111111] text-3xl sm:text-[40px] font-black tracking-tight max-w-3xl leading-tight">
+          <h2 className="text-[#111111] text-3xl sm:text-[40px] font-bold tracking-tight max-w-3xl leading-tight">
             Every Feature Built For Professional Release Operations.
           </h2>
         </div>

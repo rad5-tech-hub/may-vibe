@@ -36,7 +36,7 @@ export default function VerificationPipeline() {
         <div className="lg:col-span-6 flex flex-col pt-4">
           <div className="flex items-center gap-2 mb-4">
             <span className="w-4 h-0.5 bg-[#FF6200]" />
-            <span className="text-[#FF6200] text-xs font-black tracking-widest uppercase">
+            <span className="text-[#FF6200] text-xs font-bold tracking-widest uppercase">
               Verification Pipeline
             </span>
           </div>

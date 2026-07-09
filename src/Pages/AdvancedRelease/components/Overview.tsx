@@ -15,11 +15,11 @@ export default function AdvancedOverview() {
             </span>
           </div>
           
-          <h2 className="text-[#111111] text-3xl sm:text-[40px] font-bold tracking-tight leading-tight mb-8">
+          <h2 className="text-[#111111] text-3xl lg:text-[40px] font-bold tracking-tight leading-tight mb-8">
             Present Your Music <span className="text-[#FF6200]">At Its Best</span>
           </h2>
           
-          <div className="space-y-6 max-w-2xl text-[#444444] text-[15px] sm:text-base font-normal leading-relaxed">
+          <div className="space-y-6 max-w-2xl text-[#444444] text-[15px] lg:text-base font-normal leading-relaxed">
             <p>
               Your music should arrive exactly the way you made it — full audio quality, accurate credits, and artwork that does it justice everywhere it's heard. Mayvibe's release tools make sure nothing gets lost between your studio and your listener's headphones.
             </p>

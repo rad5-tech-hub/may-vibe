@@ -59,7 +59,7 @@ export default function HighFidelityMetadata() {
               {badges.map((badge, idx) => (
                 <span 
                   key={idx}
-                  className="bg-gray-200/60 text-gray-800 font-medium text-xs px-4 py-2 rounded-xl border border-gray-300/30 shadow-xs"
+                  className="bg-gray-400/60 text-gray-800 font-medium text-xs px-4 py-2 rounded-xl border border-gray-300/30 shadow-xs"
                 >
                   {badge}
                 </span>

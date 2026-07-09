@@ -41,7 +41,7 @@ export default function Footer() {
 
         {/* Universal Copyright Line Element */}
         <div className="w-full pt-6">
-          <p className="text-gray-500 text-xs sm:text-sm font-normal tracking-wide">
+          <p className="text-white text-xs sm:text-sm font-normal tracking-wide">
             &copy; 2026 Mayvibe Limited
           </p>
         </div>

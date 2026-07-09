@@ -18,12 +18,12 @@ export default function ComingSoonAcr() {
         <div className="lg:col-span-7 flex flex-col justify-center order-1 lg:order-2">
           <div className="flex items-center gap-2 mb-4 justify-center lg:justify-start">
             <span className="w-4 h-0.5 bg-[#FF6200]" />
-            <span className="text-[#FF6200] text-xs font-black tracking-widest uppercase">
+            <span className="text-[#FF6200] text-xs font-bold tracking-widest uppercase">
               Coming Soon
             </span>
           </div>
           
-          <h2 className="text-[#111111] text-3xl sm:text-[38px] font-bold tracking-tight leading-tight mb-5 text-center lg:text-left">
+          <h2 className="text-[#111111] text-3xl lg:text-[38px] font-bold tracking-tight leading-tight mb-5 text-center lg:text-left">
             Automatic Content Recognition <span className="text-[#FF6200]">&</span> <br />
             Content-matching Infrastructure
           </h2>

@@ -10,16 +10,16 @@ export default function AccountingOverview() {
         <div className="lg:col-span-7 flex flex-col justify-center">
           <div className="flex items-center gap-2 mb-4">
             <span className="w-4 h-0.5 bg-[#FF6200]" />
-            <span className="text-[#FF6200] text-xs font-black tracking-widest uppercase">
+            <span className="text-[#FF6200] text-xs font-bold tracking-widest uppercase">
               Overview
             </span>
           </div>
           
-          <h2 className="text-[#111111] text-3xl sm:text-[40px] font-black tracking-tight leading-tight mb-6">
+          <h2 className="text-[#111111] text-3xl lg:text-[40px] font-bold tracking-tight leading-tight mb-6">
             Where Music <span className="text-[#FF6200]">Revenue Meets <br className="hidden sm:inline" /> Transparency</span>
           </h2>
           
-          <p className="text-[#444444] text-[15px] sm:text-base font-normal leading-relaxed max-w-2xl mb-8">
+          <p className="text-[#444444] text-[15px] lg:text-base font-normal leading-relaxed max-w-2xl mb-8">
             Tracking what you've earned shouldn't take a finance degree. Mayvibe gives you clear earnings tracking, automatic royalty splits, and simple expense tracking,built to grow with you, whether you're releasing your first single or running your own label.
           </p>
 

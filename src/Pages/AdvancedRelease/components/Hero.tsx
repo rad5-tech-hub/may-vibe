@@ -24,17 +24,17 @@ export default function AdvancedHero() {
               </span>
             </div>
 
-            <h1 className="text-[#111111] text-4xl sm:text-5xl lg:text-[54px] font-bold tracking-tight leading-[1.12]">
+            <h1 className="text-[#111111] text-3xl lg:text-[54px] font-bold tracking-tight leading-[1.12]">
               Advanced <span className="text-[#FF6200]">Release</span> <br />
               <span className="text-[#FF6200]">Features</span>
             </h1>
 
-            <p className="mt-6 text-[#444444] text-[15px] sm:text-base font-normal max-w-xl leading-relaxed">
+            <p className="mt-6 text-[#444444] text-[15px] lg:text-base font-normal max-w-xl leading-relaxed">
               Make every release sound and look as good as the song deserves — with spatial audio, animated artwork, and metadata that's accurate everywhere your music lands.
             </p>
 
             <div className="mt-8">
-              <button onClick={() => navigate("/signup")} className="bg-[#FF6200] text-white font-bold text-base px-10 py-4 rounded-2xl shadow-sm hover:bg-orange-600 transition duration-150 cursor-pointer">
+              <button onClick={() => navigate("/signup")} className="bg-[#FF6200] text-white font-bold text-base px-10 py-2 lg:py-3 rounded-2xl shadow-sm hover:bg-orange-600 transition duration-150 cursor-pointer">
                 Join Mayvibe
               </button>
             </div>
@@ -52,7 +52,7 @@ export default function AdvancedHero() {
       </section>
 
       {/* Synchronized Metrics Strip */}
-      <div className="w-full bg-white border-y border-gray-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="w-full bg-white border-y border-gray-100 grid grid-cols-2 lg:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat, idx) => (
           <div 
             key={idx} 

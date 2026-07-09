@@ -16,19 +16,19 @@ export default function GlobalDspHero() {
             </span>
           </div>
 
-          <h1 className="text-[#111111] text-4xl sm:text-5xl lg:text-[54px] font-black tracking-tight leading-[1.12]">
+          <h1 className="text-[#111111] text-3xl lg:text-[54px] font-bold tracking-tight leading-[1.12]">
             Worldwide Reach. <br />
             <span className="text-[#FF6200]">Local Platforms Included.</span>
           </h1>
 
-          <p className="mt-6 text-[#444444] text-[15px] sm:text-base font-normal max-w-xl leading-relaxed">
+          <p className="mt-6 text-[#444444] text-[15px] lg:text-base font-normal max-w-xl leading-relaxed">
             Your music doesn't stop at one border. Mayvibe gets you onto every major global platform and the regional services your fans actually use;all from one place, so you're not juggling separate accounts for every country.
           </p>
 
           <div className="mt-8">
             <button 
               onClick={() => navigate("/signup")}
-              className="bg-[#FF6200] text-white font-bold text-base px-10 py-4 rounded-2xl shadow-md hover:bg-orange-600 transition duration-150 cursor-pointer"
+              className="bg-[#FF6200] text-white font-bold text-base px-10 py-2 lg:py-3 rounded-2xl shadow-md hover:bg-orange-600 transition duration-150 cursor-pointer"
             >
               Join Mayvibe
             </button>

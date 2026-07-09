@@ -16,17 +16,17 @@ export default function RightsHero() {
             </span>
           </div>
 
-          <h1 className="text-[#111111] text-4xl sm:text-5xl lg:text-[54px] font-bold tracking-tight leading-[1.12]">
+          <h1 className="text-[#111111] text-3xl lg:text-[54px] font-bold tracking-tight leading-[1.12]">
             Rights <span className="text-[#FF6200]">Protection &</span> <br />
             <span className="text-[#FF6200]">Compliance</span>
           </h1>
 
-          <p className="mt-6 text-[#555555] text-[14px] sm:text-base font-normal max-w-xl leading-relaxed">
+          <p className="mt-6 text-[#555555] text-[14px] lg:text-base font-normal max-w-xl leading-relaxed">
             Mayvibe maintains structured compliance and content protection systems designed to help reduce copyright conflicts, impersonation attempts, fraudulent uploads, and artificial streaming risks while supporting industry best practices across digital distribution.
           </p>
 
           <div className="mt-8">
-            <button onClick={() => navigate("/signup")} className="bg-[#FF6200] text-white font-bold text-base px-10 py-4 rounded-2xl shadow-sm hover:bg-orange-600 transition duration-150 cursor-pointer">
+            <button onClick={() => navigate("/signup")} className="bg-[#FF6200] text-white font-bold text-base px-10 py-2 lg:py-3 rounded-2xl shadow-sm hover:bg-orange-600 transition duration-150 cursor-pointer">
               Join Mayvibe
             </button>
           </div>

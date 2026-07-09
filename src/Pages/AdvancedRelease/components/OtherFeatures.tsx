@@ -63,7 +63,7 @@ export default function OtherReleaseFeatures() {
                 <div className="w-7 h-7 flex items-center justify-center shrink-0">
                   <img src={iconMap[item.iconName]} alt="" className="w-full h-full object-contain select-none pointer-events-none" />
                 </div>
-                <h4 className="text-black font-bold text-[15px] sm:text-base tracking-tight leading-tight">{item.title}</h4>
+                <h4 className="text-black font-bold text-[15px] lg:text-base tracking-tight leading-tight">{item.title}</h4>
                 <p className="text-gray-500 text-xs sm:text-[13px] font-normal leading-relaxed">{item.description}</p>
               </div>
             ))}
@@ -76,7 +76,7 @@ export default function OtherReleaseFeatures() {
                 <div className="w-7 h-7 flex items-center justify-center shrink-0">
                   <img src={iconMap[item.iconName]} alt="" className="w-full h-full object-contain select-none pointer-events-none" />
                 </div>
-                <h4 className="text-black font-bold text-[15px] sm:text-base tracking-tight leading-tight">{item.title}</h4>
+                <h4 className="text-black font-bold text-[15px] lg:text-base tracking-tight leading-tight">{item.title}</h4>
                 <p className="text-gray-500 text-xs sm:text-[13px] font-normal leading-relaxed">{item.description}</p>
               </div>
             ))}
@@ -88,7 +88,7 @@ export default function OtherReleaseFeatures() {
               <div className="w-7 h-7 flex items-center justify-center shrink-0">
                 <img src={iconMap[extraFeatures[2].iconName]} alt="" className="w-full h-full object-contain select-none pointer-events-none" />
               </div>
-              <h4 className="text-black font-bold text-[15px] sm:text-base tracking-tight leading-tight">{extraFeatures[2].title}</h4>
+              <h4 className="text-black font-bold text-[15px] lg:text-base tracking-tight leading-tight">{extraFeatures[2].title}</h4>
               <p className="text-gray-500 text-xs sm:text-[13px] font-normal leading-relaxed">{extraFeatures[2].description}</p>
             </div>
           </div>

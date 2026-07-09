@@ -14,7 +14,7 @@ export default function AdvancedMusicOverview() {
             </span>
           </div>
 
-          <h2 className="text-[#111111] text-3xl sm:text-[38px] font-black tracking-tight leading-tight mb-6">
+          <h2 className="text-[#111111] text-3xl sm:text-[38px] font-bold tracking-tight leading-tight mb-6">
             Music Distribution Infrastructure Designed To Meet Modern <span className="text-[#FF6200]">International</span> Delivery Standards.
           </h2>
 

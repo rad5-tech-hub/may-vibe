@@ -73,11 +73,11 @@ export default function GlobalDspPlatformGrid() {
               </span>
             </div>
             
-            <h2 className="text-[#111111] text-3xl sm:text-[40px] font-black tracking-tight leading-tight mb-5">
+            <h2 className="text-[#111111] text-3xl lg:text-[40px] font-bold tracking-tight leading-tight mb-5">
               Your Music. Everywhere
             </h2>
             
-            <p className="text-gray-600 text-[15px] sm:text-base font-normal leading-relaxed max-w-xl">
+            <p className="text-gray-600 text-[15px] lg:text-base font-normal leading-relaxed max-w-xl">
               Reach listeners on various streaming platforms, downloads, socials, fitness and so many more platforms across the globe.
             </p>
           </div>
@@ -93,7 +93,7 @@ export default function GlobalDspPlatformGrid() {
         </div>
 
         {/* 4-Column Balanced Grid Matrix matching image_dda38a.png */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {platformAssets.map((platform, idx) => (
             <div 
               key={idx}
@@ -106,7 +106,7 @@ export default function GlobalDspPlatformGrid() {
                   className="w-full h-full object-contain select-none pointer-events-none"
                 />
               </div>
-              <span className="text-[#111111] font-bold text-base tracking-tight">
+              <span className="text-[#111111] lg:font-bold text-sm lg:text-base tracking-tight">
                 {platform.name}
               </span>
             </div>
