@@ -41,7 +41,7 @@ export default function AccountingHero() {
           <img 
             src={accountinghero} 
             alt="Earnings Overview dashboard analytics widget panel view" 
-            className="w-full max-w-[440px] object-contain select-none pointer-events-none "
+            className="w-full max-w-[480px] object-contain select-none pointer-events-none "
           />
         </div>
 
