@@ -7,10 +7,10 @@ export default function AccountingHero() {
 
   return (
     <section className="bg-[#FAF6F4] w-full py-16 lg:py-24 px-6 min-h-[600px] flex items-center overflow-hidden">
-      <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row gap-12 lg:gap-8 items-center py-5">
+      <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row gap-12 lg:gap-8 items-center justify-between py-5">
         
         {/* Left Typography Column */}
-        <div className="lg:w-7/12 flex flex-col justify-center">
+        <div className="flex flex-col justify-center">
           <div className="w-fit bg-[#FCEBE6] rounded-full px-4 py-1.5 flex items-center gap-2 mb-6">
             <span className="text-[#FF6200] text-xs font-bold tracking-wider uppercase">
               • Business Solutions
@@ -37,7 +37,7 @@ export default function AccountingHero() {
         </div>
 
         {/* Right Dashboard Graphic Frame */}
-        <div className="lg:w-5/12 flex justify-center lg:justify-end">
+        <div className="flex justify-center lg:justify-end">
           <img 
             src={accountinghero} 
             alt="Earnings Overview dashboard analytics widget panel view" 
