@@ -5,7 +5,7 @@ export default function DistributeBanner() {
 
   return (
     <section className="w-full bg-[#FF6200] py-16 px-6 text-center">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <h2 className="text-white text-3xl md:text-5xl font-bold tracking-tight">
           Distribute Music
         </h2>

@@ -37,8 +37,6 @@ const Welcome = () => {
     username: "",
     bio: "",
     genre: "",
-    gender: "",
-    paymentMethod: "",
     profilePhoto: "",
   });
 
@@ -97,9 +95,9 @@ const Welcome = () => {
   };
 
   const handleOnboardingSubmit = async () => {
-    const { username, bio, genre, gender, profilePhoto, paymentMethod } = formData;
+    const { username, bio, genre, profilePhoto } = formData;
 
-    if (!username || !bio || !genre || !gender || !profilePhoto) {
+    if (!username || !bio || !genre || !profilePhoto) {
       return toast.error("Please complete all required fields");
     }
 
@@ -113,9 +111,7 @@ const Welcome = () => {
           username: username.trim(),
           bio: bio.trim(),
           genre: genre.trim(),
-          gender,
           profilePhoto,
-          paymentMethod: paymentMethod.trim() || undefined,
         },
         {
           headers: {
@@ -304,32 +300,6 @@ const Welcome = () => {
                 )}
               </div>
 
-              <div>
-                <label className="block text-gray-300 mb-2">Gender</label>
-                <select
-                  value={formData.gender}
-                  onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                  className="w-full bg-black/70 backdrop-blur-sm border-b-2 border-white focus:border-orange-500 outline-none py-3 px-1 text-white"
-                  required
-                >
-                  <option value="">Select gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                  <option value="Prefer not to say">Prefer not to say</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-gray-300 mb-2">Payment Method (Optional)</label>
-                <input
-                  type="text"
-                  value={formData.paymentMethod}
-                  onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
-                  placeholder="e.g. PayPal, Bank Transfer"
-                  className="w-full bg-white/10 backdrop-blur-sm border-b-2 border-white focus:border-orange-500 outline-none py-3 px-1 text-white placeholder-gray-400"
-                />
-              </div>
 
               <div className="flex justify-start gap-4 pt-8">
                 <button

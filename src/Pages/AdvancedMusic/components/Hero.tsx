@@ -12,7 +12,7 @@ export default function AdvancedMusicHero() {
         <div className="lg:col-span-7 flex flex-col justify-center">
           <div className="w-fit bg-[#FCEBE6] rounded-full px-4 py-1.5 flex items-center gap-2 mb-6">
             <span className="text-[#FF6200] text-xs font-bold tracking-wider uppercase">
-              • Business Solutions
+              • For Artists
             </span>
           </div>
 

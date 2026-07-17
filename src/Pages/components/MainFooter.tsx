@@ -37,7 +37,7 @@ export default function MainFooter() {
           {/* Business Solutions Column */}
           <div>
             <h4 className="font-bold text-[#FF6200] lg:text-[18px] tracking-wide mb-5">
-              Business Solutions
+              For Artists
             </h4>
             <ul className="space-y-4 lg:text-[18px] font-normal text-black leading-snug">
               <li onClick={() => navigate("/advanced-music")} className="cursor-pointer hover:text-[#FF6200] transition-colors">Advanced Music Distribution Infrastructure</li>

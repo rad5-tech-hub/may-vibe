@@ -9,18 +9,20 @@ const standardData = [
     subtitle: "Perfect for artistes releasing one single within a year.",
     price: "₦13,200",
     features: [
-      "Unlimited uploads & streaming delivery",
-      "Delivery to 280+ global platforms and regional DSPs",
-      "Real-time automated release validation & metadata error scanning",
-      "100% distribution royalty payouts back to the rights holder",
-      "Keep 100% of your ownership rights & publishing control",
-      "Automated daily trends & advanced stream location insights",
-      "Free standard updates, metadata edits, and platform takedowns",
-      "DDEX-compliant supply chain distribution architecture",
-      "Free standard ISRC and UPC codes assignment",
-      "Platform-specific ingestion format optimization rules",
-      "Instant automated financial tracking statement visibility",
-      "24/7 dedicated email support channel clearance",
+      "1 Main Artist",
+      "One-off single release within a year",
+      "Distribution to all major DSPs including Spotify, Apple Music, Boomplay, Audiomack, Amazon Music, YouTube Music, TikTok & Instagram and other DSPs worldwide",
+      "Copyright Protection",
+      "DDEX Delivery",
+      "Real-time analytics",
+      "Standard metadata QC",
+      "Release scheduling",
+      "Free ISRC & UPC codes",
+      "YouTube Content ID",
+      "Email support",
+      "Digital splits for collaborators",
+      "Pre-save links for new releases",
+      "Keep 90% of your royalties",
     ],
   },
   {
@@ -29,12 +31,22 @@ const standardData = [
     subtitle: "For artistes releasing an EP of up to 6 tracks.",
     price: "₦35,000",
     features: [
-      "Everything included in the Single Release tier",
-      "Dynamic multiple track sequencing arrangement workflows",
-      "Advanced metadata assignments individual to each separate track segment",
-      "Multi-artist and featured contributor credit role configurations",
-      "Extended multi-track platform presentation optimization",
-      "Consolidated multi-track financial performance analytics reporting",
+      "1 Main Artist",
+      "One-off EP release (1–6 tracks) within a year",
+      "Distribution to all major DSPs including Spotify, Apple Music, Boomplay, Audiomack, Amazon Music, YouTube Music, TikTok & Instagram and other DSPs worldwide",
+      "Copyright Protection",
+      "Real-time analytics",
+      "Standard metadata QC",
+      "Release scheduling",
+      "Free ISRC & UPC codes",
+      "YouTube Content ID",
+      "Email support",
+      "Digital splits for collaborators",
+      "Pre-save links",
+      "Early access to Mayvibe Publishing",
+      "WhatsApp support",
+      "Access to playlisting opportunities",
+      "Keep 90% of your royalties",
     ],
   },
   {
@@ -43,12 +55,23 @@ const standardData = [
     subtitle: "Ideal for full album projects.",
     price: "₦55,000",
     features: [
-      "Everything included in the EP Release tier",
-      "Extended track capacity for up to 30 audio files per container",
-      "Custom continuous play layout & dynamic continuous track formatting rules",
-      "Comprehensive cross-album metadata credit injection profiles",
-      "Premium priority global ingestion queue management processing",
-      "Optimized large-format bundle packaging across major storefront spaces",
+      "1 Main Artist",
+      "One-off album release (1–12 tracks) within a year",
+      "Distribution to all major DSPs including Spotify, Apple Music, Boomplay, Audiomack, Amazon Music, YouTube Music, TikTok & Instagram and other DSPs worldwide",
+      "Copyright Protection",
+      "Real-time analytics",
+      "Standard metadata QC",
+      "Release scheduling",
+      "Free ISRC & UPC codes",
+      "YouTube Content ID",
+      "Email support",
+      "Digital splits for collaborators",
+      "Pre-save links",
+      "Early access to Mayvibe Publishing",
+      "WhatsApp support",
+      "Access to playlisting opportunities",
+      "Priority QC",
+      "Keep 90% of your royalties",
     ],
   },
 ];
@@ -103,6 +126,25 @@ const enterpriseFeatures = [
   "Dolby Atmos & Spatial Audio support",
   "Hi-Res Audio delivery",
   "Apple Motion Artwork support",
+  "Lyrics delivery to DSPs",
+  "Marketing Support*",
+  "Real-time analytics",
+  "Standard metadata QC",
+  "Release scheduling",
+  "Free ISRC & UPC codes",
+  "YouTube Content ID",
+  "Email support",
+  "Digital splits for collaborators",
+  "Pre-save links",
+  "Early access to Mayvibe Publishing",
+  "WhatsApp support",
+  "Access to playlisting opportunities",
+  "Priority QC",
+  "Keep 100% of your royalties",
+  "Custom royalty accounting",
+  "Dedicated distribution manager",
+  "Marketing & playlist strategy",
+  "24/7 support",
 ];
 
 export default function PricingSection() {
@@ -117,7 +159,7 @@ export default function PricingSection() {
 
   return (
     <section className="bg-white py-16 px-4 md:px-8 selection:bg-orange-200">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Header Content */}
         <h2 className="text-center text-[#111111] text-3xl md:text-[40px] font-bold tracking-tight font-display">
           Simple, Transparent Pricing
@@ -160,7 +202,7 @@ export default function PricingSection() {
         </div>
 
         {/* Pricing Cards Grid */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-5xl mx-auto">
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-7xl mx-auto items-start">
           {activeTierCards.map((card, i) => (
             <div
               key={i}
@@ -276,15 +318,15 @@ export default function PricingSection() {
                 {(expandedCards["Artiste Pro"]
                   ? [
                       "1 Main Artist",
-                      "Unlimited releases of Singles, EPs & Albums within a year",
+                      "Limited releases of Singles, EPs & Albums within a year",
                       "Distribution to all major DSPs including Spotify, Apple Music, Boomplay, Audiomack, Amazon Music, YouTube Music, TikTok & Instagram and other DSPs worldwide",
                       "Copyright Protection",
-                      "Real-time analytics",
                       "Dolby Atmos & Spatial Audio support",
                       "Hi-Res Audio delivery",
                       "Apple Motion Artwork support",
                       "Lyrics delivery to DSPs",
-                      "Marketing support",
+                      "Marketing Support*",
+                      "Real-time analytics",
                       "Standard metadata QC",
                       "Release scheduling",
                       "Free ISRC & UPC codes",
@@ -300,7 +342,7 @@ export default function PricingSection() {
                     ]
                   : [
                       "1 Main Artist",
-                      "Unlimited releases of Singles, EPs & Albums within a year",
+                      "Limited releases of Singles, EPs & Albums within a year",
                       "Distribution to all major DSPs including Spotify, Apple Music, Boomplay, Audiomack, Amazon Music, YouTube Music, TikTok & Instagram and other DSPs worldwide",
                       "Copyright Protection",
                       "Real-time analytics",
@@ -327,7 +369,7 @@ export default function PricingSection() {
 
         {/* Label Enterprise Pack Banner Section */}
         <div
-          className={`mt-6 max-w-5xl mx-auto border rounded-3xl p-6 md:p-8 transition-all duration-300 ${
+          className={`mt-6 max-w-7xl mx-auto border rounded-3xl p-6 md:p-8 transition-all duration-300 ${
             isHD 
               ? "bg-[#FF6200] border-[#FF6200] text-white" 
               : "bg-white border-orange-500 border-opacity-40 text-black"
@@ -341,7 +383,10 @@ export default function PricingSection() {
               </p>
               
               <ul className="mt-6 grid grid-cols-1 gap-y-3 gap-x-6">
-                {enterpriseFeatures.map((feat, idx) => (
+                {(expandedCards["Label Enterprise Pack"]
+                  ? enterpriseFeatures
+                  : enterpriseFeatures.slice(0, 7)
+                ).map((feat, idx) => (
                   <li key={idx} className="flex gap-3 text-[13px] items-center">
                     <CircleCheck
                       className={`shrink-0 ${isHD ? "text-white" : "text-[#FF6200]"}`}
@@ -353,6 +398,16 @@ export default function PricingSection() {
                   </li>
                 ))}
               </ul>
+              {enterpriseFeatures.length > 7 && (
+                <div className="flex justify-start w-full mt-3">
+                  <span
+                    onClick={() => toggleExpand("Label Enterprise Pack")}
+                    className={`text-xs font-semibold cursor-pointer underline decoration-dotted underline-offset-2 ${isHD ? "text-white/80 hover:text-white" : "text-orange-600 hover:text-orange-700"}`}
+                  >
+                    {expandedCards["Label Enterprise Pack"] ? "Show less" : "See more"}
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col gap-3 w-full lg:w-auto shrink-0">
@@ -378,6 +433,11 @@ export default function PricingSection() {
               </button>
             </div>
           </div>
+        </div>
+
+        {/* Notes */}
+        <div className="mt-8 text-center text-xs text-gray-400">
+          <p>*Marketing Support is subject to our <a href="/terms" className="text-[#FF6200] underline">terms and conditions</a>.</p>
         </div>
       </div>
     </section>

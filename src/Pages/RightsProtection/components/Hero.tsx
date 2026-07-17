@@ -12,7 +12,7 @@ export default function RightsHero() {
         <div className="lg:w-7/12 flex flex-col justify-center">
           <div className="w-fit bg-[#FCEBE6] rounded-full px-4 py-1.5 flex items-center mb-6">
             <span className="text-[#FF6200] text-xs font-black tracking-wider uppercase">
-              • Business Solutions
+              • For Artists
             </span>
           </div>
 

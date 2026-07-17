@@ -56,7 +56,7 @@ export default function Navbar() {
                 onClick={() => toggleDropdown("business")}
                 className={`flex items-center gap-1 hover:text-[#FF6200] transition cursor-pointer font-semibold ${isBusinessActive ? "text-[#FF6200]" : ""}`}
               >
-                <span className={`${isBusinessActive ? "border-b-2 border-[#FF6200] pb-0.5" : ""}`}>Business Solutions</span>
+                <span className={`${isBusinessActive ? "border-b-2 border-[#FF6200] pb-0.5" : ""}`}>For Artists</span>
                 <ChevronDown size={16} className={`transition ${openDropdown === "business" ? "rotate-180" : ""}`} />
               </button>
 
@@ -169,7 +169,7 @@ export default function Navbar() {
                 onClick={() => toggleDropdown("business")}
                 className={`flex items-center gap-1 hover:text-[#FF6200] transition cursor-pointer font-semibold text-base ${isBusinessActive ? "text-[#FF6200]" : ""}`}
               >
-                <span className={`${isBusinessActive ? "border-b-2 border-[#FF6200]" : ""}`}>Business Solutions</span>
+                <span className={`${isBusinessActive ? "border-b-2 border-[#FF6200]" : ""}`}>For Artists</span>
                 <ChevronDown size={16} className={`transition ${openDropdown === "business" ? "rotate-180" : ""}`} />
               </button>
               {openDropdown === "business" && (

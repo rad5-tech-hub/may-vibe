@@ -18,6 +18,8 @@ const Signup = () => {
     email: "",
     phone: "",
     password: "",
+    genre: "",
+    country: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -26,9 +28,9 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { fullName, email, password } = formData;
+    const { fullName, email, password, phone, genre, country } = formData;
 
-    if (!fullName || !email || !password) {
+    if (!fullName || !email || !password || !phone || !genre || !country) {
       return toast.error("Please fill in all fields");
     }
 
@@ -39,6 +41,9 @@ const Signup = () => {
         fullname: fullName.trim(),
         email: email.toLowerCase().trim(),
         password: password,
+        phone: phone.trim(),
+        genre: genre.trim(),
+        country: country.trim(),
       });
       console.log(response);
 
@@ -140,6 +145,58 @@ const Signup = () => {
                   >
                     {showPassword ? <FaEyeSlash className="w-5 h-5" /> : <FaEye className="w-5 h-5" />}
                   </button>
+                </div>
+
+                <div>
+                  <label className="text-xs text-gray-300">Phone Number</label>
+                  <input
+                    type="tel"
+                    value={formData.phone}
+                    placeholder="+234 800 000 0000"
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="w-full bg-transparent px-2 border-b border-white focus:border-orange-500 outline-none text-sm py-1"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs text-gray-300">Genre</label>
+                  <select
+                    value={formData.genre}
+                    onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
+                    className="w-full bg-transparent px-2 border-b border-white focus:border-orange-500 outline-none text-sm py-1 text-white"
+                    required
+                  >
+                    <option value="" className="text-gray-400">Select your genre</option>
+                    <option value="AfroBeats">AfroBeats</option>
+                    <option value="Amapiano">Amapiano</option>
+                    <option value="Hip Hop/Rap">Hip Hop/Rap</option>
+                    <option value="Pop">Pop</option>
+                    <option value="Gospel">Gospel</option>
+                    <option value="RnB/Soul">RnB/Soul</option>
+                    <option value="Reggae">Reggae</option>
+                    <option value="Dance Hall">Dance Hall</option>
+                    <option value="HighLife">HighLife</option>
+                    <option value="Fuji">Fuji</option>
+                    <option value="Jazz">Jazz</option>
+                    <option value="Rock">Rock</option>
+                    <option value="Country">Country</option>
+                    <option value="Electronica">Electronica</option>
+                    <option value="Blues">Blues</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs text-gray-300">Country</label>
+                  <input
+                    type="text"
+                    value={formData.country}
+                    placeholder="Nigeria"
+                    onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                    className="w-full bg-transparent px-2 border-b border-white focus:border-orange-500 outline-none text-sm py-1"
+                    required
+                  />
                 </div>
 
                 <button
