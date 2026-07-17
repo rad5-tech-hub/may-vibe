@@ -1,5 +1,5 @@
 // src/pages/auth/Signup.jsx
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom"; // ← Link was missing!
 import axios from "axios";
 import { toast } from "sonner";
@@ -24,6 +24,20 @@ const Signup = () => {
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [genreSearch, setGenreSearch] = useState("");
+
+  const GENRES = [
+    "AfroBeats", "Amapiano", "Hip Hop/Rap", "Pop", "Gospel", "RnB/Soul",
+    "Reggae", "Dance Hall", "HighLife", "Fuji", "Jazz", "Rock", "Country",
+    "Electronica", "Blues", "Other",
+  ];
+
+  const filteredGenres = useMemo(() => {
+    if (!genreSearch) return GENRES;
+    return GENRES.filter((g) =>
+      g.toLowerCase().includes(genreSearch.toLowerCase())
+    );
+  }, [genreSearch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -161,30 +175,32 @@ const Signup = () => {
 
                 <div>
                   <label className="text-xs text-gray-300">Genre</label>
-                  <select
-                    value={formData.genre}
-                    onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                    className="w-full bg-transparent px-2 border-b border-white focus:border-orange-500 outline-none text-sm py-1 text-white"
+                  <input
+                    type="text"
+                    value={genreSearch}
+                    onChange={(e) => setGenreSearch(e.target.value)}
+                    onFocus={() => setGenreSearch(formData.genre || "")}
+                    onBlur={() => { if (!formData.genre) setGenreSearch(""); }}
+                    placeholder="Search or select..."
+                    className="w-full bg-black/70 lg:bg-black/10 backdrop-blur-sm border-b-2 border-white focus:border-orange-500 outline-none py-3 px-1 text-white"
                     required
-                  >
-                    <option value="" className="text-gray-400">Select your genre</option>
-                    <option value="AfroBeats">AfroBeats</option>
-                    <option value="Amapiano">Amapiano</option>
-                    <option value="Hip Hop/Rap">Hip Hop/Rap</option>
-                    <option value="Pop">Pop</option>
-                    <option value="Gospel">Gospel</option>
-                    <option value="RnB/Soul">RnB/Soul</option>
-                    <option value="Reggae">Reggae</option>
-                    <option value="Dance Hall">Dance Hall</option>
-                    <option value="HighLife">HighLife</option>
-                    <option value="Fuji">Fuji</option>
-                    <option value="Jazz">Jazz</option>
-                    <option value="Rock">Rock</option>
-                    <option value="Country">Country</option>
-                    <option value="Electronica">Electronica</option>
-                    <option value="Blues">Blues</option>
-                    <option value="Other">Other</option>
-                  </select>
+                  />
+                  {genreSearch && filteredGenres.length > 0 && (
+                    <div className="w-full mt-1 bg-black/95 backdrop-blur-md border border-white/20 rounded-lg shadow-2xl max-h-60 overflow-y-auto">
+                      {filteredGenres.map((genre) => (
+                        <div
+                          key={genre}
+                          onMouseDown={() => {
+                            setFormData({ ...formData, genre });
+                            setGenreSearch(genre);
+                          }}
+                          className="px-4 py-3 hover:bg-orange-500/20 cursor-pointer text-sm"
+                        >
+                          {genre}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div>

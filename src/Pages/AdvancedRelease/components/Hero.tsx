@@ -52,7 +52,7 @@ export default function AdvancedHero() {
       </section>
 
       {/* Synchronized Metrics Strip */}
-      <div className="w-full bg-white border-y border-gray-100 grid grid-cols-2 lg:grid-cols-2 lg:grid-cols-4">
+      <div className="w-full bg-white border-y border-gray-100 grid grid-cols-2 lg:grid-cols-4 max-w-7xl mx-auto">
         {stats.map((stat, idx) => (
           <div 
             key={idx} 

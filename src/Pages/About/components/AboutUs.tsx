@@ -1,7 +1,40 @@
 // src/Pages/About/components/AboutUs.jsx
 import aboutDisk from  "../../../assets/aboutdisk.png"
-import marque from  "../../../assets/marque.png"
+import spotify from "../../../assets/spotify.png";
+import applemusic from "../../../assets/applemusic.png";
+import amazonmusic from "../../../assets/amazonmusic.png";
+import youtubemusic from "../../../assets/youtubemusic.png";
+import tiktok from "../../../assets/tiktok.png";
+import deezer from "../../../assets/deezer.png";
+import tidal from "../../../assets/tidal.png";
+import boomplay from "../../../assets/boomplay.png";
+import audiomack from "../../../assets/audiomack.png";
+import anghami from "../../../assets/anghami.png";
+import jiosaavn from "../../../assets/jiosaavn.png";
+import kkbox from "../../../assets/kkbox.png";
+import facebook from "../../../assets/facebook.png";
+import instagram from "../../../assets/instagram.png";
+import snapchat from "../../../assets/snapchat.png";
+import shazam from "../../../assets/shazam.png";
 
+const platforms = [
+  { name: "Spotify", src: spotify },
+  { name: "Apple Music", src: applemusic },
+  { name: "Amazon Music", src: amazonmusic },
+  { name: "YouTube Music", src: youtubemusic },
+  { name: "TikTok", src: tiktok },
+  { name: "Deezer", src: deezer },
+  { name: "Tidal", src: tidal },
+  { name: "Boomplay", src: boomplay },
+  { name: "Audiomack", src: audiomack },
+  { name: "Anghami", src: anghami },
+  { name: "JioSaavn", src: jiosaavn },
+  { name: "KKBOX", src: kkbox },
+  { name: "Facebook", src: facebook },
+  { name: "Instagram", src: instagram },
+  { name: "Snapchat", src: snapchat },
+  { name: "Shazam", src: shazam },
+];
 
 export default function AboutUs() {
   return (
@@ -13,14 +46,40 @@ export default function AboutUs() {
           <span className="text-gray-500 text-xs font-bold tracking-widest uppercase mb-6">
             Distribute to every major platform
           </span>
-          <div className="w-full h-full flex justify-center items-center">
-            <img 
-              src={marque}  
-              alt="Major streaming platforms group logo reel" 
-              className="w-full pointer-events-none select-none"
-            />
+          <div className="w-full overflow-hidden">
+            <div className="flex gap-8 marquee-track">
+              {[...platforms, ...platforms].map((platform, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 shrink-0 px-5 py-3"
+                >
+                  <img
+                    src={platform.src}
+                    alt={platform.name}
+                    className="w-10 h-10 object-contain"
+                  />
+                  <span className="text-sm font-medium text-gray-700 whitespace-nowrap">
+                    {platform.name}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
+
+        <style>{`
+          .marquee-track {
+            animation: marquee 30s linear infinite;
+            width: fit-content;
+          }
+          .marquee-track:hover {
+            animation-play-state: paused;
+          }
+          @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+        `}</style>
 
         {/* Bottom Segment: Main About Us Structural Matrix */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
