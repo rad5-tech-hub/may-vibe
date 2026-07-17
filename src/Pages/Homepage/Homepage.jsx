@@ -4,7 +4,7 @@ import DistributeBanner from "./components/DistributeBanner";
 import PricingSection from "./components/PricingSection";
 import QuoteSection from "./components/QuoteSection";
 import TestimonialsSection from "./components/TestimonialsSection";
-import PublishingSection from "./components/PublishingSection";
+import DistributingSection from "./components/DistributingSection";
 import FooterLinks from "./components/FooterLinks";
 import MainFooter from "../components/MainFooter";
 
@@ -17,7 +17,7 @@ const Homepage = () => {
       <PricingSection />
       <QuoteSection />
       <TestimonialsSection />
-      <PublishingSection />
+      <DistributingSection />
       <FooterLinks />
       <MainFooter />
     </div>

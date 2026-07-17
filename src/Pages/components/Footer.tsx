@@ -15,19 +15,9 @@ export default function Footer() {
       <div className="relative z-10 max-w-5xl mx-auto w-full flex flex-col items-center text-center">
         
         {/* Upper Orange Sub-title Tag */}
-        <span className="text-[#FF6200] text-xs sm:text-sm font-normal tracking-widest uppercase mb-4">
-          Ready To Publish?
+        <span className="text-[#FF6200] text-xs sm:text-sm font-normal tracking-widest uppercase mb-8">
+          Ready to distribute?
         </span>
-
-        {/* Master Core Heading */}
-        <h2 className="text-white text-3xl sm:text-4xl md:text-[42px] font-bold tracking-tight mb-4">
-          Your Music Deserves The World
-        </h2>
-
-        {/* Secondary Supporting Copy Text Line */}
-        <p className="text-gray-400 text-sm sm:text-base font-normal tracking-wide max-w-xl mb-8">
-          Join thousands of African artists publishing globally with Mayvibe.
-        </p>
 
         {/* Action Button Link Block */}
         <div className="mb-16">
@@ -35,7 +25,7 @@ export default function Footer() {
             onClick={() => navigate("/signup")}
             className="bg-[#FF6200] text-white font-bold text-sm sm:text-base px-8 py-3.5 rounded-xl shadow-lg hover:bg-orange-600 transition duration-150 active:scale-98 cursor-pointer"
           >
-            Start Publishing
+            Start Distributing
           </button>
         </div>
 
