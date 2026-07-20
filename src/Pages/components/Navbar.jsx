@@ -42,7 +42,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md border-b border-gray-100 h-16 lg:h-20">
-      <div className="h-full flex items-center justify-between px-6 max-w-7xl mx-auto">
+      <div className="h-full flex items-center justify-between px-6 lg:px-0 max-w-7xl mx-auto">
         <Link to="/" className="text-[#FF6200] font-bold text-2xl lg:text-3xl tracking-tight cursor-pointer">
           Mayvibe
         </Link>
