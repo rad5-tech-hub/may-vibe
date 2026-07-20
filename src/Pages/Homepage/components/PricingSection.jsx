@@ -202,7 +202,7 @@ export default function PricingSection() {
         </div>
 
         {/* Pricing Cards Grid */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-7xl mx-auto items-start">
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-5xl mx-auto items-start">
           {activeTierCards.map((card, i) => (
             <div
               key={i}
@@ -369,7 +369,7 @@ export default function PricingSection() {
 
         {/* Label Enterprise Pack Banner Section */}
         <div
-          className={`mt-6 max-w-7xl mx-auto border rounded-3xl p-6 md:p-8 transition-all duration-300 ${
+          className={`mt-6 max-w-5xl mx-auto border rounded-3xl p-6 md:p-8 transition-all duration-300 ${
             isHD 
               ? "bg-[#FF6200] border-[#FF6200] text-white" 
               : "bg-white border-orange-500 border-opacity-40 text-black"
