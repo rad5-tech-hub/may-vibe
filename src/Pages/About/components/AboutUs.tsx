@@ -82,7 +82,7 @@ export default function AboutUs() {
         `}</style>
 
         {/* Bottom Segment: Main About Us Structural Matrix */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
           {/* Left Column: Core Narrative Content & Mission Card */}
           <div className="lg:col-span-7 flex flex-col">
@@ -136,8 +136,8 @@ export default function AboutUs() {
           </div>
 
           {/* Right Column: Vinyl Disc Creative Framed Viewport */}
-          <div className="lg:col-span-5 w-full flex justify-center lg:justify-end">
-            <div className="w-full max-w-[460px] lg:max-w-none aspect-11/12 rounded-4xl overflow-hidden shadow-sm">
+          <div className="lg:col-span-5 w-full flex justify-center lg:justify-end items-center">
+            <div className="w-full max-w-[460px] lg:max-w-none aspect-11/12 rounded-2xl overflow-hidden shadow-sm">
               <img 
                 src={aboutDisk} 
                 alt="Vintage vinyl record disc on turntable close up visual" 

@@ -1,6 +1,8 @@
 // src/pages/advanced-release/components/CorePremiumFeatures.jsx
 import dolby from "../../../assets/dolby.png";
-import applemotion from "../../../assets/applemotion.png";
+import applemotion from "../../../assets/applemotion.mp4";
+import applemotion2 from "../../../assets/applemotion2.png";
+
 
 export default function CorePremiumFeatures() {
   return (
@@ -44,20 +46,23 @@ export default function CorePremiumFeatures() {
       </section>
 
       {/* Subsection B: Apple Motion Artworks Block */}
-      <section className="bg-white w-full py-20 px-6 sm:px-12 lg:px-20">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      <section className="bg-white w-full py-20 px-6 lg:px-10 ">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
           
-          {/* Double Phone Comparison Frame */}
-          <div className="lg:col-span-5 flex justify-center lg:justify-start order-2 lg:order-1">
-            <img 
+          {/* Apple Motion Artworks */}
+          <div className="flex flex-col lg:flex-row justify-center gap-5 lg:justify-start order-2 lg:order-1">
+            <video
               src={applemotion} 
-              alt="Normal static cover artwork vs Apple Motion Artworks phone UI screen displays mockups side by side" 
-              className="w-full object-contain"
+              className="w-72 h-60 object-cover rounded-3xl"
+              autoPlay
+              loop
+              muted
             />
+            <img src={applemotion2} alt="Apple Motion Artworks phone UI screen display" className="w-72 h-60 object-cover rounded-3xl" />
           </div>
 
           {/* Description Copy */}
-          <div className="lg:col-span-7 flex flex-col justify-center order-1 lg:order-2">
+          <div className="flex flex-col justify-center order-1 lg:order-2">
             <h3 className="text-[#111111] text-3xl sm:text-[38px] font-bold tracking-tight mb-6">
               Apple <span className="text-[#FF6200]">Motion Artworks</span>
             </h3>

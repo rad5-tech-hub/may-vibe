@@ -1,5 +1,5 @@
 // src/pages/auth/Signup.jsx
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // ← Link was missing!
 import axios from "axios";
 import { toast } from "sonner";
@@ -18,33 +18,44 @@ const Signup = () => {
     email: "",
     phone: "",
     password: "",
-    genre: "",
     country: "",
   });
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [genreSearch, setGenreSearch] = useState("");
+  const [countryCode, setCountryCode] = useState("+234");
 
-  const GENRES = [
-    "AfroBeats", "Amapiano", "Hip Hop/Rap", "Pop", "Gospel", "RnB/Soul",
-    "Reggae", "Dance Hall", "HighLife", "Fuji", "Jazz", "Rock", "Country",
-    "Electronica", "Blues", "Other",
+  const COUNTRY_CODES = [
+    { code: "+234", name: "Nigeria" },
+    { code: "+1", name: "United States"},
+    { code: "+44", name: "United Kingdom"},
+    { code: "+233", name: "Ghana"},
+    { code: "+254", name: "Kenya"},
+    { code: "+27", name: "South Africa"},
+    { code: "+250", name: "Rwanda"},
+    { code: "+221", name: "Senegal"},
+    { code: "+91", name: "India"},
+    { code: "+49", name: "Germany"},
+    { code: "+33", name: "France"},
+    { code: "+61", name: "Australia"},
+    { code: "+81", name: "Japan"},
+    { code: "+55", name: "Brazil"},
+    { code: "+52", name: "Mexico"},
+    { code: "+7", name: "Russia"},
+    { code: "+86", name: "China"},
+    { code: "+39", name: "Italy" },
+    { code: "+34", name: "Spain"},
+    { code: "+46", name: "Sweden"},
+    { code: "+31", name: "Netherlands"},
+    { code: "+41", name: "Switzerland"},
   ];
-
-  const filteredGenres = useMemo(() => {
-    if (!genreSearch) return GENRES;
-    return GENRES.filter((g) =>
-      g.toLowerCase().includes(genreSearch.toLowerCase())
-    );
-  }, [genreSearch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { fullName, email, password, phone, genre, country } = formData;
+    const { fullName, email, password, phone, country } = formData;
 
-    if (!fullName || !email || !password || !phone || !genre || !country) {
+    if (!fullName || !email || !password || !phone || !country) {
       return toast.error("Please fill in all fields");
     }
 
@@ -55,8 +66,7 @@ const Signup = () => {
         fullname: fullName.trim(),
         email: email.toLowerCase().trim(),
         password: password,
-        phone: phone.trim(),
-        genre: genre.trim(),
+        phone: `${countryCode}${phone.trim()}`,
         country: country.trim(),
       });
       console.log(response);
@@ -163,44 +173,27 @@ const Signup = () => {
 
                 <div>
                   <label className="text-xs text-gray-300">Phone Number</label>
-                  <input
-                    type="tel"
-                    value={formData.phone}
-                    placeholder="+234 800 000 0000"
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full bg-transparent px-2 border-b border-white focus:border-orange-500 outline-none text-sm py-1"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs text-gray-300">Genre</label>
-                  <input
-                    type="text"
-                    value={genreSearch}
-                    onChange={(e) => setGenreSearch(e.target.value)}
-                    onFocus={() => setGenreSearch(formData.genre || "")}
-                    onBlur={() => { if (!formData.genre) setGenreSearch(""); }}
-                    placeholder="Search or select..."
-                    className="w-full bg-black/70 lg:bg-black/10 backdrop-blur-sm border-b-2 border-white focus:border-orange-500 outline-none py-3 px-1 text-white"
-                    required
-                  />
-                  {genreSearch && filteredGenres.length > 0 && (
-                    <div className="w-full mt-1 bg-black/95 backdrop-blur-md border border-white/20 rounded-lg shadow-2xl max-h-60 overflow-y-auto">
-                      {filteredGenres.map((genre) => (
-                        <div
-                          key={genre}
-                          onMouseDown={() => {
-                            setFormData({ ...formData, genre });
-                            setGenreSearch(genre);
-                          }}
-                          className="px-4 py-3 hover:bg-orange-500/20 cursor-pointer text-sm"
-                        >
-                          {genre}
-                        </div>
+                  <div className="flex gap-2 items-end">
+                    <select
+                      value={countryCode}
+                      onChange={(e) => setCountryCode(e.target.value)}
+                      className="bg-transparent border-b border-white focus:border-orange-500 outline-none text-xs py-1 text-white w-auto min-w-[100px]"
+                    >
+                      {COUNTRY_CODES.map((c) => (
+                        <option key={c.code} value={c.code} className="text-black">
+                         {c.name} ({c.code})
+                        </option>
                       ))}
-                    </div>
-                  )}
+                    </select>
+                    <input
+                      type="tel"
+                      value={formData.phone}
+                      placeholder="800 000 0000"
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="w-full bg-transparent px-2 border-b border-white focus:border-orange-500 outline-none text-sm py-1"
+                      required
+                    />
+                  </div>
                 </div>
 
                 <div>
