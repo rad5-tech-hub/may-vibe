@@ -1,17 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import bg from "../../../assets/PublishingImage.png";
+import bg from "../../../assets/distributingLanding.jpg";
 
 export default function DistributingSection() {
   const navigate = useNavigate();
 
   return (
     <section 
-      className="w-full min-h-[560px] md:min-h-[640px] bg-cover bg-center relative flex items-center"
+      className="w-full min-h-[560px] md:min-h-[680px] bg-cover bg-no-repeat bg-center relative flex items-center"
       style={{ backgroundImage: `url(${bg})` }}
     >
-      <div className="absolute inset-0 bg-linear-to-r from-black via-black/80 to-transparent lg:via-black/60" />
+      <div className="absolute inset-0 bg-linear-to-r from-black via-black/20 to-transparent lg:via-black/50" />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-20">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-20 py-20">
         <div className="max-w-xl">
           <h2 className="text-white text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
             Distributing
