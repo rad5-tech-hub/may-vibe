@@ -65,17 +65,8 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(decoded));
       toast.success("Welcome back!");
 
-      // Use the field from your actual JWT payload
-      const isOnboarded = decoded.onBoarded === true;
       setTimeout(() => {
-        if (isOnboarded) {
-          navigate("/dashboard", { replace: true });
-        } else {
-          navigate("/welcome", {
-            state: { userId: decoded.userId },
-            replace: true,
-          });
-        }
+        navigate("/dashboard", { replace: true });
       }, 1200);
     } catch (err) {
       const msg = getErrorMessage(err, "Invalid email or password");

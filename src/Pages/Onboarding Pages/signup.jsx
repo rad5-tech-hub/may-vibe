@@ -69,7 +69,6 @@ const Signup = () => {
         phone: `${countryCode}${phone.trim()}`,
         country: country.trim(),
       });
-      console.log(response);
 
       // Extract userId safely
       const userId = 
