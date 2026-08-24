@@ -28,6 +28,9 @@ import GlobalDSP from './Pages/GlobalDSP/GlobalDSP';
 import AccountingRoyalty from './Pages/AccountingRoyalty/AccountingRoyalty';
 import AdvancedRelease from './Pages/AdvancedRelease/AdvancedRelease';
 import RightsProtection from './Pages/RightsProtection/RightsProtection';
+import AdminLogin from './Pages/Admin/auth/login';
+import AdminVerifyOTP from './Pages/Admin/auth/verifyOTP';
+import AdminDashboard from './Pages/Admin/dashboard';
 
 
 function App() {
@@ -58,6 +61,11 @@ function App() {
           <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/resetPassword" element={<ResetPassword />} />
           <Route path="/verifyOtp" element={<VerifyOTP />} />
+
+          {/* Admin Authentication */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/verifyOtp" element={<AdminVerifyOTP />} />
+          <Route path="/admin" element={<AdminDashboard />} />
 
           {/* Dashboard Routes */}
           <Route path="/dashboard/overview" element={<Overview />} />

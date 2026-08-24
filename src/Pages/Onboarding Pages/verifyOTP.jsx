@@ -42,6 +42,15 @@ const VerifyOTP = () => {
     }
   };
 
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pastedOtp = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    if (!pastedOtp) return;
+    const newOtp = [...pastedOtp, ...Array(6 - pastedOtp.length).fill("")];
+    setOtp(newOtp);
+    inputRefs.current[Math.min(pastedOtp.length, 5)]?.focus();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -84,7 +93,7 @@ const VerifyOTP = () => {
 
     setResending(true);
     try {
-      await axios.post(`${BASE_URL}auth/resend-otp`, {
+      await axios.post(`${BASE_URL}/auth/resend-otp`, {
         email: email.toLowerCase().trim(),
       });
       toast.success("New OTP sent!");
@@ -143,6 +152,7 @@ const VerifyOTP = () => {
                         maxLength="1"
                         value={digit}
                         onChange={(e) => handleOtpChange(index, e.target.value)}
+                        onPaste={handlePaste}
                         onKeyDown={(e) => handleKeyDown(index, e)}
                         className="w-8 h-8 lg:w-12 lg:h-12 text-center text-xl font-bold bg-transparent border-2 border-white/50 rounded-lg focus:border-orange-500 outline-none transition text-white"
                         required

@@ -4,6 +4,16 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Keep dashboard scrolling available without displaying a scrollbar. */
+.admin-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.admin-scroll::-webkit-scrollbar {
+  display: none;
+}
+
 /* Page transition fade-in */
 .page-enter {
   opacity: 0;
