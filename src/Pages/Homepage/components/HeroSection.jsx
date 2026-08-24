@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import heroImage from "../../../assets/heroImage.png";
+import heroImage from "../../../assets/HeroImage.png";
 import Sub1 from '../../../assets/Subscribers1.png';
 import Sub2 from '../../../assets/Subscribers2.png';
 import Sub3 from '../../../assets/Subscribers3.png';
