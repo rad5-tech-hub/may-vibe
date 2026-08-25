@@ -31,6 +31,7 @@ import RightsProtection from './Pages/RightsProtection/RightsProtection';
 import AdminLogin from './Pages/Admin/auth/login';
 import AdminVerifyOTP from './Pages/Admin/auth/verifyOTP';
 import AdminDashboard from './Pages/Admin/dashboard';
+import AdminProtectedRoute from './Pages/Admin/AdminProtectedRoute';
 
 
 function App() {
@@ -65,7 +66,7 @@ function App() {
           {/* Admin Authentication */}
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/verifyOtp" element={<AdminVerifyOTP />} />
-          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
 
           {/* Dashboard Routes */}
           <Route path="/dashboard/overview" element={<Overview />} />

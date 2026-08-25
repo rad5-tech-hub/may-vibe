@@ -36,11 +36,24 @@ const AdminVerifyOTP = () => {
     if (code.length !== 6) return toast.error("Please enter all 6 digits");
     setLoading(true);
     try {
-      const response = await axios.post(`${BASE_URL}/admin/auth/verify`, {
-        email, otp: code, token: temporaryToken,
+      const response = await axios.post(`${BASE_URL}/admin/verify-mfa`, {
+        temp_token: temporaryToken,
+        otp: code,
       });
-      const token = response.data.token || response.data.accessToken;
-      if (token) localStorage.setItem("adminToken", token);
+      const data = response.data || {};
+      const token =
+        data.token ||
+        data.accessToken ||
+        data.access_token ||
+        data.jwt ||
+        data.authToken ||
+        data.data?.token ||
+        data.data?.accessToken;
+      if (!token) {
+        toast.error("Verification succeeded but no session token was returned");
+        return;
+      }
+      localStorage.setItem("adminToken", token);
       toast.success("Welcome to the admin dashboard");
       navigate("/admin", { replace: true });
     } catch (error) {

@@ -19,11 +19,16 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${BASE_URL}/admin/auth/login`, {
+      const response = await axios.post(`${BASE_URL}/admin/login`, {
         email: formData.email.toLowerCase().trim(),
         password: formData.password,
       });
-      const temporaryToken = response.data.token || response.data.accessToken;
+      const temporaryToken =
+        response.data.token ||
+        response.data.accessToken ||
+        response.data.temp_token ||
+        response.data.data?.token ||
+        response.data.data?.temp_token;
 
       toast.success("A verification code has been sent to your email");
       navigate("/admin/verifyOtp", {
