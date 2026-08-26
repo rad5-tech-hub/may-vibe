@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -23,19 +23,35 @@ const AdminLogin = () => {
         email: formData.email.toLowerCase().trim(),
         password: formData.password,
       });
-      const temporaryToken =
-        response.data.token ||
-        response.data.accessToken ||
-        response.data.temp_token ||
-        response.data.data?.token ||
-        response.data.data?.temp_token;
 
-      toast.success("A verification code has been sent to your email");
-      navigate("/admin/verifyOtp", {
-        state: { email: formData.email.toLowerCase().trim(), temporaryToken },
-      });
+      // Handle explicit backend failure (e.g. suspended/disabled account)
+      if (response.data?.success === false) {
+        toast.error(response.data.error || "Unable to sign in");
+        return;
+      }
+
+      const data = response.data?.data || {};
+      const email = formData.email.toLowerCase().trim();
+
+      if (data.mfa_required) {
+        toast.success("A verification code has been sent to your email");
+        navigate("/admin/verifyOtp", {
+          state: { email, temporaryToken: data.temp_token },
+        });
+        return;
+      }
+
+      const token = data.token || data.accessToken;
+      if (!token) {
+        toast.error("Login succeeded but no session token was returned");
+        return;
+      }
+      localStorage.setItem("adminToken", token);
+      if (data.admin) localStorage.setItem("adminUser", JSON.stringify(data.admin));
+      toast.success(`Welcome back, ${data.admin?.full_name || "Admin"}!`);
+      navigate("/admin", { replace: true });
     } catch (error) {
-      toast.error(getErrorMessage(error, "Unable to sign in"));
+      toast.error(getErrorMessage(error, "Account is suspended or disabled"));
     } finally {
       setLoading(false);
     }
@@ -67,6 +83,9 @@ const AdminLogin = () => {
                 onClick={() => setShowPassword(!showPassword)} className="absolute right-2 top-6 text-gray-400 hover:text-white">
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
+            </div>
+            <div className="mb-6 text-right">
+              <Link to="/admin/forgotPassword" className="text-xs text-orange-500 italic hover:text-orange-400">Forgot password?</Link>
             </div>
             <button type="submit" disabled={loading}
               className="w-full bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 text-sm transition-all disabled:opacity-70 disabled:cursor-not-allowed">

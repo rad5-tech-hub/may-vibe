@@ -30,8 +30,25 @@ import AdvancedRelease from './Pages/AdvancedRelease/AdvancedRelease';
 import RightsProtection from './Pages/RightsProtection/RightsProtection';
 import AdminLogin from './Pages/Admin/auth/login';
 import AdminVerifyOTP from './Pages/Admin/auth/verifyOTP';
+import AdminForgotPassword from './Pages/Admin/auth/forgotPassword';
 import AdminDashboard from './Pages/Admin/dashboard';
 import AdminProtectedRoute from './Pages/Admin/AdminProtectedRoute';
+import OverviewPage from './Pages/Admin/pages/Overview';
+import Album from './Pages/Admin/pages/Album';
+import Track from './Pages/Admin/pages/Track';
+import DistroArtiste from './Pages/Admin/pages/DistroArtiste';
+import AllAlbumDistributions from './Pages/Admin/pages/AllAlbumDistributions';
+import AllTrackDistributions from './Pages/Admin/pages/AllTrackDistributions';
+import AllTransactions from './Pages/Admin/pages/AllTransactions';
+import TransactionsWithoutAccounts from './Pages/Admin/pages/TransactionsWithoutAccounts';
+import AllFundings from './Pages/Admin/pages/AllFundings';
+import AllRegisteredUsers from './Pages/Admin/pages/AllRegisteredUsers';
+import PaymentRequests from './Pages/Admin/pages/PaymentRequests';
+import AddAdmin from './Pages/Admin/pages/AddAdmin';
+import AddGenre from './Pages/Admin/pages/AddGenre';
+import SetAccountActivationFees from './Pages/Admin/pages/SetAccountActivationFees';
+import VerifyArtist from './Pages/Admin/pages/VerifyArtist';
+import AdminProfile from './Pages/Admin/pages/Profile';
 
 
 function App() {
@@ -66,7 +83,28 @@ function App() {
           {/* Admin Authentication */}
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/verifyOtp" element={<AdminVerifyOTP />} />
-          <Route path="/admin" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
+          <Route path="/admin/forgotPassword" element={<AdminForgotPassword />} />
+          <Route
+            path="/admin"
+            element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>}
+          >
+            <Route index element={<OverviewPage />} />
+            <Route path="album" element={<Album />} />
+            <Route path="track" element={<Track />} />
+            <Route path="distro-artiste" element={<DistroArtiste />} />
+            <Route path="distributions/albums" element={<AllAlbumDistributions />} />
+            <Route path="distributions/tracks" element={<AllTrackDistributions />} />
+            <Route path="transactions" element={<AllTransactions />} />
+            <Route path="transactions-without-accounts" element={<TransactionsWithoutAccounts />} />
+            <Route path="fundings" element={<AllFundings />} />
+            <Route path="users" element={<AllRegisteredUsers />} />
+            <Route path="payment-requests" element={<PaymentRequests />} />
+            <Route path="add-admin" element={<AddAdmin />} />
+            <Route path="add-genre" element={<AddGenre />} />
+            <Route path="activation-fees" element={<SetAccountActivationFees />} />
+            <Route path="verify-artist" element={<VerifyArtist />} />
+            <Route path="profile" element={<AdminProfile />} />
+          </Route>
 
           {/* Dashboard Routes */}
           <Route path="/dashboard/overview" element={<Overview />} />
