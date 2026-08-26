@@ -3,17 +3,20 @@ import { NavLink, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import { ChevronDown, ChevronRight, LogOut, X } from "lucide-react";
 import { adminNav } from "../routes";
+import { canAccess } from "../roleAccess";
 
 const linkClass = ({ isActive }) =>
   `flex w-full cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium transition ${
     isActive ? "bg-orange-500 text-white" : "text-gray-600 hover:bg-orange-50 hover:text-orange-600"
   }`;
 
-const Sidebar = ({ isOpen, setIsOpen }) => {
+const Sidebar = ({ isOpen, setIsOpen, role }) => {
   const location = useLocation();
   const [distributionOpen, setDistributionOpen] = useState(
     () => !!adminNav.find((item) => item.children)?.children.some((child) => location.pathname === child.path)
   );
+
+  const visibleNav = adminNav.filter((item) => canAccess(role, item.path));
 
   return (
     <>
@@ -30,14 +33,14 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </div>
 
         <nav className="admin-scroll flex-1 space-y-1 overflow-y-auto px-4 py-6">
-          {adminNav.map((item) =>
+          {visibleNav.map((item) =>
             item.children ? (
               <div key={item.label}>
                 <button
                   type="button"
                   onClick={() => setDistributionOpen(!distributionOpen)}
                   className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-medium ${
-                    item.children.some((child) => location.pathname === child.path) ? "text-orange-600" : "text-gray-600 hover:bg-orange-50 hover:text-orange-600"
+                    item.children.some((child) => location.pathname === child.path && canAccess(role, child.path)) ? "text-orange-600" : "text-gray-600 hover:bg-orange-50 hover:text-orange-600"
                   }`}
                 >
                   <span className="flex items-center gap-3"><item.icon size={19} />{item.label}</span>
@@ -45,7 +48,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 </button>
                 {distributionOpen && (
                   <div className="ml-5 space-y-1 border-l border-orange-100 pl-3">
-                    {item.children.map((child) => (
+                    {item.children.filter((child) => canAccess(role, child.path)).map((child) => (
                       <NavLink key={child.path} to={child.path} onClick={() => setIsOpen(false)}
                         className={({ isActive }) => `block w-full cursor-pointer rounded-lg px-3 py-2 text-left text-xs ${isActive ? "bg-orange-50 font-semibold text-orange-600" : "text-gray-500 hover:text-orange-600"}`}>
                         {child.label}
@@ -73,6 +76,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 Sidebar.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
+  role: PropTypes.string,
 };
 
 export default Sidebar;
