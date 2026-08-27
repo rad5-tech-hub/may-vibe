@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { toast } from "sonner";
 import { ShieldCheck, UserPlus, UserCog } from "lucide-react";
 import { getErrorMessage } from "../../../utils/errorHelper";
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-const authHeaders = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` } });
+import adminApi from "../adminApi";
 
 const AddAdmin = () => {
   const [admins, setAdmins] = useState([]);
@@ -18,7 +14,7 @@ const AddAdmin = () => {
   const [updating, setUpdating] = useState(false);
 
   const refreshAdmins = async () => {
-    const adminsRes = await axios.get(`${BASE_URL}/admin/all-admin`, authHeaders());
+    const adminsRes = await adminApi.get("/admin/all-admin");
     setAdmins(adminsRes.data?.data?.admins || adminsRes.data?.data || (Array.isArray(adminsRes.data) ? adminsRes.data : []));
   };
 
@@ -26,7 +22,7 @@ const AddAdmin = () => {
     if (!selectedAdmin) return;
     setUpdating(true);
     try {
-      await axios.patch(`${BASE_URL}/admin/${selectedAdmin.id}/${action}`, {}, authHeaders());
+      await adminApi.patch(`/admin/${selectedAdmin.id}/${action}`);
       toast.success(action === "suspend" ? "Admin suspended successfully" : "Admin restored successfully");
       setSelectedAdmin(null);
       await refreshAdmins();
@@ -42,8 +38,8 @@ const AddAdmin = () => {
       setLoading(true);
       try {
         const [adminsRes, rolesRes] = await Promise.all([
-          axios.get(`${BASE_URL}/admin/all-admin`, authHeaders()),
-          axios.get(`${BASE_URL}/admin/roles`, authHeaders()),
+          adminApi.get("/admin/all-admin"),
+          adminApi.get("/admin/roles"),
         ]);
         setAdmins(adminsRes.data?.data?.admins || adminsRes.data?.data || (Array.isArray(adminsRes.data) ? adminsRes.data : []));
         setRoles(rolesRes.data?.data?.roles || rolesRes.data?.data || (Array.isArray(rolesRes.data) ? rolesRes.data : []));
@@ -63,12 +59,12 @@ const AddAdmin = () => {
     }
     setCreating(true);
     try {
-      await axios.post(`${BASE_URL}/admin/create`, {
+      await adminApi.post("/admin/create", {
         full_name: form.full_name.trim(),
         email: form.email.toLowerCase().trim(),
         phone: form.phone.trim(),
         role_id: form.role_id,
-      }, authHeaders());
+      });
       toast.success("Admin created successfully");
       setForm({ full_name: "", email: "", phone: "", role_id: "" });
 

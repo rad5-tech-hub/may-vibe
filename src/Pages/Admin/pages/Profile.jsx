@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { toast } from "sonner";
 import PropTypes from "prop-types";
 import { BadgeCheck, KeyRound, Save, ShieldCheck } from "lucide-react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { getErrorMessage } from "../../../utils/errorHelper";
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import adminApi from "../adminApi";
 
 const formatDate = (value) => {
   if (!value) return "—";
@@ -52,7 +50,7 @@ const Profile = () => {
     } else if (confirmAction === "reset") {
       setConfirming(true);
       try {
-        await axios.post(`${BASE_URL}/admin/forgot-password`, { email: profile.email });
+        await adminApi.post("/admin/forgot-password", { email: profile.email });
         toast.success("A reset code has been sent to your email");
       } catch (error) {
         toast.error(getErrorMessage(error, "Failed to send reset code"));
@@ -66,10 +64,10 @@ const Profile = () => {
     if (passwords.new_password !== passwords.confirm_password) return toast.error("New passwords do not match");
     if (!passwords.current_password || !passwords.new_password) return toast.error("Please fill in all password fields");
     try {
-      await axios.post(`${BASE_URL}/admin/change-password`, {
+      await adminApi.post("/admin/change-password", {
         current_password: passwords.current_password,
         new_password: passwords.new_password,
-      }, authHeaders());
+      });
       setPasswords({ current_password: "", new_password: "", confirm_password: "" });
       toast.success("Password changed successfully");
     } catch (error) {
@@ -126,13 +124,11 @@ const Profile = () => {
     autoComplete: PropTypes.string,
   };
 
-  const authHeaders = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` } });
-
   useEffect(() => {
     const fetchProfile = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${BASE_URL}/admin/profile`, authHeaders());
+        const response = await adminApi.get("/admin/profile");
         const data = response.data?.data || response.data;
         setProfile(data);
         setDetails({ full_name: data.full_name || "", phone: data.phone || "" });
@@ -149,10 +145,10 @@ const Profile = () => {
     event.preventDefault();
     setSavingDetails(true);
     try {
-      await axios.patch(`${BASE_URL}/admin/profile`, {
+      await adminApi.patch("/admin/profile", {
         full_name: details.full_name.trim(),
         phone: details.phone.trim(),
-      }, authHeaders());
+      });
       setProfile({ ...profile, full_name: details.full_name.trim(), phone: details.phone.trim() });
       toast.success("Profile updated successfully");
     } catch (error) {

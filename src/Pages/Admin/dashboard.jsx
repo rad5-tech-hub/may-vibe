@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Menu } from "lucide-react";
 import Sidebar from "./components/sidebar";
 import Main from "./components/main";
+import adminApi from "./adminApi";
 import { getInitials } from "./roleAccess";
-import { getErrorMessage } from "../../utils/errorHelper";
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -19,17 +16,14 @@ const Dashboard = () => {
         try { setAdminUser(JSON.parse(cached)); } catch { /* ignore */ }
       }
       try {
-        const response = await axios.get(`${BASE_URL}/admin/profile`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
-        });
+        const response = await adminApi.get("/admin/profile");
         const data = response.data?.data || response.data;
         if (data) {
           setAdminUser(data);
           localStorage.setItem("adminUser", JSON.stringify(data));
         }
-      } catch (error) {
-        // Silent fallback to cached adminUser; profile page surfaces API errors.
-        console.error(getErrorMessage(error, "Failed to load admin profile"));
+      } catch {
+        // 401 handled by interceptor
       }
     };
     fetchAdmin();

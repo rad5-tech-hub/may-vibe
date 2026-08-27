@@ -65,7 +65,7 @@ const Sidebar = ({ isOpen, setIsOpen, role }) => {
           )}
         </nav>
 
-        <button type="button" onClick={() => { localStorage.removeItem("adminToken"); window.location.href = "/admin/login"; }} className="mx-4 mb-6 flex cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-500 hover:bg-gray-100">
+        <button type="button" onClick={() => { localStorage.removeItem("adminToken"); localStorage.removeItem("adminUser"); window.location.href = "/admin/login"; }} className="mx-4 mb-6 flex cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-500 hover:bg-gray-100">
           <LogOut size={19} />Sign out
         </button>
       </aside>

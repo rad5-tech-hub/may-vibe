@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
 import { toast } from "sonner";
 import { CheckCircle2, XCircle, Users } from "lucide-react";
 import { getErrorMessage } from "../../../utils/errorHelper";
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-const authHeaders = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` } });
+import adminApi from "../adminApi";
 
 const extractList = (payload) => {
   const data = payload?.data;
@@ -43,8 +39,7 @@ const AllRegisteredUsers = () => {
 
   const loadUsers = async (cursor) => {
     try {
-      const response = await axios.get(`${BASE_URL}/user`, {
-        ...authHeaders(),
+      const response = await adminApi.get("/user", {
         params: cursor ? { cursor } : {},
       });
       setUsers((prev) => (cursor ? [...prev, ...extractList(response.data)] : extractList(response.data)));
