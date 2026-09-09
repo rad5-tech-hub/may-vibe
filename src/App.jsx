@@ -10,6 +10,8 @@ import ForgotPassword from './Pages/Onboarding Pages/forgetPassword.jsx';
 import ResetPassword from './Pages/Onboarding Pages/resetPassword.jsx';
 import VerifyOTP from './Pages/Onboarding Pages/verifyOTP.jsx';
 import Music from './Pages/Dashboard/Music Upload/Music';
+import AlbumDetail from './Pages/Dashboard/Music Upload/AlbumDetail';
+import TrackDetail from './Pages/Dashboard/Music Upload/TrackDetail';
 import Homepage from './Pages/Homepage/Homepage';
 import Overview from './Pages/Dashboard/Overview/overview';
 import RoyaltiesPage from './Pages/Dashboard/Royalties/Royalties';
@@ -17,6 +19,7 @@ import Support from './Pages/Dashboard/Support &Academy/support';
 import Notifications from './Pages/Dashboard/Notifications/notifications';
 import Profile from './Pages/Dashboard/Profile/profile';
 import Releases from './Pages/Dashboard/Releases/releases';
+import Payouts from './Pages/Dashboard/Payouts/payouts';
 import Dashboard from './Pages/Dashboard/dashboard';
 import NotFound from './Pages/NotFound/NotFound';
 import SimplePage from './Pages/SimplePages/SimplePage';
@@ -106,15 +109,20 @@ function App() {
             <Route path="profile" element={<AdminProfile />} />
           </Route>
 
-          {/* Dashboard Routes */}
-          <Route path="/dashboard/overview" element={<Overview />} />
-          <Route path="/dashboard/releases" element={<Releases />} />
-          <Route path="/dashboard/music-upload" element={<Music />} />
-          <Route path="/dashboard/royalties" element={<RoyaltiesPage />} />
-          <Route path="/dashboard/support" element={<Support />} />
-          <Route path="/dashboard/notifications" element={<Notifications />} />
-          <Route path="/dashboard/profile" element={<Profile />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          {/* Dashboard - nested layout: sidebar independent, outlet for content */}
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route index element={<Overview />} />
+            <Route path="overview" element={<Overview />} />
+            <Route path="music-upload" element={<Music />} />
+            <Route path="albums/:id" element={<AlbumDetail />} />
+            <Route path="tracks/:id" element={<TrackDetail />} />
+            <Route path="releases" element={<Releases />} />
+            <Route path="royalties" element={<RoyaltiesPage />} />
+            <Route path="payouts" element={<Payouts />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="notifications" element={<Notifications />} />
+            <Route path="support" element={<Support />} />
+          </Route>
 
           {/* Public Utility Pages */}
           <Route path="/about" element={<About title="About Us" />} />

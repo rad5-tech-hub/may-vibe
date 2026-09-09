@@ -1,26 +1,22 @@
-import AudioUploadCard from '../Music Upload/components/AudioUploadCard';
-import ArtworkUploadCard from '../Music Upload/components/ArtworkUploadCard';
-import MetadataForm from '../Music Upload/components/MetadataForm';
-import ReleaseDatePicker from '../Music Upload/components/ReleaseDatePicker';
+import { useState } from "react";
+import AlbumsTab from "./components/AlbumsTab";
+import TracksTab from "./components/TracksTab";
 
 const UploadMusic = () => {
+  const [tab, setTab] = useState("albums");
+
   return (
     <div className="min-h-screen bg-white py-5 px-2 font-display">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl lg:text-4xl font-normal text-gray-900 mb-5">Upload Music</h1>
+        <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-2">Upload Music</h1>
+        <p className="text-sm text-gray-500 mb-6">Create albums, then add tracks. Release is the final step — tentative flow.</p>
 
-        {/* Upload Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <AudioUploadCard />
-          <ArtworkUploadCard />
+        <div className="flex gap-2 mb-8 bg-gray-100 p-1 rounded-2xl w-fit">
+          <button onClick={() => setTab("albums")} className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition ${tab === "albums" ? "bg-orange-500 text-white shadow" : "text-gray-600 hover:text-gray-900"}`}>Albums</button>
+          <button onClick={() => setTab("tracks")} className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition ${tab === "tracks" ? "bg-orange-500 text-white shadow" : "text-gray-600 hover:text-gray-900"}`}>Tracks</button>
         </div>
 
-        {/* Metadata + Calendar */}
-        <div className="mb-16">
-          <MetadataForm />
-        </div>
-
-          <ReleaseDatePicker />
+        {tab === "albums" ? <AlbumsTab /> : <TracksTab />}
       </div>
     </div>
   );

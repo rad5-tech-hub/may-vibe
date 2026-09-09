@@ -14,7 +14,7 @@ export default function Overview() {
   return (
     <div className="min-h-screen bg-white px-6 py-4">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-900 mb-10">Overview</h1>
+        <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-10">Overview</h1>
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 ">
           <div className="flex flex-col">
