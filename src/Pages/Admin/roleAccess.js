@@ -7,7 +7,7 @@ export const ROLE_MODULES = {
   super_admin: ALL,
   content_admin: [
     "/admin", "/admin/profile",
-    "/admin/album", "/admin/track", "/admin/distro-artiste",
+    "/admin/releases", "/admin/album", "/admin/track", "/admin/distro-artiste",
     "/admin/distributions/albums", "/admin/distributions/tracks",
     "/admin/add-genre", "/admin/verify-artist",
   ],

@@ -2,8 +2,7 @@ import { LayoutDashboard, Music2, Users, UserCheck } from "lucide-react";
 
 export const adminNav = [
   { label: "Overview", path: "/admin", icon: LayoutDashboard, end: true },
-  { label: "Album", path: "/admin/album", icon: Music2 },
-  { label: "Track", path: "/admin/track", icon: Music2 },
+  { label: "Releases", path: "/admin/releases", icon: Music2 },
   { label: "Distro Artiste", path: "/admin/distro-artiste", icon: Users },
   {
     label: "Distributions",

@@ -37,8 +37,6 @@ import AdminForgotPassword from './Pages/Admin/auth/forgotPassword';
 import AdminDashboard from './Pages/Admin/dashboard';
 import AdminProtectedRoute from './Pages/Admin/AdminProtectedRoute';
 import OverviewPage from './Pages/Admin/pages/Overview';
-import Album from './Pages/Admin/pages/Album';
-import Track from './Pages/Admin/pages/Track';
 import DistroArtiste from './Pages/Admin/pages/DistroArtiste';
 import AllAlbumDistributions from './Pages/Admin/pages/AllAlbumDistributions';
 import AllTrackDistributions from './Pages/Admin/pages/AllTrackDistributions';
@@ -52,6 +50,7 @@ import AddGenre from './Pages/Admin/pages/AddGenre';
 import SetAccountActivationFees from './Pages/Admin/pages/SetAccountActivationFees';
 import VerifyArtist from './Pages/Admin/pages/VerifyArtist';
 import AdminProfile from './Pages/Admin/pages/Profile';
+import ReleasesAdmin from './Pages/Admin/pages/Releases';
 
 
 function App() {
@@ -92,8 +91,7 @@ function App() {
             element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>}
           >
             <Route index element={<OverviewPage />} />
-            <Route path="album" element={<Album />} />
-            <Route path="track" element={<Track />} />
+            <Route path="releases" element={<ReleasesAdmin />} />
             <Route path="distro-artiste" element={<DistroArtiste />} />
             <Route path="distributions/albums" element={<AllAlbumDistributions />} />
             <Route path="distributions/tracks" element={<AllTrackDistributions />} />
