@@ -27,6 +27,7 @@ const compressImage = (file, maxDim = 1024, quality = 0.8) =>
 export default function TracksTab() {
   const [albums, setAlbums] = useState([]);
   const [genres, setGenres] = useState([]);
+  const [genresLoading, setGenresLoading] = useState(true);
   const [tracks, setTracks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -67,7 +68,7 @@ export default function TracksTab() {
     userApi.get("/genre/all-genres").then(res => {
       const list = res.data.data || res.data.genres || res.data || [];
       setGenres(Array.isArray(list) ? list : []);
-    }).catch(() => {});
+    }).catch((err) => toast.error(getErrorMessage(err, "Failed to load genres"))).finally(() => setGenresLoading(false));
   }, []);
 
   const resetForm = () => {
@@ -191,10 +192,10 @@ export default function TracksTab() {
           </div>
           <div>
             <label className="text-xs font-medium text-gray-600">Genre</label>
-            <select value={form.genre_id} onChange={e => setForm({ ...form, genre_id: e.target.value })} className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none">
-              <option value="">Select genre</option>
-              {genres.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
-            </select>
+              <select value={form.genre_id} onChange={e => setForm({ ...form, genre_id: e.target.value })} className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none">
+                <option value="">{genresLoading ? "Loading genres..." : "Select genre"}</option>
+                {genres.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
+              </select>
           </div>
           <div>
             <label className="text-xs font-medium text-gray-600">Release Date (YYYY-MM-DD)</label>
@@ -284,7 +285,7 @@ export default function TracksTab() {
                   <Link to={`/dashboard/tracks/${t.id}`} className="flex-1 flex items-center justify-center gap-1 bg-white border border-gray-200 hover:bg-gray-50 py-2 rounded-xl text-xs font-medium"><Eye size={14} /> View details</Link>
                   <button onClick={() => openEdit(t)} className="flex-1 flex items-center justify-center gap-1 bg-gray-900 hover:bg-black text-white py-2 rounded-xl text-xs font-medium"><Pencil size={14} /> Edit</button>
                 </div>
-                <button onClick={() => setReleaseFor(t)} className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl text-xs font-semibold">Release (ACR)</button>
+                <button onClick={() => setReleaseFor(t)} className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl text-xs font-semibold">Release</button>
               </div>
             </div>
           ))}
@@ -298,10 +299,10 @@ export default function TracksTab() {
             <p className="text-xs text-gray-500">Track: {releaseFor.name} • {releaseFor.id}</p>
             <div><label className="text-xs font-medium text-gray-600">Record Label</label><input value={releaseData.record_label} onChange={e => setReleaseData({ ...releaseData, record_label: e.target.value })} className="mt-1 w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" /></div>
             <div><label className="text-xs font-medium text-gray-600">Release Date</label><input type="date" value={releaseData.release_date} onChange={e => setReleaseData({ ...releaseData, release_date: e.target.value })} className="mt-1 w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" /></div>
-            <div><label className="text-xs font-medium text-gray-600">Songwriter</label><input value={releaseData.songwriter} onChange={e => setReleaseData({ ...releaseData, songwriter: e.target.value })} placeholder="Carita, Dawn" className="mt-1 w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" /></div>
+            <div><label className="text-xs font-medium text-gray-600">Songwriter</label><input value={releaseData.songwriter} onChange={e => setReleaseData({ ...releaseData, songwriter: e.target.value })} placeholder="Dawn, Shawn" className="mt-1 w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" /></div>
             <div className="flex items-center gap-2"><input type="checkbox" checked={releaseData.explicit_lyrics} onChange={e => setReleaseData({ ...releaseData, explicit_lyrics: e.target.checked })} className="w-4 h-4 accent-orange-500" /><span className="text-sm">Explicit lyrics</span></div>
             <div><label className="text-xs font-medium text-gray-600">Lyrics</label><textarea value={releaseData.lyrics} onChange={e => setReleaseData({ ...releaseData, lyrics: e.target.value })} rows={4} placeholder="Verse 1..." className="mt-1 w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" /></div>
-            <div className="flex gap-3"><button type="button" onClick={() => setReleaseFor(null)} className="flex-1 bg-gray-100 hover:bg-gray-200 py-3 rounded-xl text-sm font-medium">Cancel</button><button type="submit" className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl text-sm font-semibold">Release (ACR)</button></div>
+            <div className="flex gap-3"><button type="button" onClick={() => setReleaseFor(null)} className="flex-1 bg-gray-100 hover:bg-gray-200 py-3 rounded-xl text-sm font-medium">Cancel</button><button type="submit" className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl text-sm font-semibold">Release</button></div>
           </form>
         </div>
       )}

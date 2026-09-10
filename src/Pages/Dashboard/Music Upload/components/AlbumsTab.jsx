@@ -38,6 +38,7 @@ export default function AlbumsTab() {
   const [editing, setEditing] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [genres, setGenres] = useState([]);
+  const [genresLoading, setGenresLoading] = useState(true);
 
   const [form, setForm] = useState({
     name: "",
@@ -67,7 +68,9 @@ export default function AlbumsTab() {
       const res = await userApi.get("/genre/all-genres");
       const list = res.data.data || res.data.genres || res.data || [];
       setGenres(Array.isArray(list) ? list : []);
-    } catch { /* silent */ }
+    } catch (err) {
+      toast.error(getErrorMessage(err, "Failed to load genres"));
+    } finally { setGenresLoading(false); }
   };
 
   useEffect(() => { fetchAlbums(); fetchGenres(); }, []);
@@ -170,7 +173,7 @@ export default function AlbumsTab() {
             <div>
               <label className="text-xs font-medium text-gray-600">Genre</label>
               <select value={form.genre_id} onChange={e => setForm({ ...form, genre_id: e.target.value })} className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none">
-                <option value="">Select genre</option>
+                <option value="">{genresLoading ? "Loading genres..." : "Select genre"}</option>
                 {genres.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
               </select>
             </div>
