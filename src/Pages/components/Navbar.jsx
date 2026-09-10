@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { ChevronDown, Menu, X } from "lucide-react";
+import { isAuthenticated } from "../../utils/auth";
 
 import tower from "../../assets/tower.png";
 import globe from "../../assets/globe.png";
@@ -139,18 +140,29 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate("/login")}
-              className="bg-[#FF6200] text-white rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-orange-700 transition cursor-pointer"
-            >
-              Login
-            </button>
-            <button
-              onClick={() => navigate("/signup")}
-              className="border border-gray-800 text-gray-800 rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-gray-50 transition cursor-pointer"
-            >
-              Get Started
-            </button>
+            {isAuthenticated() ? (
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="bg-[#FF6200] text-white rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-orange-700 transition cursor-pointer"
+              >
+                Dashboard
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={() => navigate("/login")}
+                  className="bg-[#FF6200] text-white rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-orange-700 transition cursor-pointer"
+                >
+                  Login
+                </button>
+                <button
+                  onClick={() => navigate("/signup")}
+                  className="border border-gray-800 text-gray-800 rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-gray-50 transition cursor-pointer"
+                >
+                  Get Started
+                </button>
+              </>
+            )}
           </div>
         </div>
 
@@ -245,18 +257,29 @@ export default function Navbar() {
             ))}
 
             <div className="flex flex-col gap-3 pt-2">
-              <button
-                onClick={() => { navigate("/login"); setMobileOpen(false); }}
-                className="bg-[#FF6200] text-white rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-orange-700 transition cursor-pointer w-full"
-              >
-                Login
-              </button>
-              <button
-                onClick={() => { navigate("/signup"); setMobileOpen(false); }}
-                className="border border-gray-800 text-gray-800 rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-gray-50 transition cursor-pointer w-full"
-              >
-                Get Started
-              </button>
+              {isAuthenticated() ? (
+                <button
+                  onClick={() => { navigate("/dashboard"); setMobileOpen(false); }}
+                  className="bg-[#FF6200] text-white rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-orange-700 transition cursor-pointer w-full"
+                >
+                  Dashboard
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={() => { navigate("/login"); setMobileOpen(false); }}
+                    className="bg-[#FF6200] text-white rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-orange-700 transition cursor-pointer w-full"
+                  >
+                    Login
+                  </button>
+                  <button
+                    onClick={() => { navigate("/signup"); setMobileOpen(false); }}
+                    className="border border-gray-800 text-gray-800 rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-gray-50 transition cursor-pointer w-full"
+                  >
+                    Get Started
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

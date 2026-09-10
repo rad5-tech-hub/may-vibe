@@ -7,8 +7,21 @@ import { getErrorMessage } from "../../../../utils/errorHelper";
 
 const TRACK_TYPES = ["audio_track", "video_track", "audio_album_track", "video_album_track"];
 const MAX_IMG_BYTES = 5 * 1024 * 1024;
-const MAX_AUDIO_BYTES = 10 * 1024 * 1024;
-const MAX_TOTAL_BYTES = 12 * 1024 * 1024;
+
+const formatPriceDisplay = (value) => {
+  if (value == null || value === "") return "";
+  const num = Number(String(value).replace(/,/g, ""));
+  if (isNaN(num)) return String(value);
+  return num.toLocaleString("en-US");
+};
+const formatPriceInput = (value) => {
+  const digits = String(value).replace(/[^0-9]/g, "");
+  if (!digits) return "";
+  return Number(digits).toLocaleString("en-US");
+};
+const stripCommas = (value) => String(value).replace(/,/g, "");
+const MAX_AUDIO_BYTES = 40 * 1024 * 1024;
+const MAX_TOTAL_BYTES = 80 * 1024 * 1024;
 const compressImage = (file, maxDim = 1024, quality = 0.8) =>
   new Promise((resolve) => {
     if (!file.type.startsWith("image/") || file.size <= MAX_IMG_BYTES) return resolve(file);
@@ -35,8 +48,8 @@ export default function TracksTab() {
   const [editing, setEditing] = useState(null);
   const [releaseFor, setReleaseFor] = useState(null);
   const [releaseData, setReleaseData] = useState({
-    record_label: "Fendol Records",
-    release_date: new Date().toISOString().slice(0, 10),
+    record_label: "",
+    release_date: "",
     songwriter: "",
     explicit_lyrics: false,
     lyrics: "",
@@ -84,7 +97,7 @@ export default function TracksTab() {
       description: t.description || "", featuring_artiste: t.featuring_artiste || "",
       date_released: t.date_released ? t.date_released.slice(0,10) : "",
       genre_id: t.genre_id || "", album_id: t.album_id || "",
-      payment_type: t.payment_type || "paid", price: t.price ? String(t.price).replace(/\.00$/,"") : "",
+      payment_type: t.payment_type || "paid", price: t.price ? formatPriceInput(String(t.price).replace(/\.00$/,"")) : "",
       is_downloadable: !!t.is_downloadable,
     });
     setFiles({ file: null, artwork: null, sample: null });
@@ -96,11 +109,11 @@ export default function TracksTab() {
   const handleTrackSubmit = async (e) => {
     e.preventDefault();
     if (!form.name.trim()) return toast.error("Track name is required");
-    if (files.file && files.file.size > MAX_AUDIO_BYTES) return toast.error(`Audio/Video must be ≤ 10 MB (selected ${(files.file.size/1024/1024).toFixed(2)} MB)`);
-    if (files.sample && files.sample.size > MAX_AUDIO_BYTES) return toast.error(`Sample must be ≤ 10 MB (selected ${(files.sample.size/1024/1024).toFixed(2)} MB)`);
+    if (files.file && files.file.size > MAX_AUDIO_BYTES) return toast.error(`Audio/Video must be ≤ 40 MB (selected ${(files.file.size/1024/1024).toFixed(2)} MB)`);
+    if (files.sample && files.sample.size > MAX_AUDIO_BYTES) return toast.error(`Sample must be ≤ 40 MB (selected ${(files.sample.size/1024/1024).toFixed(2)} MB)`);
     if (files.artwork && files.artwork.size > 40 * 1024 * 1024) return toast.error(`Artwork must be ≤ 40 MB`);
     const total = (files.file?.size||0)+(files.artwork?.size||0)+(files.sample?.size||0);
-    if (total > MAX_TOTAL_BYTES) return toast.error(`Total upload size ${(total/1024/1024).toFixed(1)} MB exceeds server limit (12 MB). Use smaller files or remove sample.`);
+    if (total > MAX_TOTAL_BYTES) return toast.error(`Total upload size ${(total/1024/1024).toFixed(1)} MB exceeds server limit (80 MB). Use smaller files or remove sample.`);
     let artwork = files.artwork;
     if (artwork && artwork.size > MAX_IMG_BYTES) { toast.message("Compressing artwork..."); artwork = await compressImage(artwork); }
     const fd = new FormData();
@@ -113,7 +126,7 @@ export default function TracksTab() {
     if (form.genre_id) fd.append("genre_id", form.genre_id);
     if (form.album_id) fd.append("album_id", form.album_id);
     fd.append("payment_type", form.payment_type);
-    if (form.price) fd.append("price", form.price);
+    if (form.price) fd.append("price", stripCommas(form.price));
     fd.append("is_downloadable", String(form.is_downloadable));
     if (files.file) fd.append("file", files.file);
     if (artwork) fd.append("artwork", artwork);
@@ -132,7 +145,7 @@ export default function TracksTab() {
       setShowForm(false);
       fetchTracks();
     } catch (err) {
-      if (err.response?.status === 413) toast.error("Server rejected: payload too large (413). Keep total <12 MB, audio <10 MB, artwork auto-compressed <5 MB. Try smaller files or omit sample. Backend may need to increase client_max_body_size.");
+      if (err.response?.status === 413) toast.error("Server rejected: payload too large (413). Keep total <80 MB, audio <40 MB, artwork auto-compressed <5 MB. Try smaller files or omit sample. Backend may need to increase client_max_body_size.");
       else toast.error(getErrorMessage(err, editing ? "Update failed" : "Failed to create track"));
     } finally { setSubmitting(false); }
   };
@@ -146,7 +159,7 @@ export default function TracksTab() {
         release_date: releaseData.release_date, songwriter: releaseData.songwriter,
         explicit_lyrics: releaseData.explicit_lyrics, lyrics: releaseData.lyrics,
       });
-      toast.success("Release created. ACR scan started.");
+      toast.success("Release created successfully.");
       setReleaseFor(null);
     } catch (err) { toast.error(getErrorMessage(err, "Release failed")); }
   };
@@ -210,7 +223,7 @@ export default function TracksTab() {
           </div>
           <div>
             <label className="text-xs font-medium text-gray-600">Price</label>
-            <input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} placeholder="89789" className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
+            <input type="text" inputMode="numeric" value={form.price} onChange={e => setForm({ ...form, price: formatPriceInput(e.target.value) })} placeholder="89,789" className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
           </div>
           <div className="flex items-center gap-3 pt-6">
             <input type="checkbox" checked={form.is_downloadable} onChange={e => setForm({ ...form, is_downloadable: e.target.checked })} className="w-5 h-5 accent-orange-500" />
@@ -272,14 +285,14 @@ export default function TracksTab() {
                     <p className="text-xs text-gray-500 truncate">{t.artiste_name} • {t.type} {t.genre?.name ? `• ${t.genre.name}` : ""}</p>
                     {t.album && <p className="text-xs text-orange-600 flex items-center gap-1 truncate"><Disc3 size={12} />{t.album.name}</p>}
                   </div>
-                  <span className="text-xs bg-orange-50 text-orange-600 px-2 py-1 rounded-full shrink-0">{t.price ? `₦${t.price}` : t.payment_type}</span>
+                  <span className="text-xs bg-orange-50 text-orange-600 px-2 py-1 rounded-full shrink-0">{t.price ? `₦${formatPriceDisplay(t.price)}` : t.payment_type}</span>
                 </div>
                 <p className="text-sm text-gray-600 line-clamp-2">{t.description || "No description"}</p>
                 {t.featuring_artiste && <p className="text-xs text-gray-500">Ft: {t.featuring_artiste}</p>}
                 <div className="flex flex-wrap gap-2 text-xs text-gray-500">
                   <span className="flex items-center gap-1"><Calendar size={12} />{t.date_released?.slice(0,10) || "—"}</span>
-                  <span>{t.no_of_views} views</span>
-                  <span>{t.no_of_plays} plays</span>
+                  <span className="flex items-center gap-1"><Eye size={12} />{t.no_of_views} views</span>
+                  <span className="flex items-center gap-1"><Music2 size={12} />{t.no_of_plays} plays</span>
                 </div>
                 <div className="flex gap-2 pt-2">
                   <Link to={`/dashboard/tracks/${t.id}`} className="flex-1 flex items-center justify-center gap-1 bg-white border border-gray-200 hover:bg-gray-50 py-2 rounded-xl text-xs font-medium"><Eye size={14} /> View details</Link>

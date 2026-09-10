@@ -1,12 +1,25 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { Pencil, Music2, Calendar, DollarSign, Eye } from "lucide-react";
+import { Pencil, Music2, Calendar, Eye } from "lucide-react";
 import userApi from "../../../../utils/userApi";
 import { getErrorMessage } from "../../../../utils/errorHelper";
 
 const ALBUM_TYPES = ["audio_album", "video_album"];
 const MAX_FILE_BYTES = 5 * 1024 * 1024;
+
+const formatPriceDisplay = (value) => {
+  if (value == null || value === "") return "";
+  const num = Number(String(value).replace(/,/g, ""));
+  if (isNaN(num)) return String(value);
+  return num.toLocaleString("en-US");
+};
+const formatPriceInput = (value) => {
+  const digits = String(value).replace(/[^0-9]/g, "");
+  if (!digits) return "";
+  return Number(digits).toLocaleString("en-US");
+};
+const stripCommas = (value) => String(value).replace(/,/g, "");
 
 const compressImage = (file, maxDim = 1024, quality = 0.8) =>
   new Promise((resolve) => {
@@ -91,7 +104,7 @@ export default function AlbumsTab() {
       genre_id: album.genre_id || "",
       date_released: album.date_released ? album.date_released.slice(0, 10) : "",
       payment_type: album.payment_type || "paid",
-      price: album.price ? String(album.price).replace(/\.00$/, "") : "",
+      price: album.price ? formatPriceInput(String(album.price).replace(/\.00$/, "")) : "",
       is_downloadable: !!album.is_downloadable,
     });
     setShowForm(true);
@@ -118,7 +131,7 @@ export default function AlbumsTab() {
     if (form.genre_id) fd.append("genre_id", form.genre_id);
     if (form.date_released) fd.append("date_released", form.date_released);
     fd.append("payment_type", form.payment_type);
-    if (form.price) fd.append("price", form.price);
+    if (form.price) fd.append("price", stripCommas(form.price));
     fd.append("is_downloadable", String(form.is_downloadable));
     if (fileToSend) fd.append("artwork", fileToSend);
 
@@ -190,7 +203,7 @@ export default function AlbumsTab() {
             </div>
             <div>
               <label className="text-xs font-medium text-gray-600">Price</label>
-              <input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} placeholder="40000" className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
+              <input type="text" inputMode="numeric" value={form.price} onChange={e => setForm({ ...form, price: formatPriceInput(e.target.value) })} placeholder="40,000" className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
             </div>
             <div className="flex items-center gap-3 pt-6">
               <input type="checkbox" checked={form.is_downloadable} onChange={e => setForm({ ...form, is_downloadable: e.target.checked })} className="w-5 h-5 accent-orange-500" />
@@ -244,13 +257,13 @@ export default function AlbumsTab() {
                     <h3 className="font-bold text-gray-900 leading-tight">{album.name}</h3>
                     <p className="text-xs text-gray-500">{album.artiste_name} • {album.type} {album.genre?.name ? `• ${album.genre.name}` : ""}</p>
                   </div>
-                  <span className="text-xs bg-orange-50 text-orange-600 px-2 py-1 rounded-full">{album.price ? `₦${album.price}` : album.payment_type}</span>
+                  <span className="text-xs bg-orange-50 text-orange-600 px-2 py-1 rounded-full">{album.price ? `₦${formatPriceDisplay(album.price)}` : album.payment_type}</span>
                 </div>
                 <p className="text-sm text-gray-600 line-clamp-2">{album.description || "No description"}</p>
                 <div className="flex flex-wrap gap-2 text-xs text-gray-500">
                   <span className="flex items-center gap-1"><Calendar size={12} />{album.date_released?.slice(0,10) || "—"}</span>
                   <span className="flex items-center gap-1"><Eye size={12} />{album.no_of_views} views</span>
-                  <span className="flex items-center gap-1"><DollarSign size={12} />{album.no_of_plays} plays</span>
+                  <span className="flex items-center gap-1"><Music2 size={12} />{album.no_of_plays} plays</span>
                   {album.tracks?.length ? <span>{album.tracks.length} tracks</span> : null}
                 </div>
                 {album.tracks?.length > 0 && (

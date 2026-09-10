@@ -16,8 +16,11 @@ userApi.interceptors.response.use(
   (r) => r,
   (err) => {
     if (err.response?.status === 401) {
-      // optional: redirect to login if desired
-      // window.location.href = "/login";
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      if (window.location.pathname.startsWith("/dashboard")) {
+        window.location.href = "/login";
+      }
     }
     return Promise.reject(err);
   }

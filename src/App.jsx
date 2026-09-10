@@ -36,6 +36,8 @@ import AdminVerifyOTP from './Pages/Admin/auth/verifyOTP';
 import AdminForgotPassword from './Pages/Admin/auth/forgotPassword';
 import AdminDashboard from './Pages/Admin/dashboard';
 import AdminProtectedRoute from './Pages/Admin/AdminProtectedRoute';
+import UserProtectedRoute from './Pages/components/UserProtectedRoute';
+import GuestRoute from './Pages/components/GuestRoute';
 import OverviewPage from './Pages/Admin/pages/Overview';
 import DistroArtiste from './Pages/Admin/pages/DistroArtiste';
 import AllAlbumDistributions from './Pages/Admin/pages/AllAlbumDistributions';
@@ -75,12 +77,12 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Homepage />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/welcome" element={<Welcome />} />
-          <Route path="/forgotPassword" element={<ForgotPassword />} />
-          <Route path="/resetPassword" element={<ResetPassword />} />
-          <Route path="/verifyOtp" element={<VerifyOTP />} />
+          <Route path="/signup" element={<GuestRoute><Signup /></GuestRoute>} />
+          <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
+          <Route path="/welcome" element={<GuestRoute><Welcome /></GuestRoute>} />
+          <Route path="/forgotPassword" element={<GuestRoute><ForgotPassword /></GuestRoute>} />
+          <Route path="/resetPassword" element={<GuestRoute><ResetPassword /></GuestRoute>} />
+          <Route path="/verifyOtp" element={<GuestRoute><VerifyOTP /></GuestRoute>} />
 
           {/* Admin Authentication */}
           <Route path="/admin/login" element={<AdminLogin />} />
@@ -108,7 +110,7 @@ function App() {
           </Route>
 
           {/* Dashboard - nested layout: sidebar independent, outlet for content */}
-          <Route path="/dashboard" element={<Dashboard />}>
+          <Route path="/dashboard" element={<UserProtectedRoute><Dashboard /></UserProtectedRoute>}>
             <Route index element={<Overview />} />
             <Route path="overview" element={<Overview />} />
             <Route path="music-upload" element={<Music />} />

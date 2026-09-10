@@ -1,9 +1,22 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, Pencil, Trash2, Calendar, Eye, DollarSign, Disc3 } from "lucide-react";
+import { ArrowLeft, Pencil, Trash2, Calendar, Eye, Music2, Download, Disc3 } from "lucide-react";
 import { toast } from "sonner";
 import userApi from "../../../utils/userApi";
 import { getErrorMessage } from "../../../utils/errorHelper";
+
+const formatPriceDisplay = (value) => {
+  if (value == null || value === "") return "";
+  const num = Number(String(value).replace(/,/g, ""));
+  if (isNaN(num)) return String(value);
+  return num.toLocaleString("en-US");
+};
+const formatPriceInput = (value) => {
+  const digits = String(value).replace(/[^0-9]/g, "");
+  if (!digits) return "";
+  return Number(digits).toLocaleString("en-US");
+};
+const stripCommas = (value) => String(value).replace(/,/g, "");
 
 function Section({ title, description, children, danger }) {
   return (
@@ -38,7 +51,7 @@ export default function TrackDetail() {
     fetch();
   }, [id]);
 
-  useEffect(()=>{ if(track) setForm({ name: track.name||"", artiste_name: track.artiste_name||"", featuring_artiste: track.featuring_artiste||"", description: track.description||"", date_released: track.date_released?.slice(0,10)||"", payment_type: track.payment_type||"paid", price: track.price?String(track.price).replace(/\.00$/,""):"", is_downloadable: !!track.is_downloadable }); },[track]);
+  useEffect(()=>{ if(track) setForm({ name: track.name||"", artiste_name: track.artiste_name||"", featuring_artiste: track.featuring_artiste||"", description: track.description||"", date_released: track.date_released?.slice(0,10)||"", payment_type: track.payment_type||"paid", price: track.price?formatPriceInput(String(track.price).replace(/\.00$/,"")):"", is_downloadable: !!track.is_downloadable }); },[track]);
 
   const handleEdit = async (e)=>{
     e.preventDefault();
@@ -49,7 +62,7 @@ export default function TrackDetail() {
     if(form.description) fd.append("description",form.description);
     if(form.date_released) fd.append("date_released",form.date_released);
     fd.append("payment_type",form.payment_type);
-    if(form.price) fd.append("price",form.price);
+    if(form.price) fd.append("price",stripCommas(form.price));
     fd.append("is_downloadable",String(form.is_downloadable));
     if(files.file) fd.append("file",files.file);
     if(files.artwork) fd.append("artwork",files.artwork);
@@ -97,7 +110,7 @@ export default function TrackDetail() {
           <div><dt className="text-gray-500">Description</dt><dd className="text-gray-900 mt-1">{track.description||"—"}</dd></div>
           <div className="flex justify-between"><dt className="text-gray-500">Genre</dt><dd>{track.genre?.name||track.genre_id||"—"}</dd></div>
           <div className="flex justify-between"><dt className="text-gray-500">Release</dt><dd className="flex items-center gap-1"><Calendar size={12}/>{track.date_released?.slice(0,10)||"—"}</dd></div>
-          <div className="flex justify-between"><dt className="text-gray-500">Payment</dt><dd>{track.payment_type} {track.price?`• ₦${track.price}`:""}</dd></div>
+          <div className="flex justify-between"><dt className="text-gray-500">Payment</dt><dd>{track.payment_type} {track.price?`• ₦${formatPriceDisplay(track.price)}`:""}</dd></div>
           <div className="flex justify-between"><dt className="text-gray-500">Downloadable</dt><dd>{track.is_downloadable?"Yes":"No"}</dd></div>
         </dl>
       </Section>
@@ -105,8 +118,8 @@ export default function TrackDetail() {
       <Section title="Stats">
         <div className="flex gap-6 text-sm">
           <span className="flex items-center gap-1"><Eye size={14}/>{track.no_of_views} views</span>
-          <span className="flex items-center gap-1"><DollarSign size={14}/>{track.no_of_plays} plays</span>
-          <span>{track.no_of_downloads} downloads</span>
+          <span className="flex items-center gap-1"><Music2 size={14}/>{track.no_of_plays} plays</span>
+          <span className="flex items-center gap-1"><Download size={14}/>{track.no_of_downloads} downloads</span>
         </div>
       </Section>
 
@@ -137,7 +150,7 @@ export default function TrackDetail() {
             <textarea value={form.description} onChange={e=>setForm({...form,description:e.target.value})} rows={2} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" placeholder="Description" />
             <input type="date" value={form.date_released} onChange={e=>setForm({...form,date_released:e.target.value})} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
             <select value={form.payment_type} onChange={e=>setForm({...form,payment_type:e.target.value})} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none"><option value="paid">paid</option><option value="free">free</option></select>
-            <input type="number" value={form.price} onChange={e=>setForm({...form,price:e.target.value})} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" placeholder="Price" />
+            <input type="text" inputMode="numeric" value={form.price} onChange={e=>setForm({...form,price:formatPriceInput(e.target.value)})} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" placeholder="Price" />
             <div className="flex items-center gap-2"><input type="checkbox" checked={form.is_downloadable} onChange={e=>setForm({...form,is_downloadable:e.target.checked})} className="w-4 h-4 accent-orange-500"/><span className="text-sm">Downloadable</span></div>
             {[
               {key:"file",label:"Audio/Video",accept:"audio/*,video/*"},
