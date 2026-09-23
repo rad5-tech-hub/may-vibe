@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { ArrowLeft, Pencil, Trash2, Calendar, Eye, Music2, Download } from "lucide-react";
 import { toast } from "sonner";
@@ -30,6 +31,13 @@ function Section({ title, description, children, danger }) {
   );
 }
 
+Section.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  children: PropTypes.node,
+  danger: PropTypes.bool,
+};
+
 export default function AlbumDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -38,7 +46,7 @@ export default function AlbumDetail() {
   const [showDelete, setShowDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
-  const [form, setForm] = useState({ name: "", artiste_name: "", description: "", date_released: "", payment_type: "paid", price: "", is_downloadable: true });
+  const [form, setForm] = useState({ name: "", artiste_name: "", description: "", date_released: "", payment_type: "paid", price: "" });
   const [artworkFile, setArtworkFile] = useState(null);
 
   useEffect(() => {
@@ -65,7 +73,6 @@ export default function AlbumDetail() {
       name: album.name || "", artiste_name: album.artiste_name || "",
       description: album.description || "", date_released: album.date_released?.slice(0,10) || "",
       payment_type: album.payment_type || "paid", price: album.price ? formatPriceInput(String(album.price).replace(/\.00$/,"")) : "",
-      is_downloadable: !!album.is_downloadable,
     });
   }, [album]);
 
@@ -78,7 +85,6 @@ export default function AlbumDetail() {
     if (form.date_released) fd.append("date_released", form.date_released);
     fd.append("payment_type", form.payment_type);
     if (form.price) fd.append("price", stripCommas(form.price));
-    fd.append("is_downloadable", String(form.is_downloadable));
     if (artworkFile) fd.append("artwork", artworkFile);
     try {
       await userApi.patch(`/album/${id}`, fd);
@@ -95,16 +101,16 @@ export default function AlbumDetail() {
     try {
       await userApi.delete(`/album/${id}`);
       toast.success("Album deleted");
-      navigate("/dashboard/music-upload");
+      navigate("/dashboard/music-upload?tab=albums");
     } catch (err) { toast.error(getErrorMessage(err, "Delete failed")); setDeleting(false); }
   };
 
   if (loading) return <div className="py-20 text-center text-gray-500">Loading...</div>;
-  if (!album) return <div className="py-20 text-center"><p className="text-gray-600">Album not found</p><Link to="/dashboard/music-upload" className="text-orange-600 text-sm">Back</Link></div>;
+  if (!album) return <div className="py-20 text-center"><p className="text-gray-600">Album not found</p><Link to="/dashboard/music-upload?tab=albums" className="text-orange-600 text-sm">Back</Link></div>;
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      <Link to="/dashboard/music-upload" className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"><ArrowLeft size={16} /> Back to albums</Link>
+      <Link to="/dashboard/music-upload?tab=albums" className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"><ArrowLeft size={16} /> Back to albums</Link>
 
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">{album.name}</h1>
@@ -130,7 +136,6 @@ export default function AlbumDetail() {
           <div className="flex justify-between"><dt className="text-gray-500">Genre</dt><dd>{album.genre?.name || album.genre_id || "—"}</dd></div>
           <div className="flex justify-between"><dt className="text-gray-500">Release date</dt><dd className="flex items-center gap-1"><Calendar size={12} />{album.date_released?.slice(0,10) || "—"}</dd></div>
           <div className="flex justify-between"><dt className="text-gray-500">Payment</dt><dd>{album.payment_type} {album.price ? `• ₦${formatPriceDisplay(album.price)}` : ""}</dd></div>
-          <div className="flex justify-between"><dt className="text-gray-500">Downloadable</dt><dd>{album.is_downloadable ? "Yes" : "No"}</dd></div>
         </dl>
       </Section>
 
@@ -178,7 +183,6 @@ export default function AlbumDetail() {
             <input type="date" value={form.date_released} onChange={e=>setForm({...form,date_released:e.target.value})} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
             <select value={form.payment_type} onChange={e=>setForm({...form,payment_type:e.target.value})} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none"><option value="paid">paid</option><option value="free">free</option></select>
             <input type="text" inputMode="numeric" value={form.price} onChange={e=>setForm({...form,price:formatPriceInput(e.target.value)})} placeholder="Price" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
-            <div className="flex items-center gap-2"><input type="checkbox" checked={form.is_downloadable} onChange={e=>setForm({...form,is_downloadable:e.target.checked})} className="w-4 h-4 accent-orange-500" /><span className="text-sm">Downloadable</span></div>
             <div><label className="text-xs font-medium text-gray-600">Artwork</label><div className="mt-1 flex items-center gap-2"><label className="cursor-pointer text-sm font-semibold text-orange-600 underline">Choose file<input type="file" accept="image/*" onChange={e=>setArtworkFile(e.target.files[0]||null)} className="hidden" /></label><span className="text-xs text-gray-500">{artworkFile?.name || "No file chosen"}</span>{artworkFile && <button type="button" onClick={()=>setArtworkFile(null)} className="text-xs bg-gray-100 px-2 py-1 rounded-full">Remove</button>}</div></div>
             <div className="flex gap-3"><button type="button" onClick={()=>setShowEdit(false)} className="flex-1 bg-gray-100 py-3 rounded-xl text-sm font-medium">Cancel</button><button type="submit" className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl text-sm font-semibold">Save</button></div>
           </form>

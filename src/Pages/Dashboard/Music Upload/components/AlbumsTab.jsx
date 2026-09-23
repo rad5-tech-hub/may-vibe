@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { Pencil, Music2, Calendar, Eye } from "lucide-react";
+import { Pencil, Music2, Calendar, Eye, ImagePlus } from "lucide-react";
 import userApi from "../../../../utils/userApi";
 import { getErrorMessage } from "../../../../utils/errorHelper";
 
@@ -62,9 +62,25 @@ export default function AlbumsTab() {
     date_released: "",
     payment_type: "paid",
     price: "",
-    is_downloadable: true,
   });
   const [artworkFile, setArtworkFile] = useState(null);
+  const [artworkPreview, setArtworkPreview] = useState("");
+  const artworkPreviewRef = useRef("");
+
+  const handleArtworkChange = (file) => {
+    if (artworkPreviewRef.current && artworkPreviewRef.current.startsWith("blob:")) URL.revokeObjectURL(artworkPreviewRef.current);
+    if (file) {
+      const url = URL.createObjectURL(file);
+      artworkPreviewRef.current = url;
+      setArtworkPreview(url);
+    } else {
+      artworkPreviewRef.current = "";
+      setArtworkPreview("");
+    }
+    setArtworkFile(file);
+  };
+
+  useEffect(() => () => { if (artworkPreviewRef.current?.startsWith("blob:")) URL.revokeObjectURL(artworkPreviewRef.current); }, []);
 
   const fetchAlbums = async () => {
     setLoading(true);
@@ -89,8 +105,8 @@ export default function AlbumsTab() {
   useEffect(() => { fetchAlbums(); fetchGenres(); }, []);
 
   const resetForm = () => {
-    setForm({ name: "", type: "audio_album", artiste_name: "", description: "", genre_id: "", date_released: "", payment_type: "paid", price: "", is_downloadable: true });
-    setArtworkFile(null);
+    setForm({ name: "", type: "audio_album", artiste_name: "", description: "", genre_id: "", date_released: "", payment_type: "paid", price: "" });
+    handleArtworkChange(null);
     setEditing(null);
   };
 
@@ -105,8 +121,9 @@ export default function AlbumsTab() {
       date_released: album.date_released ? album.date_released.slice(0, 10) : "",
       payment_type: album.payment_type || "paid",
       price: album.price ? formatPriceInput(String(album.price).replace(/\.00$/, "")) : "",
-      is_downloadable: !!album.is_downloadable,
     });
+    handleArtworkChange(null);
+    if (album.artwork_url) { setArtworkPreview(album.artwork_url); artworkPreviewRef.current = album.artwork_url; }
     setShowForm(true);
   };
 
@@ -132,7 +149,6 @@ export default function AlbumsTab() {
     if (form.date_released) fd.append("date_released", form.date_released);
     fd.append("payment_type", form.payment_type);
     if (form.price) fd.append("price", stripCommas(form.price));
-    fd.append("is_downloadable", String(form.is_downloadable));
     if (fileToSend) fd.append("artwork", fileToSend);
 
     setSubmitting(true);
@@ -205,10 +221,6 @@ export default function AlbumsTab() {
               <label className="text-xs font-medium text-gray-600">Price</label>
               <input type="text" inputMode="numeric" value={form.price} onChange={e => setForm({ ...form, price: formatPriceInput(e.target.value) })} placeholder="40,000" className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
             </div>
-            <div className="flex items-center gap-3 pt-6">
-              <input type="checkbox" checked={form.is_downloadable} onChange={e => setForm({ ...form, is_downloadable: e.target.checked })} className="w-5 h-5 accent-orange-500" />
-              <span className="text-sm text-gray-700">Downloadable</span>
-            </div>
           </div>
 
           <div>
@@ -216,17 +228,43 @@ export default function AlbumsTab() {
             <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} rows={3} placeholder="e.g. My awesome album" className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
           </div>
 
-          <div>
-            <label className="text-xs font-medium text-gray-600">Artwork {editing ? "" : "*"} <span className="text-gray-400">(JPG/PNG, max 40mb — auto-compressed to &lt;5 MB if needed)</span></label>
-            <div className="mt-2 flex items-center gap-3 flex-wrap">
+          {/* Artwork — block layout, large clickable preview + requirements */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <ImagePlus size={18} className="text-orange-500" />
+              <label className="text-sm font-semibold text-gray-800">Cover Artwork {editing ? "" : "*"}</label>
+            </div>
+            <div className="flex items-center gap-3 flex-wrap mb-4">
               <label className="cursor-pointer text-sm font-semibold text-orange-600 hover:text-orange-700 underline underline-offset-2">
                 Choose file
-                <input type="file" accept="image/*" onChange={e => setArtworkFile(e.target.files[0] || null)} className="hidden" />
+                <input type="file" accept="image/*" onChange={e => handleArtworkChange(e.target.files[0] || null)} className="hidden" />
               </label>
-              <span className="text-xs text-gray-500 truncate max-w-[200px]">{artworkFile?.name || "No file chosen"}{artworkFile ? ` (${(artworkFile.size/1024/1024).toFixed(2)} MB)` : ""}</span>
-              {artworkFile && <button type="button" onClick={() => setArtworkFile(null)} className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full">Remove</button>}
+              <span className="text-xs text-gray-500 truncate max-w-[220px]">{artworkFile?.name || (editing?.artwork_url ? "Current artwork" : "No file chosen")}{artworkFile ? ` (${(artworkFile.size/1024/1024).toFixed(2)} MB)` : ""}</span>
+              {(artworkFile || editing?.artwork_url) && <button type="button" onClick={() => handleArtworkChange(null)} className="cursor-pointer text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full">Remove</button>}
             </div>
-            {editing?.artwork_url && !artworkFile && <img src={editing.artwork_url} alt="" className="mt-2 w-20 h-20 rounded-xl object-cover border" />}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+              <label className="cursor-pointer w-full max-w-sm mx-auto md:mx-0 block group">
+                <input type="file" accept="image/*" onChange={e => handleArtworkChange(e.target.files[0] || null)} className="hidden" />
+                {artworkPreview ? (
+                  <img src={artworkPreview} alt="Cover art preview" className="w-full aspect-square rounded-2xl object-cover border border-gray-200 group-hover:opacity-90 transition" />
+                ) : (
+                  <div className="w-full aspect-square rounded-2xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 group-hover:border-orange-300 group-hover:text-orange-400 transition">
+                    <ImagePlus size={40} />
+                    <p className="text-xs mt-2">Click to select artwork</p>
+                  </div>
+                )}
+              </label>
+
+              <div className="text-sm text-gray-600">
+                <p className="font-semibold text-gray-800 mb-2">Cover art requirements:</p>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>Your cover art should be a square <span className="font-medium">.jpg</span> or <span className="font-medium">.png</span> file, at least 1400x1400 px (3000x3000 px recommended).</li>
+                  <li>Make sure it&apos;s clear and high-quality — no blurry or pixelated images.</li>
+                  <li>You can include the artist name, the release title, or both — but no other text, logos, or social media handles.</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div className="flex gap-3">

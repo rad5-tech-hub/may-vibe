@@ -4,6 +4,18 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Interactive elements should always feel clickable */
+button:not(:disabled),
+a[href],
+[role="button"]:not([aria-disabled="true"]),
+label[for],
+select {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+
 /* Keep dashboard scrolling available without displaying a scrollbar. */
 .admin-scroll {
   scrollbar-width: none;

@@ -1,28 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { Upload, Music2, Pencil, Calendar, Disc3, Eye } from "lucide-react";
+import { Upload, Music2, Pencil, Calendar, Disc3, Eye, PlayCircle, ImagePlus } from "lucide-react";
 import userApi from "../../../../utils/userApi";
 import { getErrorMessage } from "../../../../utils/errorHelper";
+import { LANGUAGES } from "../../../../utils/languages";
 
 const TRACK_TYPES = ["audio_track", "video_track", "audio_album_track", "video_album_track"];
 const MAX_IMG_BYTES = 5 * 1024 * 1024;
-
-const formatPriceDisplay = (value) => {
-  if (value == null || value === "") return "";
-  const num = Number(String(value).replace(/,/g, ""));
-  if (isNaN(num)) return String(value);
-  return num.toLocaleString("en-US");
-};
-const formatPriceInput = (value) => {
-  const digits = String(value).replace(/[^0-9]/g, "");
-  if (!digits) return "";
-  return Number(digits).toLocaleString("en-US");
-};
-const stripCommas = (value) => String(value).replace(/,/g, "");
 const MAX_AUDIO_BYTES = 40 * 1024 * 1024;
 const MAX_TOTAL_BYTES = 80 * 1024 * 1024;
-const compressImage = (file, maxDim = 1024, quality = 0.8) =>
+
+const compressImage = (file, maxDim = 1400, quality = 0.85) =>
   new Promise((resolve) => {
     if (!file.type.startsWith("image/") || file.size <= MAX_IMG_BYTES) return resolve(file);
     const img = new Image();
@@ -57,10 +46,13 @@ export default function TracksTab() {
 
   const [form, setForm] = useState({
     name: "", type: "audio_track", artiste_name: "", description: "",
-    featuring_artiste: "", date_released: "", genre_id: "", album_id: "",
-    payment_type: "paid", price: "", is_downloadable: false,
+    featuring_artiste: "", date_released: "", genre_id: "", album_id: "", language: "", languageOther: "",
   });
-  const [files, setFiles] = useState({ file: null, artwork: null, sample: null });
+  const [files, setFiles] = useState({ file: null, artwork: null });
+  const [audioPreview, setAudioPreview] = useState("");
+  const [artworkPreview, setArtworkPreview] = useState("");
+  const audioPreviewRef = useRef("");
+  const artworkPreviewRef = useRef("");
 
   const fetchTracks = async () => {
     setLoading(true);
@@ -84,36 +76,73 @@ export default function TracksTab() {
     }).catch((err) => toast.error(getErrorMessage(err, "Failed to load genres"))).finally(() => setGenresLoading(false));
   }, []);
 
+  const revokePreviews = () => {
+    if (audioPreviewRef.current) URL.revokeObjectURL(audioPreviewRef.current);
+    if (artworkPreviewRef.current) URL.revokeObjectURL(artworkPreviewRef.current);
+    audioPreviewRef.current = ""; artworkPreviewRef.current = "";
+    setAudioPreview(""); setArtworkPreview("");
+  };
+
   const resetForm = () => {
-    setForm({ name: "", type: "audio_track", artiste_name: "", description: "", featuring_artiste: "", date_released: "", genre_id: "", album_id: "", payment_type: "paid", price: "", is_downloadable: false });
-    setFiles({ file: null, artwork: null, sample: null });
+    setForm({ name: "", type: "audio_track", artiste_name: "", description: "", featuring_artiste: "", date_released: "", genre_id: "", album_id: "", language: "", languageOther: "" });
+    setFiles({ file: null, artwork: null });
+    revokePreviews();
     setEditing(null);
   };
 
   const openEdit = (t) => {
     setEditing(t);
+    const knownLanguage = LANGUAGES.includes(t.language);
     setForm({
       name: t.name || "", type: t.type || "audio_track", artiste_name: t.artiste_name || "",
       description: t.description || "", featuring_artiste: t.featuring_artiste || "",
       date_released: t.date_released ? t.date_released.slice(0,10) : "",
       genre_id: t.genre_id || "", album_id: t.album_id || "",
-      payment_type: t.payment_type || "paid", price: t.price ? formatPriceInput(String(t.price).replace(/\.00$/,"")) : "",
-      is_downloadable: !!t.is_downloadable,
+      language: t.language ? (knownLanguage ? t.language : "Other") : "",
+      languageOther: t.language && !knownLanguage ? t.language : "",
     });
-    setFiles({ file: null, artwork: null, sample: null });
+    setFiles({ file: null, artwork: null });
+    revokePreviews();
+    if (t.file_url) { setAudioPreview(t.file_url); audioPreviewRef.current = t.file_url; }
+    if (t.artwork_url) { setArtworkPreview(t.artwork_url); artworkPreviewRef.current = t.artwork_url; }
     setShowForm(true);
   };
 
+  const handleAudioChange = (file) => {
+    if (audioPreviewRef.current && audioPreviewRef.current.startsWith("blob:")) URL.revokeObjectURL(audioPreviewRef.current);
+    if (file) {
+      const url = URL.createObjectURL(file);
+      audioPreviewRef.current = url;
+      setAudioPreview(url);
+    } else {
+      audioPreviewRef.current = "";
+      setAudioPreview("");
+    }
+    setFiles(prev => ({ ...prev, file }));
+  };
 
+  const handleArtworkChange = (file) => {
+    if (artworkPreviewRef.current && artworkPreviewRef.current.startsWith("blob:")) URL.revokeObjectURL(artworkPreviewRef.current);
+    if (file) {
+      const url = URL.createObjectURL(file);
+      artworkPreviewRef.current = url;
+      setArtworkPreview(url);
+    } else {
+      artworkPreviewRef.current = "";
+      setArtworkPreview("");
+    }
+    setFiles(prev => ({ ...prev, artwork: file }));
+  };
+
+  useEffect(() => () => revokePreviews(), []);
 
   const handleTrackSubmit = async (e) => {
     e.preventDefault();
     if (!form.name.trim()) return toast.error("Track name is required");
-    if (files.file && files.file.size > MAX_AUDIO_BYTES) return toast.error(`Audio/Video must be ≤ 40 MB (selected ${(files.file.size/1024/1024).toFixed(2)} MB)`);
-    if (files.sample && files.sample.size > MAX_AUDIO_BYTES) return toast.error(`Sample must be ≤ 40 MB (selected ${(files.sample.size/1024/1024).toFixed(2)} MB)`);
+    if (files.file && files.file.size > MAX_AUDIO_BYTES) return toast.error(`Audio must be ≤ 40 MB (selected ${(files.file.size/1024/1024).toFixed(2)} MB)`);
     if (files.artwork && files.artwork.size > 40 * 1024 * 1024) return toast.error(`Artwork must be ≤ 40 MB`);
-    const total = (files.file?.size||0)+(files.artwork?.size||0)+(files.sample?.size||0);
-    if (total > MAX_TOTAL_BYTES) return toast.error(`Total upload size ${(total/1024/1024).toFixed(1)} MB exceeds server limit (80 MB). Use smaller files or remove sample.`);
+    const total = (files.file?.size||0)+(files.artwork?.size||0);
+    if (total > MAX_TOTAL_BYTES) return toast.error(`Total upload size ${(total/1024/1024).toFixed(1)} MB exceeds the 80 MB limit.`);
     let artwork = files.artwork;
     if (artwork && artwork.size > MAX_IMG_BYTES) { toast.message("Compressing artwork..."); artwork = await compressImage(artwork); }
     const fd = new FormData();
@@ -125,12 +154,10 @@ export default function TracksTab() {
     if (form.date_released) fd.append("date_released", form.date_released);
     if (form.genre_id) fd.append("genre_id", form.genre_id);
     if (form.album_id) fd.append("album_id", form.album_id);
-    fd.append("payment_type", form.payment_type);
-    if (form.price) fd.append("price", stripCommas(form.price));
-    fd.append("is_downloadable", String(form.is_downloadable));
+    const language = form.language === "Other" ? form.languageOther.trim() : form.language;
+    if (language) fd.append("language", language);
     if (files.file) fd.append("file", files.file);
     if (artwork) fd.append("artwork", artwork);
-    if (files.sample) fd.append("sample", files.sample);
 
     setSubmitting(true);
     try {
@@ -145,7 +172,7 @@ export default function TracksTab() {
       setShowForm(false);
       fetchTracks();
     } catch (err) {
-      if (err.response?.status === 413) toast.error("Server rejected: payload too large (413). Keep total <80 MB, audio <40 MB, artwork auto-compressed <5 MB. Try smaller files or omit sample. Backend may need to increase client_max_body_size.");
+      if (err.response?.status === 413) toast.error("Server rejected: payload too large (413). Keep total under 80 MB.");
       else toast.error(getErrorMessage(err, editing ? "Update failed" : "Failed to create track"));
     } finally { setSubmitting(false); }
   };
@@ -168,7 +195,7 @@ export default function TracksTab() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold text-gray-900">My Tracks</h2>
-        <button onClick={() => { if (showForm) resetForm(); setShowForm(!showForm); }} className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition">
+        <button onClick={() => { if (showForm) resetForm(); setShowForm(!showForm); }} className="cursor-pointer bg-orange-500 hover:bg-orange-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition">
           {showForm ? "Close" : "+ New Track"}
         </button>
       </div>
@@ -184,7 +211,7 @@ export default function TracksTab() {
           </div>
           <div>
             <label className="text-xs font-medium text-gray-600">Type</label>
-            <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })} className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none">
+            <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })} className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none cursor-pointer">
               {TRACK_TYPES.map(t => <option key={t} value={t}>{t.replace(/_/g, " ")}</option>)}
             </select>
           </div>
@@ -198,36 +225,31 @@ export default function TracksTab() {
           </div>
           <div>
             <label className="text-xs font-medium text-gray-600">Album {form.type.includes("album") ? "*" : "(optional)"}</label>
-            <select value={form.album_id} onChange={e => setForm({ ...form, album_id: e.target.value })} className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none">
+            <select value={form.album_id} onChange={e => setForm({ ...form, album_id: e.target.value })} className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none cursor-pointer">
               <option value="">Single (no album)</option>
               {albums.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
             </select>
           </div>
           <div>
             <label className="text-xs font-medium text-gray-600">Genre</label>
-              <select value={form.genre_id} onChange={e => setForm({ ...form, genre_id: e.target.value })} className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none">
+              <select value={form.genre_id} onChange={e => setForm({ ...form, genre_id: e.target.value })} className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none cursor-pointer">
                 <option value="">{genresLoading ? "Loading genres..." : "Select genre"}</option>
                 {genres.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
               </select>
           </div>
           <div>
+            <label className="text-xs font-medium text-gray-600">Language</label>
+            <select value={form.language} onChange={e => setForm({ ...form, language: e.target.value })} className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none cursor-pointer">
+              <option value="">What language is your release title in?</option>
+              {LANGUAGES.map(l => <option key={l} value={l}>{l}</option>)}
+            </select>
+            {form.language === "Other" && (
+              <input value={form.languageOther} onChange={e => setForm({ ...form, languageOther: e.target.value })} placeholder="Please specify the language" className="mt-2 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-orange-400" />
+            )}
+          </div>
+          <div>
             <label className="text-xs font-medium text-gray-600">Release Date (YYYY-MM-DD)</label>
             <input type="date" value={form.date_released} onChange={e => setForm({ ...form, date_released: e.target.value })} className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
-          </div>
-          <div>
-            <label className="text-xs font-medium text-gray-600">Payment Type</label>
-            <select value={form.payment_type} onChange={e => setForm({ ...form, payment_type: e.target.value })} className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none">
-              <option value="paid">paid</option>
-              <option value="free">free</option>
-            </select>
-          </div>
-          <div>
-            <label className="text-xs font-medium text-gray-600">Price</label>
-            <input type="text" inputMode="numeric" value={form.price} onChange={e => setForm({ ...form, price: formatPriceInput(e.target.value) })} placeholder="89,789" className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
-          </div>
-          <div className="flex items-center gap-3 pt-6">
-            <input type="checkbox" checked={form.is_downloadable} onChange={e => setForm({ ...form, is_downloadable: e.target.checked })} className="w-5 h-5 accent-orange-500" />
-            <span className="text-sm text-gray-700">Downloadable</span>
           </div>
         </div>
 
@@ -236,30 +258,71 @@ export default function TracksTab() {
           <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} rows={2} placeholder="e.g. My awesome track" className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-          {[
-            { key: "file", label: "Audio/Video File", accept: "audio/*,video/*" },
-            { key: "artwork", label: "Artwork", accept: "image/*" },
-            { key: "sample", label: "Sample (optional)", accept: "audio/*,video/*" },
-          ].map((item) => (
-            <div key={item.key}>
-              <label className="text-xs font-medium text-gray-600">{item.label}</label>
-              <div className="mt-2 flex items-center gap-2 flex-wrap">
-                <label className="cursor-pointer text-sm font-semibold text-orange-600 hover:text-orange-700 underline underline-offset-2">
-                  Choose file
-                  <input type="file" accept={item.accept} onChange={e => setFiles({ ...files, [item.key]: e.target.files[0] || null })} className="hidden" />
-                </label>
-                <span className="text-xs text-gray-500 truncate max-w-[110px]">{files[item.key]?.name || "No file chosen"}</span>
-                {files[item.key] && <button type="button" onClick={() => setFiles({ ...files, [item.key]: null })} className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 rounded-full">Remove</button>}
-              </div>
-              {editing && !files[item.key] && item.key === "artwork" && editing.artwork_url && <p className="text-xs text-gray-400 mt-1 truncate">Current: {editing.artwork_url.split("/").pop()}</p>}
+        {/* Audio file — block layout with playable preview */}
+        <div className="bg-white rounded-2xl border border-gray-200 p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <PlayCircle size={18} className="text-orange-500" />
+            <label className="text-sm font-semibold text-gray-800">Audio File</label>
+          </div>
+          <div className="flex items-center gap-3 flex-wrap">
+            <label className="cursor-pointer text-sm font-semibold text-orange-600 hover:text-orange-700 underline underline-offset-2">
+              Choose audio file
+              <input type="file" accept="audio/*" onChange={e => handleAudioChange(e.target.files[0] || null)} className="hidden" />
+            </label>
+            <span className="text-xs text-gray-500 truncate max-w-[220px]">{files.file?.name || (editing?.file_url ? "Current file" : "No file chosen")}{files.file ? ` (${(files.file.size/1024/1024).toFixed(2)} MB)` : ""}</span>
+            {(files.file || editing?.file_url) && <button type="button" onClick={() => handleAudioChange(null)} className="cursor-pointer text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full">Remove</button>}
+          </div>
+          {audioPreview && (
+            <div className="mt-4">
+              <p className="text-xs text-gray-500 mb-2">Preview — play to confirm this is the correct song</p>
+              <audio controls src={audioPreview} className="w-full" />
             </div>
-          ))}
+          )}
+          <p className="text-[11px] text-gray-400 mt-3">Accepted formats: MP3, WAV, M4A. Max 40 MB.</p>
+        </div>
+
+        {/* Artwork — block layout, large preview + requirements */}
+        <div className="bg-white rounded-2xl border border-gray-200 p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <ImagePlus size={18} className="text-orange-500" />
+            <label className="text-sm font-semibold text-gray-800">Cover Artwork {editing ? "" : "*"}</label>
+          </div>
+          <div className="flex items-center gap-3 flex-wrap mb-4">
+            <label className="cursor-pointer text-sm font-semibold text-orange-600 hover:text-orange-700 underline underline-offset-2">
+              Choose file
+              <input type="file" accept="image/*" onChange={e => handleArtworkChange(e.target.files[0] || null)} className="hidden" />
+            </label>
+            <span className="text-xs text-gray-500 truncate max-w-[220px]">{files.artwork?.name || (editing?.artwork_url ? "Current artwork" : "No file chosen")}{files.artwork ? ` (${(files.artwork.size/1024/1024).toFixed(2)} MB)` : ""}</span>
+            {(files.artwork || editing?.artwork_url) && <button type="button" onClick={() => handleArtworkChange(null)} className="cursor-pointer text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full">Remove</button>}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+            <label className="cursor-pointer w-full max-w-sm mx-auto md:mx-0 block group">
+              <input type="file" accept="image/*" onChange={e => handleArtworkChange(e.target.files[0] || null)} className="hidden" />
+              {artworkPreview ? (
+                <img src={artworkPreview} alt="Cover art preview" className="w-full aspect-square rounded-2xl object-cover border border-gray-200 group-hover:opacity-90 transition" />
+              ) : (
+                <div className="w-full aspect-square rounded-2xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 group-hover:border-orange-300 group-hover:text-orange-400 transition">
+                  <ImagePlus size={40} />
+                  <p className="text-xs mt-2">Click to select artwork</p>
+                </div>
+              )}
+            </label>
+
+            <div className="text-sm text-gray-600">
+              <p className="font-semibold text-gray-800 mb-2">Cover art requirements:</p>
+              <ul className="list-disc pl-5 space-y-2">
+                <li>Your cover art should be a square <span className="font-medium">.jpg</span> or <span className="font-medium">.png</span> file, at least 1400x1400 px (3000x3000 px recommended).</li>
+                <li>Make sure it&apos;s clear and high-quality — no blurry or pixelated images.</li>
+                <li>You can include the artist name, the release title, or both — but no other text, logos, or social media handles.</li>
+              </ul>
+            </div>
+          </div>
         </div>
 
         <div className="flex gap-3">
-          <button type="button" onClick={() => { resetForm(); setShowForm(false); }} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl transition">Cancel</button>
-          <button disabled={submitting} className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2">
+          <button type="button" onClick={() => { resetForm(); setShowForm(false); }} className="cursor-pointer flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl transition">Cancel</button>
+          <button disabled={submitting} className="cursor-pointer flex-1 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2">
             <Upload size={16} /> {submitting ? (editing ? "Updating..." : "Creating...") : editing ? "Update Track" : "Create Track"}
           </button>
         </div>
@@ -282,10 +345,10 @@ export default function TracksTab() {
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <h3 className="font-bold text-gray-900 truncate">{t.name}</h3>
-                    <p className="text-xs text-gray-500 truncate">{t.artiste_name} • {t.type} {t.genre?.name ? `• ${t.genre.name}` : ""}</p>
+                    <p className="text-xs text-gray-500 truncate">{t.artiste_name} • {t.type?.replace(/_/g," ")} {t.genre?.name ? `• ${t.genre.name}` : ""}</p>
                     {t.album && <p className="text-xs text-orange-600 flex items-center gap-1 truncate"><Disc3 size={12} />{t.album.name}</p>}
                   </div>
-                  <span className="text-xs bg-orange-50 text-orange-600 px-2 py-1 rounded-full shrink-0">{t.price ? `₦${formatPriceDisplay(t.price)}` : t.payment_type}</span>
+                  {t.language && <span className="text-xs bg-orange-50 text-orange-600 px-2 py-1 rounded-full shrink-0">{t.language}</span>}
                 </div>
                 <p className="text-sm text-gray-600 line-clamp-2">{t.description || "No description"}</p>
                 {t.featuring_artiste && <p className="text-xs text-gray-500">Ft: {t.featuring_artiste}</p>}
@@ -295,10 +358,10 @@ export default function TracksTab() {
                   <span className="flex items-center gap-1"><Music2 size={12} />{t.no_of_plays} plays</span>
                 </div>
                 <div className="flex gap-2 pt-2">
-                  <Link to={`/dashboard/tracks/${t.id}`} className="flex-1 flex items-center justify-center gap-1 bg-white border border-gray-200 hover:bg-gray-50 py-2 rounded-xl text-xs font-medium"><Eye size={14} /> View details</Link>
-                  <button onClick={() => openEdit(t)} className="flex-1 flex items-center justify-center gap-1 bg-gray-900 hover:bg-black text-white py-2 rounded-xl text-xs font-medium"><Pencil size={14} /> Edit</button>
+                  <Link to={`/dashboard/tracks/${t.id}`} className="cursor-pointer flex-1 flex items-center justify-center gap-1 bg-white border border-gray-200 hover:bg-gray-50 py-2 rounded-xl text-xs font-medium"><Eye size={14} /> View details</Link>
+                  <button onClick={() => openEdit(t)} className="cursor-pointer flex-1 flex items-center justify-center gap-1 bg-gray-900 hover:bg-black text-white py-2 rounded-xl text-xs font-medium"><Pencil size={14} /> Edit</button>
                 </div>
-                <button onClick={() => setReleaseFor(t)} className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl text-xs font-semibold">Release</button>
+                <button onClick={() => setReleaseFor(t)} className="cursor-pointer w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl text-xs font-semibold">Release</button>
               </div>
             </div>
           ))}
@@ -315,7 +378,7 @@ export default function TracksTab() {
             <div><label className="text-xs font-medium text-gray-600">Songwriter</label><input value={releaseData.songwriter} onChange={e => setReleaseData({ ...releaseData, songwriter: e.target.value })} placeholder="Dawn, Shawn" className="mt-1 w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" /></div>
             <div className="flex items-center gap-2"><input type="checkbox" checked={releaseData.explicit_lyrics} onChange={e => setReleaseData({ ...releaseData, explicit_lyrics: e.target.checked })} className="w-4 h-4 accent-orange-500" /><span className="text-sm">Explicit lyrics</span></div>
             <div><label className="text-xs font-medium text-gray-600">Lyrics</label><textarea value={releaseData.lyrics} onChange={e => setReleaseData({ ...releaseData, lyrics: e.target.value })} rows={4} placeholder="Verse 1..." className="mt-1 w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" /></div>
-            <div className="flex gap-3"><button type="button" onClick={() => setReleaseFor(null)} className="flex-1 bg-gray-100 hover:bg-gray-200 py-3 rounded-xl text-sm font-medium">Cancel</button><button type="submit" className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl text-sm font-semibold">Release</button></div>
+            <div className="flex gap-3"><button type="button" onClick={() => setReleaseFor(null)} className="cursor-pointer flex-1 bg-gray-100 hover:bg-gray-200 py-3 rounded-xl text-sm font-medium">Cancel</button><button type="submit" className="cursor-pointer flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl text-sm font-semibold">Release</button></div>
           </form>
         </div>
       )}
