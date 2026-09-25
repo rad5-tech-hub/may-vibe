@@ -6,19 +6,6 @@ import { toast } from "sonner";
 import userApi from "../../../utils/userApi";
 import { getErrorMessage } from "../../../utils/errorHelper";
 
-const formatPriceDisplay = (value) => {
-  if (value == null || value === "") return "";
-  const num = Number(String(value).replace(/,/g, ""));
-  if (isNaN(num)) return String(value);
-  return num.toLocaleString("en-US");
-};
-const formatPriceInput = (value) => {
-  const digits = String(value).replace(/[^0-9]/g, "");
-  if (!digits) return "";
-  return Number(digits).toLocaleString("en-US");
-};
-const stripCommas = (value) => String(value).replace(/,/g, "");
-
 function Section({ title, description, children, danger }) {
   return (
     <div className={`bg-white rounded-2xl border ${danger ? "border-red-200" : "border-gray-200"} overflow-hidden`}>
@@ -46,7 +33,7 @@ export default function AlbumDetail() {
   const [showDelete, setShowDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
-  const [form, setForm] = useState({ name: "", artiste_name: "", description: "", date_released: "", payment_type: "paid", price: "" });
+  const [form, setForm] = useState({ name: "", artiste_name: "", description: "", date_released: "" });
   const [artworkFile, setArtworkFile] = useState(null);
 
   useEffect(() => {
@@ -72,7 +59,6 @@ export default function AlbumDetail() {
     if (album) setForm({
       name: album.name || "", artiste_name: album.artiste_name || "",
       description: album.description || "", date_released: album.date_released?.slice(0,10) || "",
-      payment_type: album.payment_type || "paid", price: album.price ? formatPriceInput(String(album.price).replace(/\.00$/,"")) : "",
     });
   }, [album]);
 
@@ -83,8 +69,6 @@ export default function AlbumDetail() {
     if (form.artiste_name) fd.append("artiste_name", form.artiste_name);
     if (form.description) fd.append("description", form.description);
     if (form.date_released) fd.append("date_released", form.date_released);
-    fd.append("payment_type", form.payment_type);
-    if (form.price) fd.append("price", stripCommas(form.price));
     if (artworkFile) fd.append("artwork", artworkFile);
     try {
       await userApi.patch(`/album/${id}`, fd);
@@ -135,7 +119,6 @@ export default function AlbumDetail() {
           <div><dt className="text-gray-500">Description</dt><dd className="text-gray-900 mt-1">{album.description || "—"}</dd></div>
           <div className="flex justify-between"><dt className="text-gray-500">Genre</dt><dd>{album.genre?.name || album.genre_id || "—"}</dd></div>
           <div className="flex justify-between"><dt className="text-gray-500">Release date</dt><dd className="flex items-center gap-1"><Calendar size={12} />{album.date_released?.slice(0,10) || "—"}</dd></div>
-          <div className="flex justify-between"><dt className="text-gray-500">Payment</dt><dd>{album.payment_type} {album.price ? `• ₦${formatPriceDisplay(album.price)}` : ""}</dd></div>
         </dl>
       </Section>
 
@@ -181,8 +164,6 @@ export default function AlbumDetail() {
             <input value={form.artiste_name} onChange={e=>setForm({...form,artiste_name:e.target.value})} placeholder="Artiste name" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
             <textarea value={form.description} onChange={e=>setForm({...form,description:e.target.value})} rows={3} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" placeholder="Description" />
             <input type="date" value={form.date_released} onChange={e=>setForm({...form,date_released:e.target.value})} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
-            <select value={form.payment_type} onChange={e=>setForm({...form,payment_type:e.target.value})} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none"><option value="paid">paid</option><option value="free">free</option></select>
-            <input type="text" inputMode="numeric" value={form.price} onChange={e=>setForm({...form,price:formatPriceInput(e.target.value)})} placeholder="Price" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
             <div><label className="text-xs font-medium text-gray-600">Artwork</label><div className="mt-1 flex items-center gap-2"><label className="cursor-pointer text-sm font-semibold text-orange-600 underline">Choose file<input type="file" accept="image/*" onChange={e=>setArtworkFile(e.target.files[0]||null)} className="hidden" /></label><span className="text-xs text-gray-500">{artworkFile?.name || "No file chosen"}</span>{artworkFile && <button type="button" onClick={()=>setArtworkFile(null)} className="text-xs bg-gray-100 px-2 py-1 rounded-full">Remove</button>}</div></div>
             <div className="flex gap-3"><button type="button" onClick={()=>setShowEdit(false)} className="flex-1 bg-gray-100 py-3 rounded-xl text-sm font-medium">Cancel</button><button type="submit" className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl text-sm font-semibold">Save</button></div>
           </form>

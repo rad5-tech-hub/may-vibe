@@ -8,19 +8,6 @@ import { getErrorMessage } from "../../../../utils/errorHelper";
 const ALBUM_TYPES = ["audio_album", "video_album"];
 const MAX_FILE_BYTES = 5 * 1024 * 1024;
 
-const formatPriceDisplay = (value) => {
-  if (value == null || value === "") return "";
-  const num = Number(String(value).replace(/,/g, ""));
-  if (isNaN(num)) return String(value);
-  return num.toLocaleString("en-US");
-};
-const formatPriceInput = (value) => {
-  const digits = String(value).replace(/[^0-9]/g, "");
-  if (!digits) return "";
-  return Number(digits).toLocaleString("en-US");
-};
-const stripCommas = (value) => String(value).replace(/,/g, "");
-
 const compressImage = (file, maxDim = 1024, quality = 0.8) =>
   new Promise((resolve) => {
     if (!file.type.startsWith("image/")) return resolve(file);
@@ -60,8 +47,6 @@ export default function AlbumsTab() {
     description: "",
     genre_id: "",
     date_released: "",
-    payment_type: "paid",
-    price: "",
   });
   const [artworkFile, setArtworkFile] = useState(null);
   const [artworkPreview, setArtworkPreview] = useState("");
@@ -105,7 +90,7 @@ export default function AlbumsTab() {
   useEffect(() => { fetchAlbums(); fetchGenres(); }, []);
 
   const resetForm = () => {
-    setForm({ name: "", type: "audio_album", artiste_name: "", description: "", genre_id: "", date_released: "", payment_type: "paid", price: "" });
+    setForm({ name: "", type: "audio_album", artiste_name: "", description: "", genre_id: "", date_released: "" });
     handleArtworkChange(null);
     setEditing(null);
   };
@@ -119,8 +104,6 @@ export default function AlbumsTab() {
       description: album.description || "",
       genre_id: album.genre_id || "",
       date_released: album.date_released ? album.date_released.slice(0, 10) : "",
-      payment_type: album.payment_type || "paid",
-      price: album.price ? formatPriceInput(String(album.price).replace(/\.00$/, "")) : "",
     });
     handleArtworkChange(null);
     if (album.artwork_url) { setArtworkPreview(album.artwork_url); artworkPreviewRef.current = album.artwork_url; }
@@ -147,8 +130,6 @@ export default function AlbumsTab() {
     if (form.description) fd.append("description", form.description);
     if (form.genre_id) fd.append("genre_id", form.genre_id);
     if (form.date_released) fd.append("date_released", form.date_released);
-    fd.append("payment_type", form.payment_type);
-    if (form.price) fd.append("price", stripCommas(form.price));
     if (fileToSend) fd.append("artwork", fileToSend);
 
     setSubmitting(true);
@@ -209,17 +190,6 @@ export default function AlbumsTab() {
             <div>
               <label className="text-xs font-medium text-gray-600">Release Date (YYYY-MM-DD)</label>
               <input type="date" value={form.date_released} onChange={e => setForm({ ...form, date_released: e.target.value })} className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-600">Payment Type</label>
-              <select value={form.payment_type} onChange={e => setForm({ ...form, payment_type: e.target.value })} className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none">
-                <option value="paid">paid</option>
-                <option value="free">free</option>
-              </select>
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-600">Price</label>
-              <input type="text" inputMode="numeric" value={form.price} onChange={e => setForm({ ...form, price: formatPriceInput(e.target.value) })} placeholder="40,000" className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" />
             </div>
           </div>
 
@@ -293,9 +263,8 @@ export default function AlbumsTab() {
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <h3 className="font-bold text-gray-900 leading-tight">{album.name}</h3>
-                    <p className="text-xs text-gray-500">{album.artiste_name} • {album.type} {album.genre?.name ? `• ${album.genre.name}` : ""}</p>
+                    <p className="text-xs text-gray-500">{album.artiste_name} • {album.type?.replace(/_/g, " ")} {album.genre?.name ? `• ${album.genre.name}` : ""}</p>
                   </div>
-                  <span className="text-xs bg-orange-50 text-orange-600 px-2 py-1 rounded-full">{album.price ? `₦${formatPriceDisplay(album.price)}` : album.payment_type}</span>
                 </div>
                 <p className="text-sm text-gray-600 line-clamp-2">{album.description || "No description"}</p>
                 <div className="flex flex-wrap gap-2 text-xs text-gray-500">
