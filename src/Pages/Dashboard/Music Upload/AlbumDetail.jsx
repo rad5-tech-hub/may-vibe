@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, Pencil, Trash2, Calendar, Eye, Music2, Download } from "lucide-react";
+import { ArrowLeft, Pencil, Trash2, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import userApi from "../../../utils/userApi";
 import { getErrorMessage } from "../../../utils/errorHelper";
@@ -122,19 +122,11 @@ export default function AlbumDetail() {
         </dl>
       </Section>
 
-      <Section title="Stats">
-        <div className="flex gap-6 text-sm">
-          <span className="flex items-center gap-1"><Eye size={14} />{album.no_of_views} views</span>
-          <span className="flex items-center gap-1"><Music2 size={14} />{album.no_of_plays} plays</span>
-          <span className="flex items-center gap-1"><Download size={14} />{album.no_of_downloads} downloads</span>
-        </div>
-        {album.tracks?.length > 0 && (
-          <div className="mt-4 bg-gray-50 rounded-xl p-3">
-            <p className="text-xs font-semibold mb-2">Tracks ({album.tracks.length})</p>
-            <ul className="text-sm space-y-1">{album.tracks.map(t => <li key={t.id || t.name} className="text-gray-700">• {t.name}</li>)}</ul>
-          </div>
-        )}
-      </Section>
+      {album.tracks?.length > 0 && (
+        <Section title={`Tracks (${album.tracks.length})`}>
+          <ul className="text-sm space-y-1">{album.tracks.map(t => <li key={t.id || t.name} className="text-gray-700">• {t.name}</li>)}</ul>
+        </Section>
+      )}
 
       <Section title="Danger zone" description="Delete this album permanently. This cannot be undone." danger>
         <div className="flex items-center justify-between">

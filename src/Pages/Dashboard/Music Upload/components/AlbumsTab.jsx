@@ -269,9 +269,7 @@ export default function AlbumsTab() {
                 <p className="text-sm text-gray-600 line-clamp-2">{album.description || "No description"}</p>
                 <div className="flex flex-wrap gap-2 text-xs text-gray-500">
                   <span className="flex items-center gap-1"><Calendar size={12} />{album.date_released?.slice(0,10) || "—"}</span>
-                  <span className="flex items-center gap-1"><Eye size={12} />{album.no_of_views} views</span>
-                  <span className="flex items-center gap-1"><Music2 size={12} />{album.no_of_plays} plays</span>
-                  {album.tracks?.length ? <span>{album.tracks.length} tracks</span> : null}
+                  {album.tracks?.length ? <span>{album.tracks.length} track{album.tracks.length === 1 ? "" : "s"}</span> : null}
                 </div>
                 {album.tracks?.length > 0 && (
                   <div className="bg-gray-50 rounded-xl p-3">
@@ -285,6 +283,7 @@ export default function AlbumsTab() {
                   <Link to={`/dashboard/albums/${album.id}`} className="flex-1 flex items-center justify-center gap-1 bg-white border border-gray-200 hover:bg-gray-50 py-2 rounded-xl text-xs font-medium transition"><Eye size={14} /> View details</Link>
                   <button onClick={() => openEdit(album)} className="flex-1 flex items-center justify-center gap-1 bg-gray-900 hover:bg-black text-white py-2 rounded-xl text-xs font-medium transition"><Pencil size={14} /> Edit</button>
                 </div>
+                <Link to={`/dashboard/music-upload?tab=tracks&album=${album.id}`} className="w-full flex items-center justify-center gap-1 bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl text-xs font-semibold transition"><Music2 size={14} /> Add tracks</Link>
               </div>
             </div>
           ))}

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, Pencil, Trash2, Calendar, Eye, Music2, Disc3 } from "lucide-react";
+import { ArrowLeft, Pencil, Trash2, Calendar, Disc3 } from "lucide-react";
 import { toast } from "sonner";
 import userApi from "../../../utils/userApi";
 import { getErrorMessage } from "../../../utils/errorHelper";
@@ -124,13 +124,6 @@ export default function TrackDetail() {
           <div className="flex justify-between"><dt className="text-gray-500">Genre</dt><dd>{track.genre?.name||track.genre_id||"—"}</dd></div>
           <div className="flex justify-between"><dt className="text-gray-500">Release</dt><dd className="flex items-center gap-1"><Calendar size={12}/>{track.date_released?.slice(0,10)||"—"}</dd></div>
         </dl>
-      </Section>
-
-      <Section title="Stats">
-        <div className="flex gap-6 text-sm">
-          <span className="flex items-center gap-1"><Eye size={14}/>{track.no_of_views} views</span>
-          <span className="flex items-center gap-1"><Music2 size={14}/>{track.no_of_plays} plays</span>
-        </div>
       </Section>
 
       <Section title="Danger zone" description="Delete this track permanently." danger>

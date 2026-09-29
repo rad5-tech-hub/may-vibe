@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Upload, Music2, Pencil, Calendar, Disc3, Eye, PlayCircle, ImagePlus } from "lucide-react";
 import userApi from "../../../../utils/userApi";
@@ -27,6 +27,7 @@ const compressImage = (file, maxDim = 1400, quality = 0.85) =>
   });
 
 export default function TracksTab() {
+  const [searchParams] = useSearchParams();
   const [albums, setAlbums] = useState([]);
   const [genres, setGenres] = useState([]);
   const [genresLoading, setGenresLoading] = useState(true);
@@ -75,6 +76,15 @@ export default function TracksTab() {
       setGenres(Array.isArray(list) ? list : []);
     }).catch((err) => toast.error(getErrorMessage(err, "Failed to load genres"))).finally(() => setGenresLoading(false));
   }, []);
+
+  // Prefill album when arriving via "Add tracks" from an album card
+  useEffect(() => {
+    const albumId = searchParams.get("album");
+    if (albumId) {
+      setForm((prev) => ({ ...prev, album_id: albumId, type: "audio_album_track" }));
+      setShowForm(true);
+    }
+  }, [searchParams]);
 
   const revokePreviews = () => {
     if (audioPreviewRef.current) URL.revokeObjectURL(audioPreviewRef.current);
@@ -354,14 +364,12 @@ export default function TracksTab() {
                 {t.featuring_artiste && <p className="text-xs text-gray-500">Ft: {t.featuring_artiste}</p>}
                 <div className="flex flex-wrap gap-2 text-xs text-gray-500">
                   <span className="flex items-center gap-1"><Calendar size={12} />{t.date_released?.slice(0,10) || "—"}</span>
-                  <span className="flex items-center gap-1"><Eye size={12} />{t.no_of_views} views</span>
-                  <span className="flex items-center gap-1"><Music2 size={12} />{t.no_of_plays} plays</span>
                 </div>
                 <div className="flex gap-2 pt-2">
                   <Link to={`/dashboard/tracks/${t.id}`} className="cursor-pointer flex-1 flex items-center justify-center gap-1 bg-white border border-gray-200 hover:bg-gray-50 py-2 rounded-xl text-xs font-medium"><Eye size={14} /> View details</Link>
                   <button onClick={() => openEdit(t)} className="cursor-pointer flex-1 flex items-center justify-center gap-1 bg-gray-900 hover:bg-black text-white py-2 rounded-xl text-xs font-medium"><Pencil size={14} /> Edit</button>
                 </div>
-                <button onClick={() => setReleaseFor(t)} className="cursor-pointer w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl text-xs font-semibold">Release</button>
+                <button onClick={() => setReleaseFor(t)} className="cursor-pointer w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl text-xs font-semibold">Distribute</button>
               </div>
             </div>
           ))}
@@ -371,14 +379,14 @@ export default function TracksTab() {
       {releaseFor && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
           <form onSubmit={handleRelease} className="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-            <h3 className="font-bold text-lg">Release Track</h3>
-            <p className="text-xs text-gray-500">Track: {releaseFor.name} • {releaseFor.id}</p>
+            <h3 className="font-bold text-lg">Distribute Track</h3>
+            <p className="text-xs text-gray-500 font-bold">Track: {releaseFor.name}{releaseFor.album?.name ? ` • Album: ${releaseFor.album.name}` : ""}</p>
             <div><label className="text-xs font-medium text-gray-600">Record Label</label><input value={releaseData.record_label} onChange={e => setReleaseData({ ...releaseData, record_label: e.target.value })} className="mt-1 w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" /></div>
             <div><label className="text-xs font-medium text-gray-600">Release Date</label><input type="date" value={releaseData.release_date} onChange={e => setReleaseData({ ...releaseData, release_date: e.target.value })} className="mt-1 w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" /></div>
             <div><label className="text-xs font-medium text-gray-600">Songwriter</label><input value={releaseData.songwriter} onChange={e => setReleaseData({ ...releaseData, songwriter: e.target.value })} placeholder="Dawn, Shawn" className="mt-1 w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" /></div>
             <div className="flex items-center gap-2"><input type="checkbox" checked={releaseData.explicit_lyrics} onChange={e => setReleaseData({ ...releaseData, explicit_lyrics: e.target.checked })} className="w-4 h-4 accent-orange-500" /><span className="text-sm">Explicit lyrics</span></div>
             <div><label className="text-xs font-medium text-gray-600">Lyrics</label><textarea value={releaseData.lyrics} onChange={e => setReleaseData({ ...releaseData, lyrics: e.target.value })} rows={4} placeholder="Verse 1..." className="mt-1 w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" /></div>
-            <div className="flex gap-3"><button type="button" onClick={() => setReleaseFor(null)} className="cursor-pointer flex-1 bg-gray-100 hover:bg-gray-200 py-3 rounded-xl text-sm font-medium">Cancel</button><button type="submit" className="cursor-pointer flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl text-sm font-semibold">Release</button></div>
+            <div className="flex gap-3"><button type="button" onClick={() => setReleaseFor(null)} className="cursor-pointer flex-1 bg-gray-100 hover:bg-gray-200 py-3 rounded-xl text-sm font-medium">Cancel</button><button type="submit" className="cursor-pointer flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl text-sm font-semibold">Distribute</button></div>
           </form>
         </div>
       )}
