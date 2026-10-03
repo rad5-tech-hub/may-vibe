@@ -1,0 +1,148 @@
+export const RELEASE_VERSIONS = [
+  "original",
+  "live",
+  "remix",
+  "cover",
+  "radio_edit",
+  "acoustic",
+  "acapella",
+  "sped_up",
+  "slowed",
+  "reprise",
+  "custom",
+];
+
+export const AI_CLASSES = [
+  { value: "human_no_ai", label: "Human Created, No AI" },
+  { value: "human_ai_assisted", label: "Human Created, AI Assisted" },
+  { value: "human_partially_ai", label: "Human Created, Partially AI Generated" },
+  { value: "fully_ai", label: "Fully AI Created" },
+];
+
+export const ARTIST_ROLES = ["Performer", "Featured Artist", "Remixer"];
+
+export const PRODUCER_ROLES = [
+  "Producer",
+  "Co-Producer",
+  "Executive Producer",
+  "Associate Producer",
+  "Additional Producer",
+  "Vocal Producer",
+  "Beat Producer",
+  "Music Producer",
+  "Arranger",
+];
+
+export const ENGINEER_ROLES = [
+  "Recording Engineer",
+  "Audio Engineer",
+  "Sound Engineer",
+  "Mixing Engineer",
+  "Mastering Engineer",
+  "Assistant Engineer",
+  "Re-Recording Engineer",
+  "Music Programmer",
+  "Additional Programmer",
+];
+
+export const MUSICIAN_ROLES = [
+  { group: "Vocal", roles: ["Lead Vocals", "Background Vocals", "Harmony Vocals", "Rap Vocals", "Spoken Vocals", "Soprano Vocals", "Alto Vocals", "Tenor Vocals", "Baritone Vocals", "Bass Vocals"] },
+  { group: "Guitar / Bass", roles: ["Guitar", "Lead Guitar", "Rhythm Guitar", "Acoustic Guitar", "Electric Guitar", "Bass Guitar"] },
+  { group: "Keyboard / Electronic", roles: ["Piano", "Keyboard", "Organ", "Synthesizer", "Programmer", "MIDI Programmer", "Electronic Music Programmer"] },
+  { group: "Drums / Percussion", roles: ["Drums", "Percussion", "Congas", "Bongos", "Tambourine", "Shaker", "Maracas"] },
+  { group: "Strings", roles: ["Violin", "Viola", "Cello", "Double Bass", "String Section", "Harp"] },
+  { group: "Brass", roles: ["Trumpet", "Trombone", "French Horn", "Tuba"] },
+  { group: "Woodwind", roles: ["Saxophone", "Alto Saxophone", "Tenor Saxophone", "Baritone Saxophone", "Flute", "Clarinet", "Oboe", "Bassoon"] },
+  { group: "Other Instruments", roles: ["Harmonica", "Accordion", "Banjo", "Mandolin", "Traditional Instrument", "Other Instrument"] },
+];
+
+export const LANGUAGE_OPTIONS = [
+  { value: "en", label: "English" },
+  { value: "fr", label: "French" },
+  { value: "es", label: "Spanish" },
+  { value: "pt", label: "Portuguese" },
+  { value: "de", label: "German" },
+  { value: "it", label: "Italian" },
+  { value: "nl", label: "Dutch" },
+  { value: "ar", label: "Arabic" },
+  { value: "yo", label: "Yoruba" },
+  { value: "ig", label: "Igbo" },
+  { value: "ha", label: "Hausa" },
+  { value: "sw", label: "Swahili" },
+  { value: "zu", label: "Zulu" },
+  { value: "xh", label: "Xhosa" },
+  { value: "am", label: "Amharic" },
+  { value: "pcm", label: "Pidgin" },
+  { value: "hi", label: "Hindi" },
+  { value: "zh", label: "Mandarin" },
+  { value: "ja", label: "Japanese" },
+  { value: "ko", label: "Korean" },
+  { value: "ru", label: "Russian" },
+  { value: "tr", label: "Turkish" },
+  { value: "other", label: "Other" },
+];
+
+export const ISRC_REGEX = /^[A-Z]{2}[A-Z0-9]{3}\d{7}$/i;
+export const UPC_REGEX = /^\d{12,14}$/;
+
+export const TERRITORIES = [
+  "Worldwide",
+  "United States",
+  "United Kingdom",
+  "Nigeria",
+  "Canada",
+  "Australia",
+  "New Zealand",
+  "Ireland",
+  "Germany",
+  "France",
+  "Italy",
+  "Spain",
+  "Portugal",
+  "Netherlands",
+  "Belgium",
+  "Switzerland",
+  "Austria",
+  "Sweden",
+  "Norway",
+  "Denmark",
+  "Finland",
+  "Poland",
+  "Greece",
+  "Czech Republic",
+  "Romania",
+  "Hungary",
+  "Russia",
+  "Turkey",
+  "Brazil",
+  "Mexico",
+  "Argentina",
+  "Chile",
+  "Colombia",
+  "Peru",
+  "Japan",
+  "South Korea",
+  "China",
+  "India",
+  "Indonesia",
+  "Philippines",
+  "Singapore",
+  "Malaysia",
+  "Thailand",
+  "Vietnam",
+  "South Africa",
+  "Kenya",
+  "Ghana",
+  "Ethiopia",
+  "Tanzania",
+  "Egypt",
+  "United Arab Emirates",
+  "Saudi Arabia",
+  "Israel",
+];
+
+export const AUDIO_RULES_TEXT = {
+  formats: "WAV or FLAC",
+  bitDepth: "16-bit / 44.1 kHz minimum, 24-bit / 192 kHz maximum",
+  channels: "Stereo",
+};

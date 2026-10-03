@@ -1,0 +1,150 @@
+import { useState } from "react";
+import PropTypes from "prop-types";
+import { toast } from "sonner";
+import { Search, Plus, X, Loader2, UserPlus, Check } from "lucide-react";
+import { useReleaseWizard } from "../context/ReleaseWizardContext";
+import { ContributorFormModal } from "./ArtistSelect";
+
+export default function CreditPicker({ roles, roleLabel, existing, onAdd, onRemove }) {
+  const { contributors, contributorsLoading, pushContributor } = useReleaseWizard();
+  const [query, setQuery] = useState("");
+  const [person, setPerson] = useState(null);
+  const [role, setRole] = useState(roles[0] || "");
+  const [showForm, setShowForm] = useState(false);
+
+  const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const visible = contributors.filter((c) => {
+    const haystack = `${c.stage_name || ""} ${c.legal_name || ""}`.toLowerCase();
+    return words.every((w) => haystack.includes(w));
+  });
+
+  const handleAdd = () => {
+    if (!person) return toast.error(`Select a person for ${roleLabel.toLowerCase()}`);
+    if (!role) return toast.error("Select a role");
+    const dup = existing.some((e) => e.artist_id === person.id && e.role === role);
+    if (dup) return toast.error("This person already has that role.");
+    onAdd({ artist_id: person.id, role, name: person.stage_name || person.legal_name });
+    setPerson(null);
+    setRole(roles[0] || "");
+  };
+
+  return (
+    <div className="space-y-3">
+      {existing.length > 0 && (
+        <div className="space-y-1.5">
+          {existing.map((entry, i) => (
+            <div key={`${entry.artist_id}_${entry.role}_${i}`} className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl px-3 py-2">
+              <span className="text-sm text-gray-800 truncate">
+                {entry.name || entry.artist_id}
+                <span className="text-xs text-orange-600 font-medium ml-2">{entry.role}</span>
+              </span>
+              <button type="button" onClick={() => onRemove(i)} className="cursor-pointer text-gray-400 hover:text-red-500 shrink-0 ml-2">
+                <X size={14} />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide">
+        {contributorsLoading ? "Loading your contributors..." : `Your contributors — tap to select as ${roleLabel.toLowerCase()}`}
+      </p>
+      <div className="border border-gray-200 rounded-xl bg-white divide-y divide-gray-100 max-h-44 overflow-y-auto">
+        {contributorsLoading ? (
+          <div className="px-4 py-3 text-sm text-gray-500 flex items-center gap-2">
+            <Loader2 size={14} className="animate-spin" /> Loading contributors...
+          </div>
+        ) : visible.length === 0 ? (
+          <div className="px-4 py-3 text-sm text-gray-500">No contributors found{query.trim() ? ` for “${query.trim()}”` : ""}.</div>
+        ) : (
+          visible.map((c) => {
+            const isPicked = person?.id === c.id;
+            return (
+              <button
+                type="button"
+                key={c.id}
+                onClick={() => setPerson(isPicked ? null : c)}
+                className={`w-full text-left px-4 py-2.5 flex items-center justify-between gap-2 text-sm transition ${
+                  isPicked ? "bg-orange-50 text-orange-700 font-semibold" : "text-gray-800 hover:bg-gray-50"
+                }`}
+              >
+                <span className="min-w-0">
+                  <span className="block truncate">{c.stage_name || c.legal_name}</span>
+                  {c.stage_name && c.legal_name && c.stage_name !== c.legal_name && (
+                    <span className="block text-xs text-gray-500 truncate">{c.legal_name}</span>
+                  )}
+                </span>
+                {isPicked ? <Check size={15} className="shrink-0 text-orange-600" /> : null}
+              </button>
+            );
+          })
+        )}
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-2">
+        <div className="relative flex-1">
+          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input
+            value={person ? person.stage_name || person.legal_name : query}
+            onChange={(e) => {
+              setPerson(null);
+              setQuery(e.target.value);
+            }}
+            placeholder={`Search ${roleLabel.toLowerCase()}s by word...`}
+            className="w-full bg-white border border-gray-200 rounded-xl pl-9 pr-4 py-2.5 text-sm outline-none focus:border-orange-400"
+          />
+        </div>
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          className="bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none cursor-pointer sm:w-52"
+        >
+          {roles.map((r) => (
+            <option key={r} value={r}>
+              {r}
+            </option>
+          ))}
+        </select>
+        <button
+          type="button"
+          onClick={handleAdd}
+          className="cursor-pointer bg-gray-900 hover:bg-black text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-1.5 shrink-0"
+        >
+          <Plus size={15} /> Add
+        </button>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setShowForm(true)}
+        className="cursor-pointer inline-flex items-center gap-1.5 text-xs font-semibold text-orange-600 hover:text-orange-700"
+      >
+        <UserPlus size={13} /> New {roleLabel.toLowerCase()}
+      </button>
+
+      <ContributorFormModal
+        open={showForm}
+        onClose={() => setShowForm(false)}
+        title={`Add New ${roleLabel}`}
+        onCreated={(c) => {
+          pushContributor(c);
+          setPerson(c);
+        }}
+      />
+    </div>
+  );
+}
+
+CreditPicker.propTypes = {
+  roles: PropTypes.arrayOf(PropTypes.string).isRequired,
+  roleLabel: PropTypes.string.isRequired,
+  existing: PropTypes.arrayOf(
+    PropTypes.shape({
+      artist_id: PropTypes.string.isRequired,
+      role: PropTypes.string.isRequired,
+      name: PropTypes.string,
+    })
+  ).isRequired,
+  onAdd: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
+};

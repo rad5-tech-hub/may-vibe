@@ -10,8 +10,7 @@ import ForgotPassword from './Pages/Onboarding Pages/forgetPassword.jsx';
 import ResetPassword from './Pages/Onboarding Pages/resetPassword.jsx';
 import VerifyOTP from './Pages/Onboarding Pages/verifyOTP.jsx';
 import Music from './Pages/Dashboard/Music Upload/Music';
-import AlbumDetail from './Pages/Dashboard/Music Upload/AlbumDetail';
-import TrackDetail from './Pages/Dashboard/Music Upload/TrackDetail';
+import Subscription from './Pages/Dashboard/Subscription/subscription';
 import Homepage from './Pages/Homepage/Homepage';
 import Overview from './Pages/Dashboard/Overview/overview';
 import RoyaltiesPage from './Pages/Dashboard/Royalties/Royalties';
@@ -114,8 +113,7 @@ function App() {
             <Route index element={<Overview />} />
             <Route path="overview" element={<Overview />} />
             <Route path="music-upload" element={<Music />} />
-            <Route path="albums/:id" element={<AlbumDetail />} />
-            <Route path="tracks/:id" element={<TrackDetail />} />
+            <Route path="subscription" element={<Subscription />} />
             <Route path="releases" element={<Releases />} />
             <Route path="royalties" element={<RoyaltiesPage />} />
             <Route path="payouts" element={<Payouts />} />

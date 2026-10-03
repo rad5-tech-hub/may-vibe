@@ -11,14 +11,16 @@ import {
   Headphones,
   LogOut,
   X,
+  BadgeCheck,
 } from "lucide-react";
 
 const menuItems = [
   { icon: BarChart3, label: "Overview", path: "/dashboard", end: true },
-  { icon: Upload, label: "Upload Music", path: "/dashboard/music-upload" },
+  { icon: Upload, label: "Upload Release", path: "/dashboard/music-upload" },
   { icon: Music, label: "My Releases", path: "/dashboard/releases" },
   { icon: TrendingUp, label: "Royalties", path: "/dashboard/royalties" },
   { icon: CreditCard, label: "Payouts", path: "/dashboard/payouts" },
+  { icon: BadgeCheck, label: "Subscription", path: "/dashboard/subscription" },
   { icon: User, label: "Profile", path: "/dashboard/profile" },
   { icon: Bell, label: "Notifications", path: "/dashboard/notifications" },
   { icon: Headphones, label: "Support/Academy", path: "/dashboard/support" },

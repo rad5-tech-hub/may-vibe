@@ -12,6 +12,8 @@ dist
 dist-ssr
 .env
 *.local
+music technical flow.md
+implementation flow.md
 
 # Internal admin rules (do not deploy/commit)
 ADMIN_RULES.md
