@@ -1,7 +1,5 @@
-import { useRef } from "react";
 import PropTypes from "prop-types";
-import { toast } from "sonner";
-import { ImagePlus, ListMusic, Disc3 } from "lucide-react";
+import { ListMusic, Disc3 } from "lucide-react";
 import { useReleaseWizard } from "../context/ReleaseWizardContext";
 import CreditPicker from "../components/CreditPicker";
 import SongwriterSelect from "../components/SongwriterSelect";
@@ -35,62 +33,6 @@ function Section({ title, children, error }) {
 Section.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.node,
-  error: PropTypes.string,
-};
-
-function TrackArtwork({ track, error }) {
-  const { patchTrack } = useReleaseWizard();
-  const inputRef = useRef(null);
-
-  const handleChange = (file) => {
-    if (!file) return;
-    if (!/^image\/(jpeg|png)$/.test(file.type)) {
-      toast.error("Track artwork must be a .jpg or .png file.");
-      return;
-    }
-    const preview = URL.createObjectURL(file);
-    patchTrack(track.key, { artworkFile: file, artworkPreview: preview });
-  };
-
-  return (
-    <Section title="Track Artwork *" error={error}>
-      <div className="flex items-center gap-4 flex-wrap">
-        <div className="w-28 h-28 rounded-xl border border-gray-200 overflow-hidden bg-gray-50 shrink-0">
-          {track.artworkPreview ? (
-            <img src={track.artworkPreview} alt="Track artwork" className="w-full h-full object-cover" />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-300">
-              <ImagePlus size={28} />
-            </div>
-          )}
-        </div>
-        <div className="space-y-2">
-          <button
-            type="button"
-            onClick={() => inputRef.current?.click()}
-            className="cursor-pointer text-sm font-semibold text-orange-600 underline underline-offset-2"
-          >
-            {track.artworkFile ? "Change artwork" : "Choose artwork"}
-          </button>
-          <input ref={inputRef} type="file" accept="image/jpeg,image/png" className="hidden" onChange={(e) => handleChange(e.target.files[0] || null)} />
-          {track.artworkFile && (
-            <button
-              type="button"
-              onClick={() => patchTrack(track.key, { artworkFile: null, artworkPreview: "" })}
-              className="cursor-pointer block text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full"
-            >
-              Remove
-            </button>
-          )}
-          <p className="text-[11px] text-gray-400 max-w-[220px]">Square .jpg or .png, minimum 1400×1400 px.</p>
-        </div>
-      </div>
-    </Section>
-  );
-}
-
-TrackArtwork.propTypes = {
-  track: PropTypes.object.isRequired,
   error: PropTypes.string,
 };
 
@@ -337,8 +279,6 @@ export default function Step3TrackDetails() {
             )}
             {err("instrumental") && <p className="text-xs text-red-500 mt-1">{err("instrumental")}</p>}
           </div>
-
-          <TrackArtwork track={t} error={err("artwork")} />
         </div>
       </div>
 

@@ -1,5 +1,5 @@
 const MAX_IMG_BYTES = 5 * 1024 * 1024;
-const HARD_MAX_BYTES = 40 * 1024 * 1024;
+const HARD_MAX_BYTES = 10 * 1024 * 1024;
 
 export const ARTWORK_RULES = {
   minDim: 1400,

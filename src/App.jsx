@@ -18,6 +18,7 @@ import Support from './Pages/Dashboard/Support &Academy/support';
 import Notifications from './Pages/Dashboard/Notifications/notifications';
 import Profile from './Pages/Dashboard/Profile/profile';
 import Releases from './Pages/Dashboard/Releases/releases';
+import ReleaseDetail from './Pages/Dashboard/Releases/ReleaseDetail';
 import Payouts from './Pages/Dashboard/Payouts/payouts';
 import Dashboard from './Pages/Dashboard/dashboard';
 import NotFound from './Pages/NotFound/NotFound';
@@ -115,6 +116,7 @@ function App() {
             <Route path="music-upload" element={<Music />} />
             <Route path="subscription" element={<Subscription />} />
             <Route path="releases" element={<Releases />} />
+            <Route path="releases/:id" element={<ReleaseDetail />} />
             <Route path="royalties" element={<RoyaltiesPage />} />
             <Route path="payouts" element={<Payouts />} />
             <Route path="profile" element={<Profile />} />

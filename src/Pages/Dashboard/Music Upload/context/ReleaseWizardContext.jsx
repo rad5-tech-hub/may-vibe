@@ -24,6 +24,7 @@ const makeTrack = (over = {}) => ({
   key: uid(),
   serverId: null,
   dirty: false,
+  audioDirty: false,
   title: "",
   version: "original",
   custom_version: "",
@@ -31,8 +32,6 @@ const makeTrack = (over = {}) => ({
   audioName: "",
   audioPreview: "",
   audioMeta: null,
-  artworkFile: null,
-  artworkPreview: "",
   is_instrumental: false,
   language: "",
   lyrics: "",
@@ -136,6 +135,10 @@ export function ReleaseWizardProvider({ children }) {
 
   const attachAudio = useCallback(async (key, file) => {
     if (!file) return;
+    if (file.size > 200 * 1024 * 1024) {
+      toast.error(`Audio must be 200 MB or smaller (selected ${(file.size / 1024 / 1024).toFixed(1)} MB).`);
+      return;
+    }
     const preview = URL.createObjectURL(file);
     let meta = null;
     let audioErrors = [];
@@ -154,7 +157,7 @@ export function ReleaseWizardProvider({ children }) {
       prev.map((t) => {
         if (t.key !== key) return t;
         if (t.audioPreview?.startsWith("blob:")) URL.revokeObjectURL(t.audioPreview);
-        return { ...t, audioFile: file, audioName: file.name, audioPreview: preview, audioMeta: meta, dirty: true };
+        return { ...t, audioFile: file, audioName: file.name, audioPreview: preview, audioMeta: meta, dirty: true, audioDirty: true };
       })
     );
   }, []);
@@ -227,7 +230,6 @@ export function ReleaseWizardProvider({ children }) {
           if (t.is_instrumental && (t.lyrics || t.language)) errs[`instrumental_${t.key}`] = "Instrumental tracks cannot have lyrics or language.";
           if (t.isrc.trim() && !ISRC_REGEX.test(t.isrc.trim())) errs[`isrc_${t.key}`] = "ISRC format is invalid (e.g. NOPA26100001).";
           if (t.version === "custom" && !t.custom_version.trim()) errs[`version_${t.key}`] = "Enter the custom version name.";
-          if (!t.artworkFile && !t.serverId) errs[`artwork_${t.key}`] = "Track artwork is required.";
         });
       }
 
@@ -246,7 +248,6 @@ export function ReleaseWizardProvider({ children }) {
         tracks.forEach((t, i) => {
           if (!t.audioMeta) errs[`audio_${t.key}`] = `Track ${i + 1} needs a valid audio file.`;
           if (!t.title.trim()) errs[`title_${t.key}`] = `Track ${i + 1}: title is required.`;
-          if (!t.serverId && !t.artworkFile) errs[`artwork_${t.key}`] = `Track ${i + 1}: artwork is required.`;
         });
         if (tracks.length === 1 && tracks[0].title.trim() !== release.title.trim()) {
           errs[`title_${tracks[0].key}`] = "For a single release the track title must match the release title.";
@@ -295,29 +296,70 @@ export function ReleaseWizardProvider({ children }) {
     [step, validateStep, scrollToTop, tracks]
   );
 
-  const buildTrackFormData = useCallback(
+  const creditList = useCallback(
+    (arr) => arr.map(({ artist_id, role }, i) => ({ artist_id, role, order: i })),
+    []
+  );
+
+  const songwriterList = useCallback(
+    (arr) => arr.map(({ songwriter_id }, i) => ({ songwriter_id, order: i })),
+    []
+  );
+
+  const buildTrackMetadata = useCallback(
     (t) => {
-      const fd = new FormData();
       const title = t.title.trim();
-      fd.append("name", title);
-      fd.append("title", title);
-      fd.append("type", tracks.length === 1 ? "audio_track" : "audio_album_track");
-      fd.append("is_instrumental", String(t.is_instrumental));
-      fd.append("explicit_content", String(t.explicit_content === true));
-      fd.append("version", t.version === "custom" ? t.custom_version.trim() : t.version);
-      fd.append("ai_classification", t.ai_classification);
-      if (!t.is_instrumental && t.language) fd.append("language", t.language);
-      if (!t.is_instrumental && t.lyrics.trim()) fd.append("lyrics", t.lyrics.trim());
-      if (t.isrc.trim()) fd.append("isrc", t.isrc.trim());
+      const meta = {
+        name: title,
+        type: tracks.length === 1 ? "audio_track" : "audio_album_track",
+        explicit_content: t.explicit_content === true,
+        is_instrumental: t.is_instrumental,
+        version: t.version === "custom" ? t.custom_version.trim() : t.version,
+        ai_classification: t.ai_classification || null,
+        audio: t.audioMeta || undefined,
+        producers: creditList(t.producers),
+        engineers: creditList(t.engineers),
+        additional_artists: creditList(t.additional_artists),
+        musicians: creditList(t.musicians),
+        songwriters: songwriterList(t.songwriters),
+      };
+      if (!t.is_instrumental) {
+        if (t.language) meta.language = t.language;
+        if (t.lyrics.trim()) meta.lyrics = t.lyrics.trim();
+      }
+      if (t.isrc.trim()) meta.isrc = t.isrc.trim();
       const genreId = t.genre_id || release.genre_id;
       const subGenreId = t.sub_genre_id || release.sub_genre_id;
-      if (genreId) fd.append("genre_id", genreId);
-      if (subGenreId) fd.append("sub_genre_id", subGenreId);
-      if (t.audioFile) fd.append("file", t.audioFile);
-      if (t.artworkFile) fd.append("artwork", t.artworkFile);
-      return fd;
+      if (genreId) meta.genre_id = genreId;
+      if (subGenreId) meta.sub_genre_id = subGenreId;
+      return meta;
     },
-    [tracks.length, release.genre_id, release.sub_genre_id]
+    [tracks.length, release.genre_id, release.sub_genre_id, creditList, songwriterList]
+  );
+
+  const buildTrackDistribution = useCallback(
+    (t) => {
+      const meta = {
+        explicit_content: t.explicit_content === true,
+        is_instrumental: t.is_instrumental,
+        version: t.version === "custom" ? t.custom_version.trim() : t.version,
+        ai_classification: t.ai_classification || null,
+        producers: creditList(t.producers),
+        engineers: creditList(t.engineers),
+        additional_artists: creditList(t.additional_artists),
+        musicians: creditList(t.musicians),
+        songwriters: songwriterList(t.songwriters),
+      };
+      if (!t.is_instrumental) {
+        if (t.language) meta.language = t.language;
+        if (t.lyrics.trim()) meta.lyrics = t.lyrics.trim();
+      }
+      if (t.isrc.trim()) meta.isrc = t.isrc.trim();
+      if (t.genre_id) meta.genre_id = t.genre_id;
+      if (t.sub_genre_id) meta.sub_genre_id = t.sub_genre_id;
+      return meta;
+    },
+    [creditList, songwriterList]
   );
 
   const syncTrackErrors = useCallback((err, fallbackStep) => {
@@ -369,33 +411,32 @@ export function ReleaseWizardProvider({ children }) {
         const t = withIds[i];
         setSubmitProgress(`Saving track ${i + 1} of ${withIds.length}…`);
         if (!t.serverId) {
-          const res = await userApi.post("/track/post", buildTrackFormData(t));
+          const fd = new FormData();
+          fd.append("metadata", JSON.stringify(buildTrackMetadata(t)));
+          if (t.audioFile) fd.append("audio", t.audioFile);
+          const res = await userApi.post("/track/post", fd);
           const data = res.data?.data || res.data || {};
           const id = data.id || data.track?.id;
           if (!id) throw new Error("Track created but no id was returned.");
-          withIds[i] = { ...t, serverId: id, dirty: false };
+          withIds[i] = { ...t, serverId: id, dirty: false, audioDirty: false };
         } else if (t.dirty) {
-          await userApi.patch(`/track/${t.serverId}`, buildTrackFormData(t));
-          withIds[i] = { ...t, dirty: false };
+          const legacyFd = new FormData();
+          legacyFd.append(
+            "metadata",
+            JSON.stringify({
+              name: t.title.trim(),
+              type: tracks.length === 1 ? "audio_track" : "audio_album_track",
+            })
+          );
+          if (t.audioDirty && t.audioFile) legacyFd.append("audio", t.audioFile);
+          await userApi.patch(`/track/${t.serverId}`, legacyFd);
+          await userApi.put(`/track/${t.serverId}/distribution`, buildTrackDistribution(t));
+          withIds[i] = { ...t, dirty: false, audioDirty: false };
         }
       }
       setTracks(withIds);
 
       setSubmitProgress("Uploading cover art and creating release…");
-      const fd = new FormData();
-      fd.append("title", release.title.trim());
-      fd.append("genre_id", release.genre_id);
-      fd.append("sub_genre_id", release.sub_genre_id);
-      fd.append("primary_artist_ids", JSON.stringify(release.primary_artist_ids));
-      fd.append("label_id", release.label_id || getLabel().id);
-      const subLabelName = (getLabel()?.name || "").trim();
-      const typedLabel = (release.label_name || "").trim();
-      if (typedLabel && typedLabel !== subLabelName) fd.append("label_name", typedLabel);
-      if (release.upc.trim()) fd.append("upc", release.upc.trim());
-      fd.append("copyright_of_recording", release.copyright_of_recording.trim());
-      fd.append("copyright_of_release", release.copyright_of_release.trim());
-      fd.append("release_date", release.release_date);
-
       const payloadTracks = withIds.map((t) => {
         const entry = {
           id: t.serverId,
@@ -403,29 +444,51 @@ export function ReleaseWizardProvider({ children }) {
           is_instrumental: t.is_instrumental,
           explicit_content: t.explicit_content === true,
           version: t.version === "custom" ? t.custom_version.trim() : t.version,
-          ai_classification: t.ai_classification,
+          ai_classification: t.ai_classification || null,
           audio: t.audioMeta,
+          additional_artists: creditList(t.additional_artists),
+          producers: creditList(t.producers),
+          engineers: creditList(t.engineers),
+          musicians: creditList(t.musicians),
+          songwriters: songwriterList(t.songwriters),
         };
         if (!t.is_instrumental && t.language) entry.language = t.language;
         if (!t.is_instrumental && t.lyrics.trim()) entry.lyrics = t.lyrics.trim();
         if (t.isrc.trim()) entry.isrc = t.isrc.trim();
         if (t.genre_id) entry.genre_id = t.genre_id;
         if (t.sub_genre_id) entry.sub_genre_id = t.sub_genre_id;
-        entry.additional_artists = t.additional_artists.map(({ artist_id, role }) => ({ artist_id, role }));
-        entry.producers = t.producers.map(({ artist_id, role }) => ({ artist_id, role }));
-        entry.engineers = t.engineers.map(({ artist_id, role }) => ({ artist_id, role }));
-        entry.musicians = t.musicians.map(({ artist_id, role }) => ({ artist_id, role }));
-        entry.songwriters = t.songwriters.map(({ songwriter_id }) => ({ songwriter_id }));
         return entry;
       });
-      fd.append("tracks", JSON.stringify(payloadTracks));
+
+      const releaseMeta = {
+        title: release.title.trim(),
+        tracks: payloadTracks,
+        primary_artist_ids: release.primary_artist_ids,
+        genre_id: release.genre_id,
+        sub_genre_id: release.sub_genre_id,
+        release_date: release.release_date,
+        territory: release.territory || "Worldwide",
+        copyright_of_recording: release.copyright_of_recording.trim(),
+        copyright_of_release: release.copyright_of_release.trim(),
+        is_video: false,
+      };
+      const recordLabel = (release.label_name || "").trim() || (getLabel()?.name || "").trim();
+      if (recordLabel) releaseMeta.record_label = recordLabel;
+      if (release.upc.trim()) releaseMeta.upc = release.upc.trim();
 
       let artworkFile = release.artworkFile;
       if (artworkFile && artworkFile.size > 5 * 1024 * 1024) artworkFile = await compressImage(artworkFile);
+      if (artworkFile && artworkFile.size > 10 * 1024 * 1024) {
+        toast.error(`Cover art must be 10 MB or smaller (compressed to ${(artworkFile.size / 1024 / 1024).toFixed(1)} MB).`);
+        throw new Error("Cover art too large");
+      }
+
+      const fd = new FormData();
+      fd.append("metadata", JSON.stringify(releaseMeta));
       if (artworkFile) fd.append("artwork", artworkFile);
 
       try {
-        const res = await userApi.post("/release", fd, { headers: { "Content-Type": "multipart/form-data" } });
+        const res = await userApi.post("/release", fd);
         const data = res.data?.data || res.data || {};
         setSubmitted(data);
         toast.success(res.data?.message || "Release created");
@@ -438,7 +501,7 @@ export function ReleaseWizardProvider({ children }) {
       setSubmitting(false);
       setSubmitProgress("");
     }
-  }, [tracks, release, collectErrors, buildTrackFormData, syncTrackErrors, scrollToTop]);
+  }, [tracks, release, collectErrors, buildTrackMetadata, buildTrackDistribution, creditList, songwriterList, syncTrackErrors, scrollToTop]);
 
   const resetWizard = useCallback(() => {
     setRelease(initialRelease());

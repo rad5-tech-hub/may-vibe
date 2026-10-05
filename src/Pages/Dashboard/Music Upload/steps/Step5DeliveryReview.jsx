@@ -147,19 +147,18 @@ export default function Step5DeliveryReview() {
             <Row label="Primary artist" value={release.primary_artist_ids.length ? "Performer (from release)" : "—"} />
             <Row
               label="Additional artists"
-              value={t.additional_artists.length ? t.additional_artists.map((a) => `${a.name || a.artist_id} (${a.role})`).join(", ") : "—"}
+              value={t.additional_artists.length ? t.additional_artists.map((a) => `${a.name || "Unknown"} (${a.role})`).join(", ") : "—"}
             />
-            <Row label="Producers" value={t.producers.length ? t.producers.map((p) => `${p.name || p.artist_id} (${p.role})`).join(", ") : "—"} />
-            <Row label="Engineers" value={t.engineers.length ? t.engineers.map((p) => `${p.name || p.artist_id} (${p.role})`).join(", ") : "—"} />
-            <Row label="Musicians" value={t.musicians.length ? t.musicians.map((p) => `${p.name || p.artist_id} (${p.role})`).join(", ") : "—"} />
-            <Row label="Songwriters" value={t.songwriters.length ? t.songwriters.map((s) => s.name || s.songwriter_id).join(", ") : "—"} />
+            <Row label="Producers" value={t.producers.length ? t.producers.map((p) => `${p.name || "Unknown"} (${p.role})`).join(", ") : "—"} />
+            <Row label="Engineers" value={t.engineers.length ? t.engineers.map((p) => `${p.name || "Unknown"} (${p.role})`).join(", ") : "—"} />
+            <Row label="Musicians" value={t.musicians.length ? t.musicians.map((p) => `${p.name || "Unknown"} (${p.role})`).join(", ") : "—"} />
+            <Row label="Songwriters" value={t.songwriters.length ? t.songwriters.map((s) => s.name || "Unknown songwriter").join(", ") : "—"} />
             <Row label="AI classification" value={aiLabel(t.ai_classification)} />
             <Row label="Lyrics / instrumental" value={t.is_instrumental ? "Instrumental" : "Has lyrics"} />
             {!t.is_instrumental && <Row label="Language" value={languageLabel(t.language)} />}
             <Row label="Explicit" value={t.explicit_content === null ? "—" : t.explicit_content ? "Yes" : "No"} />
             <Row label="ISRC" value={t.isrc || "Auto-generate"} />
             <Row label="Audio" value={t.audioMeta ? `${t.audioMeta.container.toUpperCase()} · ${t.audioMeta.bitDepth}-bit · ${t.audioMeta.sampleRate} Hz` : "Missing"} />
-            <Row label="Track artwork" value={t.artworkFile ? t.artworkFile.name : t.serverId ? "Uploaded" : "Missing"} />
           </dl>
         </Panel>
       ))}

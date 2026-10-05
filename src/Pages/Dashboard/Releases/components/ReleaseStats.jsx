@@ -1,263 +1,268 @@
-import { useState } from "react";
-import { Play, MoreVertical, Edit, Eye, Trash2 } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Music2, RefreshCw, Loader2, Upload } from "lucide-react";
+import userApi from "../../../../utils/userApi";
+import { getErrorMessage } from "../../../../utils/errorHelper";
 
-// Import your local images
-import Image1 from "../../../../assets/Subscribers1.png";
-import Image2 from "../../../../assets/Subscribers2.png";
-import Image3 from "../../../../assets/Subscribers3.png";
+const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1).replace(/_/g, " ") : "");
 
-// Import the modals
-import EditReleaseModal from "./editRelease";
-import ViewReleaseModal from "./ViewReleaseModal";
-import DeleteReleaseModal from "./viewDeleteModal";
+const getStatusStyle = (status) => {
+  switch ((status || "").toLowerCase()) {
+    case "draft":
+      return "bg-gray-100 text-gray-700 border border-gray-300";
+    case "pending":
+    case "pending_acr":
+    case "in_review":
+    case "review":
+      return "bg-yellow-100 text-yellow-700 border border-yellow-300";
+    case "rejected":
+    case "acr_failed":
+      return "bg-red-100 text-red-700 border border-red-300";
+    case "live":
+    case "approved":
+      return "bg-green-100 text-green-700 border border-green-300";
+    case "scheduled":
+    case "processing":
+      return "bg-blue-100 text-blue-700 border border-blue-300";
+    default:
+      return "bg-gray-100 text-gray-700 border border-gray-300";
+  }
+};
 
-// Sample data
-const releases = [
-  { title: "UY Scuti", artist: "Junior", status: "draft", streams: 0, revenue: 0 },
-  { title: "Made In Lagos", artist: "Junior", status: "pending", streams: 0, revenue: 0 },
-  { title: "A Better Time", artist: "Junior", status: "rejected", streams: 0, revenue: 0 },
-  { title: "UY Scuti", artist: "Junior", status: "live", streams: 1003123, revenue: 139.12 },
-  { title: "Made In Lagos", artist: "Junior", status: "live", streams: 1344231, revenue: 208 },
-  { title: "A Better Time", artist: "Junior", status: "live", streams: 1344231, revenue: 225 },
-];
+const releaseTitle = (r) => r?.album?.name ?? r?.track?.name ?? r?.title ?? r?.name ?? "Untitled";
 
-const albumCovers = [
-  "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=400&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop",
-  Image1,
-  Image2,
-  Image3,
-  Image1,
-];
+const typeLabel = (r) => (r?.type ? cap(r.type) : "—");
+
+const extractArray = (payload) => {
+  const candidates = [payload?.data, payload?.data?.releases, payload?.releases, payload];
+  for (const c of candidates) if (Array.isArray(c)) return c;
+  return null;
+};
 
 export default function MyReleases() {
-  const [openMenu, setOpenMenu] = useState(null);
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  const [viewModalOpen, setViewModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedRelease, setSelectedRelease] = useState(null);
+  const navigate = useNavigate();
+  const [releases, setReleases] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [albumRef, setAlbumRef] = useState({});
+  const [trackRef, setTrackRef] = useState({});
+  const [countMap, setCountMap] = useState({});
 
-  const getStatusStyle = (status) => {
-    switch (status.toLowerCase()) {
-      case "draft":    return "bg-gray-100 text-gray-700 border border-gray-300";
-      case "pending":  return "bg-yellow-100 text-yellow-700 border border-yellow-300";
-      case "rejected": return "bg-red-100 text-red-700 border border-red-300";
-      case "live":     return "bg-green-100 text-green-700 border border-green-300";
-      default:         return "bg-gray-100 text-gray-700 border border-gray-300";
+  const fetchReleases = useCallback(async () => {
+    setLoading(true);
+    setError("");
+    let list;
+    try {
+      const res = await userApi.get("/release");
+      list = extractArray(res.data);
+      if (!list) throw new Error("Unexpected releases response");
+      setReleases(list);
+    } catch (err) {
+      setError(getErrorMessage(err, "Failed to load releases"));
+      setLoading(false);
+      return;
     }
+    setLoading(false);
+
+    // Album rows don't carry a track count in the list — resolve each once
+    const albumRows = list.filter((r) => r?.type === "album" && r?.id);
+    if (albumRows.length) {
+      Promise.all(
+        albumRows.map((r) =>
+          userApi
+            .get(`/release/${r.id}`)
+            .then((res) => {
+              const d = res.data?.data || res.data;
+              const n =
+                Array.isArray(d?.releaseTracks) && d.releaseTracks.length
+                  ? d.releaseTracks.length
+                  : Array.isArray(d?.tracks) && d.tracks.length
+                    ? d.tracks.length
+                    : typeof d?.track_count === "number"
+                      ? d.track_count
+                      : null;
+              return n != null ? { id: r.id, n } : null;
+            })
+            .catch(() => null)
+        )
+      ).then((pairs) => {
+        const m = {};
+        for (const p of pairs) if (p) m[p.id] = p.n;
+        setCountMap(m);
+      });
+    }
+
+    userApi
+      .get("/album/my-albums")
+      .then((r) => {
+        const albums = extractArray(r.data);
+        if (!Array.isArray(albums)) return;
+        const map = {};
+        for (const a of albums) {
+          if (a?.id) map[a.id] = a.artiste_name || "";
+        }
+        setAlbumRef(map);
+      })
+      .catch(() => {});
+
+    userApi
+      .get("/track/my-tracks")
+      .then((r) => {
+        const list = extractArray(r.data);
+        if (!Array.isArray(list)) return;
+        const map = {};
+        for (const t of list) {
+          if (t?.id) map[t.id] = t.artiste_name || "";
+        }
+        setTrackRef(map);
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    fetchReleases();
+  }, [fetchReleases]);
+
+  const artistLabel = (r) => {
+    if (r?.type === "single" && r?.track?.id && trackRef[r.track.id]) return trackRef[r.track.id];
+    if (r?.album?.id && albumRef[r.album.id]) return albumRef[r.album.id];
+    return r?.record_label || "";
   };
 
-  const handleEdit = (release) => {
-    setSelectedRelease({
-      ...release,
-      cover: albumCovers[releases.indexOf(release) % albumCovers.length],
-    });
-    setEditModalOpen(true);
-    setOpenMenu(null);
+  const trackCount = (r) => {
+    if (typeof r?.track_count === "number") return String(r.track_count);
+    if (r?.type === "single") return "1";
+    if (countMap[r?.id] != null) return String(countMap[r.id]);
+    return "—";
   };
 
-  const handleView = () => {
-    setViewModalOpen(true);
-    setOpenMenu(null);
-  };
+  const cover = (r) => r?.artwork_url || r?.album?.artwork_url || null;
 
-  const handleDelete = () => {
-    setDeleteModalOpen(true);
-    setOpenMenu(null);
+  const openRelease = (item) => {
+    if (!item?.id) return;
+    navigate(`/dashboard/releases/${item.id}`, { state: { release: item } });
   };
 
   return (
-    <>
-      <section className="w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">My Releases</h2>
+    <section className="w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">My Releases</h2>
+        <button
+          onClick={() => navigate("/dashboard/music-upload")}
+          className="cursor-pointer inline-flex items-center gap-1.5 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2.5 rounded-full text-sm font-semibold transition"
+        >
+          <Upload size={15} /> Upload Release
+        </button>
+      </div>
 
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-          {/* Desktop Header */}
-          <div className="hidden lg:grid lg:grid-cols-12 gap-6 px-8 py-5 border-b border-gray-200 text-sm font-medium text-gray-600">
-            <div>Song Title</div>
-            <div className="col-span-2 text-center">Status</div>
-            <div className="col-span-2 text-center">Streams</div>
-            <div className="col-span-2 text-center">Revenue ($)</div>
-            <div className="col-span-1" />
+      {loading && (
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-12 text-center text-gray-500">
+          <Loader2 size={24} className="animate-spin mx-auto mb-3 text-orange-500" />
+          Loading your releases...
+        </div>
+      )}
+
+      {!loading && error && (
+        <div className="bg-white rounded-3xl shadow-sm border border-red-100 p-10 text-center">
+          <p className="text-sm text-red-600 mb-4">{error}</p>
+          <button
+            onClick={fetchReleases}
+            className="cursor-pointer inline-flex items-center gap-1.5 bg-gray-900 hover:bg-black text-white px-5 py-2.5 rounded-full text-sm font-semibold"
+          >
+            <RefreshCw size={14} /> Try again
+          </button>
+        </div>
+      )}
+
+      {!loading && !error && releases.length === 0 && (
+        <div className="bg-gray-50 rounded-3xl p-12 text-center border border-dashed border-gray-300">
+          <Music2 className="mx-auto text-gray-300 mb-3" size={40} />
+          <p className="text-gray-600 font-medium">No releases yet</p>
+          <p className="text-sm text-gray-400 mb-5">Create your first release to get started.</p>
+          <button
+            onClick={() => navigate("/dashboard/music-upload")}
+            className="cursor-pointer inline-flex items-center gap-1.5 bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-xl text-sm font-semibold"
+          >
+            <Upload size={15} /> Upload your first release
+          </button>
+        </div>
+      )}
+
+      {!loading && !error && releases.length > 0 && (
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-x-auto">
+          {/* Header — five equal columns, scrolls horizontally on small screens */}
+          <div className="grid grid-cols-5 gap-4 md:gap-6 min-w-[680px] px-5 md:px-8 py-5 border-b border-gray-200 text-sm font-semibold text-gray-600">
+            <div className="truncate">Release</div>
+            <div className="text-center whitespace-nowrap">Status</div>
+            <div className="text-center whitespace-nowrap">Type</div>
+            <div className="text-center whitespace-nowrap">Tracks</div>
+            <div className="text-center whitespace-nowrap">Release Date</div>
           </div>
 
-          {/* Rows */}
-          {releases.map((item, i) => (
-            <div key={i} className="border-t border-gray-100 first:border-t-0">
-              <div className="p-4 sm:p-6 lg:px-8 lg:py-5 hover:bg-orange-50/30 transition-colors group">
-
-                {/* Mobile Layout */}
-                <div className="lg:hidden">
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4 flex-1 min-w-0">
-                      <div className="w-14 h-14 rounded-full overflow-hidden ring-2 ring-white shadow-md flex-shrink-0">
-                        <img src={albumCovers[i]} alt={item.title} className="w-full h-full object-cover" />
-                      </div>
-                      <div className="min-w-0">
-                        <h4 className="font-semibold text-gray-900 truncate">{item.title}</h4>
-                        <p className="text-sm text-gray-500">{item.artist}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <button className="p-2.5 hover:bg-orange-100 rounded-full transition-colors">
-                        <Play className="w-5 h-5 text-gray-700" />
-                      </button>
-                      <div className="relative">
-                        <button
-                          onClick={() => setOpenMenu(openMenu === i ? null : i)}
-                          className="p-2.5 hover:bg-gray-100 rounded-full transition-colors"
-                        >
-                          <MoreVertical className="w-5 h-5 text-gray-500" />
-                        </button>
-
-                        {openMenu === i && (
-                          <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-50">
-                            <button
-                              onClick={() => handleEdit(item)}
-                              className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-orange-50 flex items-center gap-3"
-                            >
-                              <Edit className="w-4 h-4" /> Edit
-                            </button>
-                            <button
-                              onClick={handleView}
-                              className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-orange-50 flex items-center gap-3"
-                            >
-                              <Eye className="w-4 h-4" /> View
-                            </button>
-                            <button
-                              onClick={handleDelete}
-                              className="w-full px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-3"
-                            >
-                              <Trash2 className="w-4 h-4" /> Delete
-                            </button>
+          {releases.map((item, i) => {
+            const art = cover(item);
+            const status = item?.status || "draft";
+            return (
+              <div
+                key={item?.id || i}
+                role="button"
+                tabIndex={0}
+                onClick={() => openRelease(item)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    openRelease(item);
+                  }
+                }}
+                className="border-t border-gray-100 first:border-t-0 cursor-pointer hover:bg-orange-50/40 transition-colors focus:outline-none focus:bg-orange-50/60"
+              >
+                <div className="px-5 py-4 md:px-8 md:py-6 min-w-[680px]">
+                  <div className="grid grid-cols-5 gap-4 md:gap-6 items-center">
+                    {/* Release */}
+                    <div className="flex items-center gap-3 md:gap-4 min-w-0">
+                      <div className="w-11 h-11 rounded-full overflow-hidden ring-2 ring-white shadow-md bg-gray-100 shrink-0">
+                        {art ? (
+                          <img src={art} alt={releaseTitle(item)} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-300">
+                            <Music2 size={16} />
                           </div>
                         )}
                       </div>
+                      <div className="min-w-0">
+                        <div className="font-medium text-gray-900 text-sm truncate">{releaseTitle(item)}</div>
+                        <div className="text-xs text-gray-500 truncate">{artistLabel(item)}</div>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="mt-4 pt-4 border-t border-gray-100 grid grid-cols-3 gap-4 text-sm">
-                    <div>
-                      <p className="text-gray-500 text-xs">Status</p>
-                      <span className={`inline-block mt-1 px-3 py-1 rounded-full text-xs font-semibold ${getStatusStyle(item.status)}`}>
-                        {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                    {/* Status */}
+                    <div className="flex justify-center">
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${getStatusStyle(status)}`}>
+                        {cap(status) || "—"}
                       </span>
                     </div>
-                    <div>
-                      <p className="text-gray-500 text-xs">Streams</p>
-                      <p className="font-medium text-gray-900">
-                        {item.streams.toLocaleString()}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500 text-xs">Revenue</p>
-                      <p className="font-medium text-gray-900">
-                        ${item.revenue.toFixed(2)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Desktop Layout */}
-                <div className="hidden lg:grid lg:grid-cols-12 gap-6 items-center">
-                  <div className="col-span-5 flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-full overflow-hidden ring-2 ring-white shadow-md">
-                      <img src={albumCovers[i]} alt={item.title} className="w-full h-full object-cover" />
-                    </div>
-                    <div>
-                      <div className="font-medium text-gray-900 text-sm">{item.title}</div>
-                      <div className="text-xs text-gray-500">{item.artist}</div>
-                    </div>
-                  </div>
+                    {/* Type */}
+                    <div className="text-center text-sm font-medium text-gray-700 whitespace-nowrap">{typeLabel(item)}</div>
 
-                  <div className="col-span-2 flex justify-center">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusStyle(item.status)}`}>
-                      {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-                    </span>
-                  </div>
+                    {/* Tracks */}
+                    <div className="text-center text-sm font-medium text-gray-700">{trackCount(item)}</div>
 
-                  <div className="col-span-2 text-center text-sm font-medium text-gray-700">
-                    {item.streams.toLocaleString()}
-                  </div>
-
-                  <div className="col-span-2 text-center text-sm font-medium text-gray-700">
-                    ${item.revenue.toFixed(2)}
-                  </div>
-
-                  <div className="col-span-1 flex justify-center gap-3">
-                    <button className="p-2 hover:bg-orange-100 rounded-full transition-colors">
-                      <Play className="w-4 h-4 text-gray-700" />
-                    </button>
-                    <div className="relative">
-                      <button
-                        onClick={() => setOpenMenu(openMenu === i ? null : i)}
-                        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                      >
-                        <MoreVertical className="w-5 h-5 text-gray-500" />
-                      </button>
-
-                      {openMenu === i && (
-                        <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-50">
-                          <button
-                            onClick={() => handleEdit(item)}
-                            className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-orange-50 flex items-center gap-3"
-                          >
-                            <Edit className="w-4 h-4" /> Edit
-                          </button>
-                          <button
-                            onClick={handleView}
-                            className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-orange-50 flex items-center gap-3"
-                          >
-                            <Eye className="w-4 h-4" /> View
-                          </button>
-                          <button
-                            onClick={handleDelete}
-                            className="w-full px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-3"
-                          >
-                            <Trash2 className="w-4 h-4" /> Delete
-                          </button>
-                        </div>
-                      )}
+                    {/* Release Date */}
+                    <div className="text-center text-sm text-gray-600 whitespace-nowrap">
+                      {item?.release_date ? String(item.release_date).slice(0, 10) : "—"}
                     </div>
                   </div>
                 </div>
+
+                {i < releases.length - 1 && (
+                  <div className="hidden md:block h-px bg-gradient-to-r from-transparent via-orange-300 to-transparent mx-8" />
+                )}
               </div>
-
-              {/* Orange Divider (Desktop Only) */}
-              {i < releases.length - 1 && (
-                <div className="hidden lg:block h-px bg-gradient-to-r from-transparent via-orange-300 to-transparent mx-8" />
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
-
-        {/* Click outside to close menu */}
-        {openMenu !== null && (
-          <div className="fixed inset-0 z-40" onClick={() => setOpenMenu(null)} />
-        )}
-      </section>
-
-      {/* MODALS */}
-      <EditReleaseModal
-        isOpen={editModalOpen}
-        onClose={() => setEditModalOpen(false)}
-        release={selectedRelease || releases[0]}
-      />
-
-      <ViewReleaseModal
-        isOpen={viewModalOpen}
-        onClose={() => setViewModalOpen(false)}
-      />
-
-      <DeleteReleaseModal
-        isOpen={deleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
-        onConfirm={() => {
-          alert("Release successfully deleted!");
-          setDeleteModalOpen(false);
-        }}
-      />
-    </>
+      )}
+    </section>
   );
 }

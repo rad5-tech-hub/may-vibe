@@ -121,7 +121,7 @@ export default function SongwriterSelect({ existing, onAdd, onRemove }) {
             <div key={`${entry.songwriter_id}_${i}`} className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl px-3 py-2">
               <span className="text-sm text-gray-800 truncate flex items-center gap-1.5">
                 <FileSignature size={13} className="text-orange-500 shrink-0" />
-                {entry.name || entry.songwriter_id}
+                {entry.name || "Unknown songwriter"}
               </span>
               <button type="button" onClick={() => onRemove(i)} className="cursor-pointer text-gray-400 hover:text-red-500 shrink-0 ml-2">
                 <X size={14} />

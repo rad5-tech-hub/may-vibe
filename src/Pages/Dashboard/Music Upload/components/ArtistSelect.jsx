@@ -21,12 +21,20 @@ export function ContributorFormModal({ open, onClose, onCreated, title = "Add Co
     e.preventDefault();
     if (!form.stage_name.trim()) return toast.error("Stage name is required");
     const fd = new FormData();
-    fd.append("stage_name", form.stage_name.trim());
-    if (form.legal_name.trim()) fd.append("legal_name", form.legal_name.trim());
-    if (form.bio.trim()) fd.append("bio", form.bio.trim());
-    if (form.country.trim()) fd.append("country", form.country.trim());
-    if (form.spotify_artist_id.trim()) fd.append("spotify_artist_id", form.spotify_artist_id.trim());
-    if (form.apple_music_artist_id.trim()) fd.append("apple_music_artist_id", form.apple_music_artist_id.trim());
+    fd.append(
+      "metadata",
+      JSON.stringify({
+        stage_name: form.stage_name.trim(),
+        legal_name: form.legal_name.trim() || null,
+        bio: form.bio.trim() || null,
+        country: form.country.trim() || null,
+        image_url: null,
+        spotify_artist_id: form.spotify_artist_id.trim() || null,
+        spotify_artist_url: null,
+        apple_music_artist_id: form.apple_music_artist_id.trim() || null,
+        apple_music_artist_url: null,
+      })
+    );
     if (artwork) fd.append("artwork", artwork);
     setSaving(true);
     try {
@@ -148,7 +156,7 @@ export default function ArtistSelect({ value, onChange, error }) {
 
   const removeArtist = (id) => onChange(selected.filter((x) => x !== id));
 
-  const nameOf = (id) => namesById[id] || contributors.find((c) => c.id === id)?.stage_name || contributors.find((c) => c.id === id)?.legal_name || id;
+  const nameOf = (id) => namesById[id] || contributors.find((c) => c.id === id)?.stage_name || contributors.find((c) => c.id === id)?.legal_name || "Artist";
 
   return (
     <div className="space-y-2">

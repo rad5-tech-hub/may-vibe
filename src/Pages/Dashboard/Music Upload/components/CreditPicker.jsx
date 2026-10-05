@@ -35,7 +35,7 @@ export default function CreditPicker({ roles, roleLabel, existing, onAdd, onRemo
           {existing.map((entry, i) => (
             <div key={`${entry.artist_id}_${entry.role}_${i}`} className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl px-3 py-2">
               <span className="text-sm text-gray-800 truncate">
-                {entry.name || entry.artist_id}
+                {entry.name || "Unknown"}
                 <span className="text-xs text-orange-600 font-medium ml-2">{entry.role}</span>
               </span>
               <button type="button" onClick={() => onRemove(i)} className="cursor-pointer text-gray-400 hover:text-red-500 shrink-0 ml-2">
