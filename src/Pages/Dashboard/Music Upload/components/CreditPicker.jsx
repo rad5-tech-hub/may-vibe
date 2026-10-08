@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "sonner";
-import { Search, Plus, X, Loader2, UserPlus, Check } from "lucide-react";
+import { Search, Plus, X, Loader2, UserPlus } from "lucide-react";
 import { searchContributors } from "../../../../utils/search";
 import { useReleaseWizard } from "../context/ReleaseWizardContext";
 import { ContributorFormModal } from "./ArtistSelect";
@@ -75,50 +75,35 @@ export default function CreditPicker({ roles, roleLabel, existing, onAdd, onRemo
         </div>
       )}
 
-      <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide">
-        {contributorsLoading
-          ? "Loading your contributors..."
-          : isSearchingDB
-            ? `Searching all ${roleLabel.toLowerCase()}s for “${query.trim()}”…`
-            : `Your contributors — tap to select, or search all ${roleLabel.toLowerCase()}s below`}
-      </p>
-      <div className="border border-gray-200 rounded-xl bg-white divide-y divide-gray-100 max-h-44 overflow-y-auto">
-        {contributorsLoading ? (
-          <div className="px-4 py-3 text-sm text-gray-500 flex items-center gap-2">
-            <Loader2 size={14} className="animate-spin" /> Loading contributors...
-          </div>
-        ) : visible.length === 0 ? (
-          <div className="px-4 py-3 text-sm text-gray-500">
-            {isSearchingDB
+      <select
+        value={person?.id || ""}
+        disabled={contributorsLoading}
+        onChange={(e) => {
+          const id = e.target.value;
+          setPerson(visible.find((c) => c.id === id) || contributors.find((c) => c.id === id) || null);
+        }}
+        className="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-orange-400 cursor-pointer"
+      >
+        <option value="">
+          {contributorsLoading
+            ? "Loading your contributors..."
+            : isSearchingDB
               ? searching
                 ? "Searching…"
-                : `No results for “${query.trim()}” — try New ${roleLabel.toLowerCase()} below.`
-              : "No contributors yet — search below or add a new one."}
-          </div>
-        ) : (
-          visible.map((c) => {
-            const isPicked = person?.id === c.id;
-            return (
-              <button
-                type="button"
-                key={c.id}
-                onClick={() => setPerson(isPicked ? null : c)}
-                className={`w-full text-left px-4 py-2.5 flex items-center justify-between gap-2 text-sm transition ${
-                  isPicked ? "bg-orange-50 text-orange-700 font-semibold" : "text-gray-800 hover:bg-gray-50"
-                }`}
-              >
-                <span className="min-w-0">
-                  <span className="block truncate">{c.stage_name || c.legal_name}</span>
-                  {c.stage_name && c.legal_name && c.stage_name !== c.legal_name && (
-                    <span className="block text-xs text-gray-500 truncate">{c.legal_name}</span>
-                  )}
-                </span>
-                {isPicked ? <Check size={15} className="shrink-0 text-orange-600" /> : null}
-              </button>
-            );
-          })
-        )}
-      </div>
+                : visible.length
+                  ? `Search results (${visible.length}) — select one`
+                  : `No results for “${query.trim()}”`
+              : contributors.length
+                ? `Select a ${roleLabel.toLowerCase()}`
+                : "No contributors yet — search or add below"}
+        </option>
+        {visible.map((c) => (
+          <option key={c.id} value={c.id}>
+            {c.stage_name || c.legal_name}
+            {c.stage_name && c.legal_name && c.stage_name !== c.legal_name ? ` (${c.legal_name})` : ""}
+          </option>
+        ))}
+      </select>
 
       <div className="flex flex-col sm:flex-row gap-2">
         <div className="relative flex-1">

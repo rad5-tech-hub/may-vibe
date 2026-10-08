@@ -166,48 +166,39 @@ export default function SongwriterSelect({ existing, onAdd, onRemove }) {
         </div>
       )}
 
-      <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide">
-        {songwritersLoading
-          ? "Loading your songwriters..."
-          : isSearchingDB
-            ? `Searching all songwriters for “${query.trim()}”…`
-            : "Your songwriters — tap to add, or search the full database below"}
-      </p>
-      <div className="border border-gray-200 rounded-xl bg-white divide-y divide-gray-100 max-h-44 overflow-y-auto">
-        {songwritersLoading ? (
-          <div className="px-4 py-3 text-sm text-gray-500 flex items-center gap-2">
-            <Loader2 size={14} className="animate-spin" /> Loading songwriters...
-          </div>
-        ) : visible.length === 0 ? (
-          <div className="px-4 py-3 text-sm text-gray-500">
-            {isSearchingDB
+      <select
+        value=""
+        disabled={songwritersLoading}
+        onChange={(e) => {
+          const id = e.target.value;
+          const sw = visible.find((s) => s.id === id) || songwriters.find((s) => s.id === id);
+          if (sw) handleAdd(sw);
+        }}
+        className="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-orange-400 cursor-pointer"
+      >
+        <option value="">
+          {songwritersLoading
+            ? "Loading your songwriters..."
+            : isSearchingDB
               ? searching
                 ? "Searching…"
-                : `No songwriters found for “${query.trim()}” — create one below.`
-              : "No songwriters yet — search below or create one."}
-          </div>
-        ) : (
-          visible.map((sw) => {
-            const added = existing.some((e) => e.songwriter_id === sw.id);
-            return (
-              <button
-                type="button"
-                key={sw.id}
-                onClick={() => handleAdd(sw)}
-                disabled={added}
-                className={`w-full text-left px-4 py-2.5 flex items-center justify-between gap-2 text-sm transition ${
-                  added ? "text-gray-400 cursor-not-allowed" : "text-gray-800 hover:bg-orange-50"
-                }`}
-              >
-                <span className="min-w-0">
-                  <span className="block font-medium truncate">{fullName(sw)}</span>
-                </span>
-                {added && <span className="text-[11px] font-semibold shrink-0">Added</span>}
-              </button>
-            );
-          })
-        )}
-      </div>
+                : visible.length
+                  ? `Search results (${visible.length}) — select one`
+                  : `No songwriters found for “${query.trim()}”`
+              : songwriters.length
+                ? "Select a songwriter"
+                : "No songwriters yet — search or add below"}
+        </option>
+        {visible.map((sw) => {
+          const added = existing.some((e) => e.songwriter_id === sw.id);
+          return (
+            <option key={sw.id} value={sw.id} disabled={added}>
+              {fullName(sw)}
+              {added ? " — added" : ""}
+            </option>
+          );
+        })}
+      </select>
 
       <div className="relative">
         <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />

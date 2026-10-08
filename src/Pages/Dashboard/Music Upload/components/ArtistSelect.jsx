@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "sonner";
-import { Search, UserPlus, X, Loader2, Check } from "lucide-react";
+import { Search, UserPlus, X, Loader2 } from "lucide-react";
 import userApi from "../../../../utils/userApi";
 import { searchContributors } from "../../../../utils/search";
 import { getErrorMessage } from "../../../../utils/errorHelper";
@@ -191,50 +191,37 @@ export default function ArtistSelect({ value, onChange, error }) {
         </div>
       )}
 
-      <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide">
-        {contributorsLoading
-          ? "Loading your artists..."
-          : isSearchingDB
-            ? `Searching all artists for “${query.trim()}”…`
-            : "Your artists — tap to select, or search the full database below"}
-      </p>
-      <div className="border border-gray-200 rounded-xl bg-white divide-y divide-gray-100 max-h-52 overflow-y-auto">
-        {contributorsLoading ? (
-          <div className="px-4 py-3 text-sm text-gray-500 flex items-center gap-2">
-            <Loader2 size={14} className="animate-spin" /> Loading artists...
-          </div>
-        ) : visible.length === 0 ? (
-          <div className="px-4 py-3 text-sm text-gray-500">
-            {isSearchingDB
+      <select
+        value=""
+        disabled={contributorsLoading}
+        onChange={(e) => {
+          const id = e.target.value;
+          const artist = visible.find((c) => c.id === id) || contributors.find((c) => c.id === id);
+          if (artist) toggle(artist);
+        }}
+        className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-orange-400 cursor-pointer"
+      >
+        <option value="">
+          {contributorsLoading
+            ? "Loading your artists..."
+            : isSearchingDB
               ? searching
                 ? "Searching…"
-                : `No artists found for “${query.trim()}” — try Add new artist below.`
-              : "No artists yet — search below or add a new artist."}
-          </div>
-        ) : (
-          visible.map((c) => {
-            const isSelected = selected.includes(c.id);
-            return (
-              <button
-                type="button"
-                key={c.id}
-                onClick={() => toggle(c)}
-                className={`w-full text-left px-4 py-2.5 flex items-center justify-between gap-2 text-sm transition ${
-                  isSelected ? "bg-orange-50 text-orange-700 font-semibold" : "text-gray-800 hover:bg-gray-50"
-                }`}
-              >
-                <span className="min-w-0">
-                  <span className="block truncate">{c.stage_name || c.legal_name}</span>
-                  {c.stage_name && c.legal_name && c.stage_name !== c.legal_name && (
-                    <span className="block text-xs text-gray-500 truncate">{c.legal_name}</span>
-                  )}
-                </span>
-                {isSelected ? <Check size={15} className="shrink-0 text-orange-600" /> : <UserPlus size={14} className="shrink-0 text-gray-300" />}
-              </button>
-            );
-          })
-        )}
-      </div>
+                : visible.length
+                  ? `Search results (${visible.length}) — select one`
+                  : `No artists found for “${query.trim()}”`
+              : contributors.length
+                ? "Select an artist"
+                : "No artists yet — search or add below"}
+        </option>
+        {visible.map((c) => (
+          <option key={c.id} value={c.id} disabled={selected.includes(c.id)}>
+            {c.stage_name || c.legal_name}
+            {c.stage_name && c.legal_name && c.stage_name !== c.legal_name ? ` (${c.legal_name})` : ""}
+            {selected.includes(c.id) ? " — selected" : ""}
+          </option>
+        ))}
+      </select>
 
       <div className="relative">
         <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
