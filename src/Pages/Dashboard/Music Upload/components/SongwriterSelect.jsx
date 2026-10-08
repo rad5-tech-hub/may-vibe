@@ -3,15 +3,18 @@ import PropTypes from "prop-types";
 import { toast } from "sonner";
 import { Search, Plus, X, Loader2, FileSignature } from "lucide-react";
 import userApi from "../../../../utils/userApi";
+import { searchSongwriters } from "../../../../utils/search";
 import { getErrorMessage } from "../../../../utils/errorHelper";
 import { useReleaseWizard } from "../context/ReleaseWizardContext";
 
+const NAME_RE = /^[\p{L}\s-]+$/u;
+
 function SongwriterFormModal({ open, onClose, onCreated }) {
-  const [form, setForm] = useState({ first_name: "", middle_name: "", last_name: "", ipi_number: "" });
+  const [form, setForm] = useState({ first_name: "", middle_name: "", last_name: "" });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (open) setForm({ first_name: "", middle_name: "", last_name: "", ipi_number: "" });
+    if (open) setForm({ first_name: "", middle_name: "", last_name: "" });
   }, [open]);
 
   if (!open) return null;
@@ -19,16 +22,16 @@ function SongwriterFormModal({ open, onClose, onCreated }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.first_name.trim() || !form.last_name.trim()) return toast.error("First and last name are required");
-    if (form.first_name.length > 120 || form.last_name.length > 120 || form.middle_name.length > 120) {
-      return toast.error("Names must be 120 characters or fewer");
-    }
+    const names = [form.first_name.trim(), form.middle_name.trim(), form.last_name.trim()].filter(Boolean);
+    if (names.some((n) => n.length > 120)) return toast.error("Names must be 120 characters or fewer");
+    if (names.some((n) => !NAME_RE.test(n)))
+      return toast.error("Names may only contain letters, spaces and hyphens — no numbers or symbols.");
     setSaving(true);
     try {
       const res = await userApi.post("/contributors/songwriters", {
         first_name: form.first_name.trim(),
         middle_name: form.middle_name.trim() || null,
         last_name: form.last_name.trim(),
-        ipi_number: form.ipi_number.trim() || undefined,
       });
       const data = res.data?.data || {};
       if (!data.id) throw new Error("Songwriter created but no id returned");
@@ -36,7 +39,12 @@ function SongwriterFormModal({ open, onClose, onCreated }) {
       onCreated(data);
       onClose();
     } catch (err) {
-      toast.error(getErrorMessage(err, "Failed to create songwriter"));
+      const msg = getErrorMessage(err, "Failed to create songwriter");
+      if (/need a label/i.test(msg)) {
+        toast.error("This account has no label on the server yet. Open the Subscription page and link a label with a label name.");
+      } else {
+        toast.error(msg);
+      }
     } finally {
       setSaving(false);
     }
@@ -67,11 +75,10 @@ function SongwriterFormModal({ open, onClose, onCreated }) {
             <X size={18} />
           </button>
         </div>
-        <p className="text-xs text-gray-500 -mt-2">Use legal names (not stage names). First and last name are required.</p>
-        {input("first_name", "First name", true, "e.g. Ada", 120)}
-        {input("middle_name", "Middle name", false, "e.g. boy", 120)}
-        {input("last_name", "Last name", true, "e.g. Lovelace", 120)}
-        {input("ipi_number", "IPI number", false, "e.g. 00425147912", 64)}
+        <p className="text-xs text-gray-500 -mt-2">Use legal names (not stage names). Letters, spaces and hyphens only.</p>
+        {input("first_name", "First name", true, "e.g. John-Paul", 120)}
+        {input("middle_name", "Middle name", false, "e.g. Emmanuel", 120)}
+        {input("last_name", "Last name", true, "e.g. Emmanuel", 120)}
         <div className="flex gap-3">
           <button type="button" onClick={onClose} className="cursor-pointer flex-1 bg-gray-100 hover:bg-gray-200 py-3 rounded-xl text-sm font-medium">
             Cancel
@@ -95,14 +102,42 @@ export default function SongwriterSelect({ existing, onAdd, onRemove }) {
   const { songwriters, songwritersLoading, pushSongwriter } = useReleaseWizard();
   const [query, setQuery] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+  const [searching, setSearching] = useState(false);
 
   const fullName = (s) => [s.first_name, s.middle_name, s.last_name].filter(Boolean).join(" ");
 
-  const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  const visible = songwriters.filter((sw) => {
-    const haystack = `${sw.first_name || ""} ${sw.middle_name || ""} ${sw.last_name || ""}`.toLowerCase();
-    return words.every((w) => haystack.includes(w));
-  });
+  // Global songwriter search (debounced — fires on word pause, not per keypress)
+  useEffect(() => {
+    const q = query.trim();
+    if (!q) {
+      setSearchResults([]);
+      setSearching(false);
+      return;
+    }
+    let cancelled = false;
+    setSearching(true);
+    const timer = setTimeout(() => {
+      searchSongwriters(q)
+        .then((results) => {
+          if (cancelled) return;
+          setSearchResults(results);
+        })
+        .catch(() => {
+          if (!cancelled) setSearchResults([]);
+        })
+        .finally(() => {
+          if (!cancelled) setSearching(false);
+        });
+    }, 500);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [query]);
+
+  const isSearchingDB = query.trim().length > 0;
+  const visible = isSearchingDB ? searchResults : songwriters;
 
   const handleAdd = (sw) => {
     if (existing.some((e) => e.songwriter_id === sw.id)) {
@@ -132,7 +167,11 @@ export default function SongwriterSelect({ existing, onAdd, onRemove }) {
       )}
 
       <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide">
-        {songwritersLoading ? "Loading your songwriters..." : "Your songwriters — tap to add"}
+        {songwritersLoading
+          ? "Loading your songwriters..."
+          : isSearchingDB
+            ? `Searching all songwriters for “${query.trim()}”…`
+            : "Your songwriters — tap to add, or search the full database below"}
       </p>
       <div className="border border-gray-200 rounded-xl bg-white divide-y divide-gray-100 max-h-44 overflow-y-auto">
         {songwritersLoading ? (
@@ -141,7 +180,11 @@ export default function SongwriterSelect({ existing, onAdd, onRemove }) {
           </div>
         ) : visible.length === 0 ? (
           <div className="px-4 py-3 text-sm text-gray-500">
-            No songwriters found{query.trim() ? ` for “${query.trim()}”` : ""} — create one below.
+            {isSearchingDB
+              ? searching
+                ? "Searching…"
+                : `No songwriters found for “${query.trim()}” — create one below.`
+              : "No songwriters yet — search below or create one."}
           </div>
         ) : (
           visible.map((sw) => {
@@ -158,7 +201,6 @@ export default function SongwriterSelect({ existing, onAdd, onRemove }) {
               >
                 <span className="min-w-0">
                   <span className="block font-medium truncate">{fullName(sw)}</span>
-                  {sw.ipi_number && <span className="block text-xs text-gray-500">IPI {sw.ipi_number}</span>}
                 </span>
                 {added && <span className="text-[11px] font-semibold shrink-0">Added</span>}
               </button>
@@ -172,9 +214,10 @@ export default function SongwriterSelect({ existing, onAdd, onRemove }) {
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search songwriters by word..."
-          className="w-full bg-white border border-gray-200 rounded-xl pl-9 pr-4 py-2.5 text-sm outline-none focus:border-orange-400"
+          placeholder="Search all songwriters by word..."
+          className="w-full bg-white border border-gray-200 rounded-xl pl-9 pr-9 py-2.5 text-sm outline-none focus:border-orange-400"
         />
+        {searching && <Loader2 size={14} className="animate-spin absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />}
       </div>
 
       <button

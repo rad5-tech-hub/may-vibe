@@ -1,7 +1,13 @@
 import PropTypes from "prop-types";
-import { Pencil, Loader2, CheckCircle2, Calendar, Send } from "lucide-react";
+import { Pencil, Loader2, CheckCircle2, Calendar, Send, Film } from "lucide-react";
 import { useReleaseWizard } from "../context/ReleaseWizardContext";
+import TikTokClipPicker from "../components/TikTokClipPicker";
 import { AI_CLASSES, LANGUAGE_OPTIONS, TERRITORIES } from "../../../../utils/releaseConstants";
+
+const fmtClip = (s) => {
+  const sec = Math.max(0, Math.round(Number(s) || 0));
+  return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}`;
+};
 
 function EditBtn({ onClick }) {
   return (
@@ -123,15 +129,39 @@ export default function Step5DeliveryReview() {
         </div>
       </div>
 
+      {/* TikTok Clips — per track, before the final review */}
+      <div className="bg-white border border-gray-200 rounded-2xl p-5">
+        <div className="flex items-center justify-between gap-3 mb-1">
+          <h4 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+            <Film size={15} className="text-orange-500" /> TikTok Clips
+          </h4>
+          <span className="text-[11px] text-gray-400">30 seconds per track — drag to position</span>
+        </div>
+        <p className="text-[11px] text-gray-500 mb-4">
+          The release stores [start, start + 30) for each track — e.g. 01:24 → 01:54. The window is configured individually per track.
+        </p>
+        <div className="space-y-6">
+          {tracks.map((t, i) => (
+            <div key={t.key}>
+              <p className="text-sm font-semibold text-gray-800 mb-2">
+                {i + 1}. {t.title || "Untitled"}
+              </p>
+              <TikTokClipPicker track={t} />
+              {errors[`tiktok_${t.key}`] && <p className="text-xs text-red-500 mt-1.5">{errors[`tiktok_${t.key}`]}</p>}
+            </div>
+          ))}
+        </div>
+      </div>
+
       <Panel title="Release Information" onEdit={() => goToStep(1)}>
         <dl>
           <Row label="Release title" value={release.title} />
           <Row label="Primary artist(s)" value={`${artistCount} selected`} />
           <Row label="Genre" value={genreName(release.genre_id)} />
           <Row label="Sub-genre" value={genreName(release.sub_genre_id)} />
-          <Row label="Label" value={release.label_name} />
-          <Row label="Copyright of recording" value={release.copyright_of_recording} />
-          <Row label="Copyright of release" value={release.copyright_of_release} />
+          <Row label="Record label" value={release.label_name} />
+          <Row label="Copyright Date of Recording" value={release.copyright_of_recording} />
+          <Row label="Copyright Date of Release" value={release.copyright_of_release} />
           <Row label="UPC" value={release.upc || "Auto-generate"} />
           <Row label="Release type" value={tracks.length === 1 ? "Single" : `Multi-track release (${tracks.length} tracks)`} />
           <Row label="Territory" value={release.territory || "Worldwide"} />
@@ -156,8 +186,12 @@ export default function Step5DeliveryReview() {
             <Row label="AI classification" value={aiLabel(t.ai_classification)} />
             <Row label="Lyrics / instrumental" value={t.is_instrumental ? "Instrumental" : "Has lyrics"} />
             {!t.is_instrumental && <Row label="Language" value={languageLabel(t.language)} />}
-            <Row label="Explicit" value={t.explicit_content === null ? "—" : t.explicit_content ? "Yes" : "No"} />
+            {!t.is_instrumental && <Row label="Explicit" value={t.explicit_content === null ? "—" : t.explicit_content ? "Yes" : "No"} />}
             <Row label="ISRC" value={t.isrc || "Auto-generate"} />
+            <Row
+              label="TikTok clip"
+              value={t.tiktok_clip_start != null ? `${fmtClip(t.tiktok_clip_start)} → ${fmtClip(t.tiktok_clip_start + 30)}` : "Not selected"}
+            />
             <Row label="Audio" value={t.audioMeta ? `${t.audioMeta.container.toUpperCase()} · ${t.audioMeta.bitDepth}-bit · ${t.audioMeta.sampleRate} Hz` : "Missing"} />
           </dl>
         </Panel>

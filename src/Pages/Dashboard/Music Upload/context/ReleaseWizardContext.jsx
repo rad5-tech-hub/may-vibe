@@ -32,6 +32,7 @@ const makeTrack = (over = {}) => ({
   audioName: "",
   audioPreview: "",
   audioMeta: null,
+  tiktok_clip_start: null,
   is_instrumental: false,
   language: "",
   lyrics: "",
@@ -78,6 +79,7 @@ export function ReleaseWizardProvider({ children }) {
   const [genresLoading, setGenresLoading] = useState(true);
   const [contributors, setContributors] = useState([]);
   const [contributorsLoading, setContributorsLoading] = useState(true);
+  const [serverLabelId, setServerLabelId] = useState(undefined);
   const [songwriters, setSongwriters] = useState([]);
   const [songwritersLoading, setSongwritersLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -101,6 +103,7 @@ export function ReleaseWizardProvider({ children }) {
       .then((res) => {
         const list = res.data?.data || [];
         setContributors(Array.isArray(list) ? list : []);
+        setServerLabelId(res.data?.scope?.label_id ?? null);
       })
       .catch(() => {})
       .finally(() => setContributorsLoading(false));
@@ -199,12 +202,20 @@ export function ReleaseWizardProvider({ children }) {
       const errs = {};
 
       if (stepId === 1) {
+        const yearFirst = (v) => /^\d{4}/.test(v.trim()) && v.trim().length > 4;
         if (!release.title.trim()) errs.title = "Release title is required.";
         if (!release.primary_artist_ids.length) errs.primary_artist_ids = "Select at least one primary artist.";
         if (!release.genre_id) errs.genre_id = "Genre is required.";
         if (!release.sub_genre_id) errs.sub_genre_id = "Sub-genre is required.";
-        if (!release.copyright_of_recording.trim()) errs.copyright_of_recording = "Copyright of recording is required.";
-        if (!release.copyright_of_release.trim()) errs.copyright_of_release = "Copyright of release is required.";
+        else if (release.genre_id && release.sub_genre_id === release.genre_id)
+          errs.sub_genre_id = "Sub-genre must be different from the main genre.";
+        if (!release.label_name.trim()) errs.label_name = "Record label is required.";
+        if (!release.copyright_of_recording.trim()) errs.copyright_of_recording = "Copyright Date of Recording is required.";
+        else if (!yearFirst(release.copyright_of_recording))
+          errs.copyright_of_recording = "Must start with a 4-digit year, e.g. 2026 Mavin Records.";
+        if (!release.copyright_of_release.trim()) errs.copyright_of_release = "Copyright Date of Release is required.";
+        else if (!yearFirst(release.copyright_of_release))
+          errs.copyright_of_release = "Must start with a 4-digit year, e.g. 2026 Mavin Records.";
         if (release.upc.trim() && !UPC_REGEX.test(release.upc.trim())) errs.upc = "UPC must be 12–14 digits.";
       }
 
@@ -225,11 +236,12 @@ export function ReleaseWizardProvider({ children }) {
             errs[`title_${t.key}`] = "For a single release the track title must match the release title.";
           }
           if (!t.ai_classification) errs[`ai_${t.key}`] = "AI classification is required.";
-          if (t.explicit_content === null) errs[`explicit_${t.key}`] = "Explicit content choice is required.";
+          if (t.explicit_content === null && !t.is_instrumental) errs[`explicit_${t.key}`] = "Explicit content choice is required.";
           if (!t.is_instrumental && !t.language) errs[`language_${t.key}`] = "Language is required for tracks with lyrics.";
           if (t.is_instrumental && (t.lyrics || t.language)) errs[`instrumental_${t.key}`] = "Instrumental tracks cannot have lyrics or language.";
           if (t.isrc.trim() && !ISRC_REGEX.test(t.isrc.trim())) errs[`isrc_${t.key}`] = "ISRC format is invalid (e.g. NOPA26100001).";
           if (t.version === "custom" && !t.custom_version.trim()) errs[`version_${t.key}`] = "Enter the custom version name.";
+          if (!t.producers.length) errs[`producers_${t.key}`] = "At least one producer is required.";
         });
       }
 
@@ -248,6 +260,8 @@ export function ReleaseWizardProvider({ children }) {
         tracks.forEach((t, i) => {
           if (!t.audioMeta) errs[`audio_${t.key}`] = `Track ${i + 1} needs a valid audio file.`;
           if (!t.title.trim()) errs[`title_${t.key}`] = `Track ${i + 1}: title is required.`;
+          if (t.tiktok_clip_start == null || t.tiktok_clip_start < 0 || !Number.isInteger(t.tiktok_clip_start))
+            errs[`tiktok_${t.key}`] = `Track ${i + 1}: select a TikTok clip (30 seconds).`;
         });
         if (tracks.length === 1 && tracks[0].title.trim() !== release.title.trim()) {
           errs[`title_${tracks[0].key}`] = "For a single release the track title must match the release title.";
@@ -328,6 +342,10 @@ export function ReleaseWizardProvider({ children }) {
         if (t.lyrics.trim()) meta.lyrics = t.lyrics.trim();
       }
       if (t.isrc.trim()) meta.isrc = t.isrc.trim();
+      if (t.tiktok_clip_start != null) {
+        meta.tiktok_clip_start = t.tiktok_clip_start;
+        meta.tiktok_clip_duration = 30;
+      }
       const genreId = t.genre_id || release.genre_id;
       const subGenreId = t.sub_genre_id || release.sub_genre_id;
       if (genreId) meta.genre_id = genreId;
@@ -355,6 +373,10 @@ export function ReleaseWizardProvider({ children }) {
         if (t.lyrics.trim()) meta.lyrics = t.lyrics.trim();
       }
       if (t.isrc.trim()) meta.isrc = t.isrc.trim();
+      if (t.tiktok_clip_start != null) {
+        meta.tiktok_clip_start = t.tiktok_clip_start;
+        meta.tiktok_clip_duration = 30;
+      }
       if (t.genre_id) meta.genre_id = t.genre_id;
       if (t.sub_genre_id) meta.sub_genre_id = t.sub_genre_id;
       return meta;
@@ -455,6 +477,10 @@ export function ReleaseWizardProvider({ children }) {
         if (!t.is_instrumental && t.language) entry.language = t.language;
         if (!t.is_instrumental && t.lyrics.trim()) entry.lyrics = t.lyrics.trim();
         if (t.isrc.trim()) entry.isrc = t.isrc.trim();
+        if (t.tiktok_clip_start != null) {
+          entry.tiktok_clip_start = t.tiktok_clip_start;
+          entry.tiktok_clip_duration = 30;
+        }
         if (t.genre_id) entry.genre_id = t.genre_id;
         if (t.sub_genre_id) entry.sub_genre_id = t.sub_genre_id;
         return entry;
@@ -535,6 +561,7 @@ export function ReleaseWizardProvider({ children }) {
       genresLoading,
       contributors,
       contributorsLoading,
+      serverLabelId,
       pushContributor,
       songwriters,
       songwritersLoading,
@@ -553,7 +580,7 @@ export function ReleaseWizardProvider({ children }) {
       submit,
       resetWizard,
     }),
-    [step, goToStep, release, patchRelease, tracks, patchTrack, addTrack, attachAudio, removeTrack, moveTrack, isSingle, genres, genresLoading, contributors, contributorsLoading, pushContributor, songwriters, songwritersLoading, pushSongwriter, errors, validateStep, collectErrors, scrollToTop, selectedTrack, selectedTrackKey, submitting, submitProgress, submitted, submit, resetWizard]
+    [step, goToStep, release, patchRelease, tracks, patchTrack, addTrack, attachAudio, removeTrack, moveTrack, isSingle, genres, genresLoading, contributors, contributorsLoading, serverLabelId, pushContributor, songwriters, songwritersLoading, pushSongwriter, errors, validateStep, collectErrors, scrollToTop, selectedTrack, selectedTrackKey, submitting, submitProgress, submitted, submit, resetWizard]
   );
 
   return <ReleaseWizardContext.Provider value={value}>{children}</ReleaseWizardContext.Provider>;
@@ -567,4 +594,4 @@ export function useReleaseWizard() {
   return ctx;
 }
 
-export { makeTrack };
+export { makeTrack, ReleaseWizardContext };

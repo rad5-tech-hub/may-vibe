@@ -1,27 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { BadgeCheck, Calendar, Tag, Loader2, RefreshCw } from "lucide-react";
+import { BadgeCheck, Calendar, Tag, Loader2, RefreshCw, AlertTriangle } from "lucide-react";
 import { getSubscription, hasActiveSubscription, subscribe } from "../../../utils/subscription";
 import { getErrorMessage } from "../../../utils/errorHelper";
+import userApi from "../../../utils/userApi";
 
 export default function SubscriptionPage() {
   const [sub, setSub] = useState(() => (hasActiveSubscription() ? getSubscription() : null));
   const [labelName, setLabelName] = useState("");
   const [busy, setBusy] = useState(false);
+  // undefined = not checked yet, null = server says NO label, string = label id present
+  const [serverLabelId, setServerLabelId] = useState(undefined);
+
+  useEffect(() => {
+    userApi
+      .get("/contributors")
+      .then((res) => setServerLabelId(res.data?.scope?.label_id ?? null))
+      .catch(() => setServerLabelId(undefined));
+  }, []);
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
+    if (!labelName.trim()) {
+      toast.error("Enter a label name — a label is required for contributors and releases.");
+      return;
+    }
     setBusy(true);
     try {
       const data = await subscribe(labelName);
       setSub(data);
-      toast.success(`Subscribed to ${data?.plan?.name || "Free"} plan`);
+      setServerLabelId(data?.label?.id ?? null);
+      toast.success(`Subscribed to ${data?.plan?.name || "Free"} plan — label linked`);
     } catch (err) {
       toast.error(getErrorMessage(err, "Subscription failed"));
     } finally {
       setBusy(false);
     }
   };
+
+  const serverMissingLabel = serverLabelId === null;
 
   if (sub) {
     return (
@@ -50,7 +67,9 @@ export default function SubscriptionPage() {
               <dt className="text-gray-500 flex items-center gap-2">
                 <Tag size={14} /> Label
               </dt>
-              <dd className="font-medium text-gray-900">{sub.label?.name || "No label set"}</dd>
+              <dd className="font-medium text-gray-900">
+                {sub.label?.name || (serverLabelId ? "Linked to this account" : "No label set")}
+              </dd>
             </div>
             <div className="flex items-center justify-between py-2">
               <dt className="text-gray-500">Default artist</dt>
@@ -58,16 +77,20 @@ export default function SubscriptionPage() {
             </div>
           </dl>
 
-          {!sub.label && (
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-800">
-              No label on this subscription — releases need a label. Re-subscribe below with a label name.
+          {serverMissingLabel && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-xs text-red-800 flex gap-2">
+              <AlertTriangle size={15} className="shrink-0 mt-0.5" />
+              <span>
+                <span className="font-bold">The server reports no label on this account.</span> Adding contributors and creating releases will fail
+                until a label is linked. Use the form below — a label created on another account does not apply here.
+              </span>
             </div>
           )}
         </div>
 
-        {!sub.label && (
+        {(serverMissingLabel || !sub.label) && (
           <form onSubmit={handleSubscribe} className="bg-gray-50 border border-gray-200 rounded-3xl p-6 space-y-4">
-            <h3 className="font-bold text-gray-900 text-sm">Re-subscribe with a label</h3>
+            <h3 className="font-bold text-gray-900 text-sm">Link a label to this account *</h3>
             <input
               value={labelName}
               onChange={(e) => setLabelName(e.target.value)}
@@ -80,7 +103,7 @@ export default function SubscriptionPage() {
               className="cursor-pointer bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white font-semibold px-5 py-3 rounded-xl text-sm inline-flex items-center gap-2"
             >
               {busy ? <Loader2 size={15} className="animate-spin" /> : <RefreshCw size={15} />}
-              {busy ? "Subscribing..." : "Subscribe again"}
+              {busy ? "Linking..." : "Create / link label"}
             </button>
           </form>
         )}
@@ -102,13 +125,14 @@ export default function SubscriptionPage() {
 
         <form onSubmit={handleSubscribe} className="space-y-4">
           <div>
-            <label className="text-xs font-medium text-gray-600">Label name (optional)</label>
+            <label className="text-xs font-medium text-gray-600">Label name *</label>
             <input
               value={labelName}
               onChange={(e) => setLabelName(e.target.value)}
               placeholder="e.g. Nightshift Records"
               className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-orange-400"
             />
+            <p className="text-[11px] text-gray-400 mt-1">Required — contributors and releases are created under your label.</p>
           </div>
           <button
             type="submit"

@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "sonner";
 import { Search, Plus, X, Loader2, UserPlus, Check } from "lucide-react";
+import { searchContributors } from "../../../../utils/search";
 import { useReleaseWizard } from "../context/ReleaseWizardContext";
 import { ContributorFormModal } from "./ArtistSelect";
 
@@ -11,12 +12,40 @@ export default function CreditPicker({ roles, roleLabel, existing, onAdd, onRemo
   const [person, setPerson] = useState(null);
   const [role, setRole] = useState(roles[0] || "");
   const [showForm, setShowForm] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+  const [searching, setSearching] = useState(false);
 
-  const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  const visible = contributors.filter((c) => {
-    const haystack = `${c.stage_name || ""} ${c.legal_name || ""}`.toLowerCase();
-    return words.every((w) => haystack.includes(w));
-  });
+  // Search the WHOLE database (debounced — fires on word pause, not per keypress)
+  useEffect(() => {
+    const q = query.trim();
+    if (!q) {
+      setSearchResults([]);
+      setSearching(false);
+      return;
+    }
+    let cancelled = false;
+    setSearching(true);
+    const timer = setTimeout(() => {
+      searchContributors(q)
+        .then((results) => {
+          if (cancelled) return;
+          setSearchResults(results);
+        })
+        .catch(() => {
+          if (!cancelled) setSearchResults([]);
+        })
+        .finally(() => {
+          if (!cancelled) setSearching(false);
+        });
+    }, 500);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [query]);
+
+  const isSearchingDB = query.trim().length > 0;
+  const visible = isSearchingDB ? searchResults : contributors;
 
   const handleAdd = () => {
     if (!person) return toast.error(`Select a person for ${roleLabel.toLowerCase()}`);
@@ -47,7 +76,11 @@ export default function CreditPicker({ roles, roleLabel, existing, onAdd, onRemo
       )}
 
       <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide">
-        {contributorsLoading ? "Loading your contributors..." : `Your contributors — tap to select as ${roleLabel.toLowerCase()}`}
+        {contributorsLoading
+          ? "Loading your contributors..."
+          : isSearchingDB
+            ? `Searching all ${roleLabel.toLowerCase()}s for “${query.trim()}”…`
+            : `Your contributors — tap to select, or search all ${roleLabel.toLowerCase()}s below`}
       </p>
       <div className="border border-gray-200 rounded-xl bg-white divide-y divide-gray-100 max-h-44 overflow-y-auto">
         {contributorsLoading ? (
@@ -55,7 +88,13 @@ export default function CreditPicker({ roles, roleLabel, existing, onAdd, onRemo
             <Loader2 size={14} className="animate-spin" /> Loading contributors...
           </div>
         ) : visible.length === 0 ? (
-          <div className="px-4 py-3 text-sm text-gray-500">No contributors found{query.trim() ? ` for “${query.trim()}”` : ""}.</div>
+          <div className="px-4 py-3 text-sm text-gray-500">
+            {isSearchingDB
+              ? searching
+                ? "Searching…"
+                : `No results for “${query.trim()}” — try New ${roleLabel.toLowerCase()} below.`
+              : "No contributors yet — search below or add a new one."}
+          </div>
         ) : (
           visible.map((c) => {
             const isPicked = person?.id === c.id;
@@ -90,9 +129,10 @@ export default function CreditPicker({ roles, roleLabel, existing, onAdd, onRemo
               setPerson(null);
               setQuery(e.target.value);
             }}
-            placeholder={`Search ${roleLabel.toLowerCase()}s by word...`}
-            className="w-full bg-white border border-gray-200 rounded-xl pl-9 pr-4 py-2.5 text-sm outline-none focus:border-orange-400"
+            placeholder={`Search all ${roleLabel.toLowerCase()}s by word...`}
+            className="w-full bg-white border border-gray-200 rounded-xl pl-9 pr-9 py-2.5 text-sm outline-none focus:border-orange-400"
           />
+          {searching && !person && <Loader2 size={14} className="animate-spin absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />}
         </div>
         <select
           value={role}

@@ -84,6 +84,8 @@ const Signup = () => {
       if (token) {
         localStorage.setItem("token", token);
       }
+      // Brand-new account — any cached subscription belongs to someone else
+      localStorage.removeItem("subscription");
 
       toast.success("Account created! Check your email for OTP");
 

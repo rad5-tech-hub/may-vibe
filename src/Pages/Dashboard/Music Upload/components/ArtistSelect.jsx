@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 import { toast } from "sonner";
 import { Search, UserPlus, X, Loader2, Check } from "lucide-react";
 import userApi from "../../../../utils/userApi";
+import { searchContributors } from "../../../../utils/search";
 import { getErrorMessage } from "../../../../utils/errorHelper";
 import { useReleaseWizard } from "../context/ReleaseWizardContext";
 
 export function ContributorFormModal({ open, onClose, onCreated, title = "Add Contributor" }) {
   const [form, setForm] = useState({ stage_name: "", legal_name: "", bio: "", country: "", spotify_artist_id: "", apple_music_artist_id: "" });
-  const [artwork, setArtwork] = useState(null);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -35,7 +35,6 @@ export function ContributorFormModal({ open, onClose, onCreated, title = "Add Co
         apple_music_artist_url: null,
       })
     );
-    if (artwork) fd.append("artwork", artwork);
     setSaving(true);
     try {
       const res = await userApi.post("/contributors", fd);
@@ -45,7 +44,12 @@ export function ContributorFormModal({ open, onClose, onCreated, title = "Add Co
       onCreated(data);
       onClose();
     } catch (err) {
-      toast.error(getErrorMessage(err, "Failed to add contributor"));
+      const msg = getErrorMessage(err, "Failed to add contributor");
+      if (/need a label/i.test(msg)) {
+        toast.error("This account has no label on the server yet. Open the Subscription page and link a label with a label name.");
+      } else {
+        toast.error(msg);
+      }
     } finally {
       setSaving(false);
     }
@@ -72,30 +76,8 @@ export function ContributorFormModal({ open, onClose, onCreated, title = "Add Co
           <button type="button" onClick={onClose} className="cursor-pointer p-1 hover:bg-gray-100 rounded-lg"><X size={18} /></button>
         </div>
         {field("stage_name", "Stage name *", "e.g. Nia Archives")}
-        {field("legal_name", "Legal name", "e.g. Nia Imani Franklin")}
-        <div>
-          <label className="text-xs font-medium text-gray-600">Bio</label>
-          <textarea
-            value={form.bio}
-            onChange={(e) => setForm({ ...form, bio: e.target.value })}
-            rows={2}
-            placeholder="Producer and vocalist"
-            className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-orange-400"
-          />
-        </div>
-        {field("country", "Country code (ISO)", "e.g. GB")}
-        {field("spotify_artist_id", "Spotify artist ID", "e.g. 4Y3snJPTtH6KWSsXSjeLXi")}
-        {field("apple_music_artist_id", "Apple Music artist ID", "e.g. 1440857781")}
-        <div>
-          <label className="text-xs font-medium text-gray-600">Photo</label>
-          <div className="mt-1 flex items-center gap-2">
-            <label className="cursor-pointer text-sm font-semibold text-orange-600 underline">
-              Choose file
-              <input type="file" accept="image/*" onChange={(e) => setArtwork(e.target.files[0] || null)} className="hidden" />
-            </label>
-            <span className="text-xs text-gray-500 truncate max-w-[200px]">{artwork?.name || "No file chosen"}</span>
-          </div>
-        </div>
+        {field("spotify_artist_id", "Spotify Artist Profile ID", "e.g. 4Y3snJPTtH6KWSsXSjeLXi")}
+        {field("apple_music_artist_id", "Apple Music Artist Profile ID", "e.g. 1440857781")}
         <div className="flex gap-3">
           <button type="button" onClick={onClose} className="cursor-pointer flex-1 bg-gray-100 hover:bg-gray-200 py-3 rounded-xl text-sm font-medium">Cancel</button>
           <button type="submit" disabled={saving} className="cursor-pointer flex-1 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2">
@@ -120,6 +102,8 @@ export default function ArtistSelect({ value, onChange, error }) {
   const [query, setQuery] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [namesById, setNamesById] = useState({});
+  const [searchResults, setSearchResults] = useState([]);
+  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
     setNamesById((prev) => {
@@ -136,12 +120,46 @@ export default function ArtistSelect({ value, onChange, error }) {
     });
   }, [contributors]);
 
+  // Search the WHOLE database (debounced — fires on word pause, not per keypress)
+  useEffect(() => {
+    const q = query.trim();
+    if (!q) {
+      setSearchResults([]);
+      setSearching(false);
+      return;
+    }
+    let cancelled = false;
+    setSearching(true);
+    const timer = setTimeout(() => {
+      searchContributors(q)
+        .then((results) => {
+          if (cancelled) return;
+          setSearchResults(results);
+          setNamesById((prev) => {
+            const next = { ...prev };
+            for (const c of results) {
+              const name = c.stage_name || c.legal_name;
+              if (name && !next[c.id]) next[c.id] = name;
+            }
+            return next;
+          });
+        })
+        .catch(() => {
+          if (!cancelled) setSearchResults([]);
+        })
+        .finally(() => {
+          if (!cancelled) setSearching(false);
+        });
+    }, 500);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [query]);
+
   const selected = value || [];
-  const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  const visible = contributors.filter((c) => {
-    const haystack = `${c.stage_name || ""} ${c.legal_name || ""}`.toLowerCase();
-    return words.every((w) => haystack.includes(w));
-  });
+  const isSearchingDB = query.trim().length > 0;
+  const visible = isSearchingDB ? searchResults : contributors;
 
   const remember = (c) => {
     const name = c.stage_name || c.legal_name;
@@ -174,7 +192,11 @@ export default function ArtistSelect({ value, onChange, error }) {
       )}
 
       <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide">
-        {contributorsLoading ? "Loading your artists..." : "Your artists — tap to select"}
+        {contributorsLoading
+          ? "Loading your artists..."
+          : isSearchingDB
+            ? `Searching all artists for “${query.trim()}”…`
+            : "Your artists — tap to select, or search the full database below"}
       </p>
       <div className="border border-gray-200 rounded-xl bg-white divide-y divide-gray-100 max-h-52 overflow-y-auto">
         {contributorsLoading ? (
@@ -182,7 +204,13 @@ export default function ArtistSelect({ value, onChange, error }) {
             <Loader2 size={14} className="animate-spin" /> Loading artists...
           </div>
         ) : visible.length === 0 ? (
-          <div className="px-4 py-3 text-sm text-gray-500">No artists found{query.trim() ? ` for “${query.trim()}”` : ""}.</div>
+          <div className="px-4 py-3 text-sm text-gray-500">
+            {isSearchingDB
+              ? searching
+                ? "Searching…"
+                : `No artists found for “${query.trim()}” — try Add new artist below.`
+              : "No artists yet — search below or add a new artist."}
+          </div>
         ) : (
           visible.map((c) => {
             const isSelected = selected.includes(c.id);
@@ -213,9 +241,10 @@ export default function ArtistSelect({ value, onChange, error }) {
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search by word (e.g. John Doe)..."
-          className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm outline-none focus:border-orange-400"
+          placeholder="Search all artists by word (e.g. John Doe)..."
+          className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-10 py-3 text-sm outline-none focus:border-orange-400"
         />
+        {searching && <Loader2 size={15} className="animate-spin absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />}
       </div>
 
       <button

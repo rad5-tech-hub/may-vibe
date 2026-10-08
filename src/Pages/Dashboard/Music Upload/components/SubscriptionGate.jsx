@@ -11,6 +11,10 @@ export default function SubscriptionGate({ onSubscribed }) {
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
+    if (!labelName.trim()) {
+      toast.error("Enter a label name — a label is required for contributors and releases.");
+      return;
+    }
     setBusy(true);
     try {
       const data = await subscribe(labelName);
@@ -36,13 +40,14 @@ export default function SubscriptionGate({ onSubscribed }) {
 
         <form onSubmit={handleSubscribe} className="space-y-4 text-left">
           <div>
-            <label className="text-xs font-medium text-gray-600">Label name (optional)</label>
+            <label className="text-xs font-medium text-gray-600">Label name *</label>
             <input
               value={labelName}
               onChange={(e) => setLabelName(e.target.value)}
               placeholder="e.g. Nightshift Records"
               className="mt-1 w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-orange-400"
             />
+            <p className="text-[11px] text-gray-400 mt-1">Required — contributors and releases are created under your label.</p>
           </div>
           <button
             type="submit"

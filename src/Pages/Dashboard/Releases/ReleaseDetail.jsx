@@ -7,13 +7,9 @@ import userApi from "../../../utils/userApi";
 import { getErrorMessage } from "../../../utils/errorHelper";
 import { ARTIST_ROLES, PRODUCER_ROLES, ENGINEER_ROLES, MUSICIAN_ROLES } from "../../../utils/releaseConstants";
 import EditReleaseModal from "./components/EditReleaseModal";
+import TikTokClipPicker from "../Music Upload/components/TikTokClipPicker";
 
 const ALL_MUSICIAN_ROLES = MUSICIAN_ROLES.flatMap((g) => g.roles);
-
-const formatTime = (s) => {
-  const sec = Math.max(0, Math.floor(Number(s) || 0));
-  return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}`;
-};
 
 const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1).replace(/_/g, " ") : "");
 
@@ -77,7 +73,7 @@ export default function ReleaseDetail() {
   const [error, setError] = useState("");
   const [artistMap, setArtistMap] = useState({});
   const [songwriterMap, setSongwriterMap] = useState({});
-  const [trackAudio, setTrackAudio] = useState(null);
+  const [trackAudioById, setTrackAudioById] = useState({});
   const [showEdit, setShowEdit] = useState(false);
   const [showDistribute, setShowDistribute] = useState(false);
   const [distributing, setDistributing] = useState(false);
@@ -128,23 +124,44 @@ export default function ReleaseDetail() {
       .catch(() => {});
   }, []);
 
-  // Audio for the release's track entity
   useEffect(() => {
-    setTrackAudio(null);
-    const trackId = release?.track_id;
-    if (!trackId) return;
-    let cancelled = false;
-    userApi
-      .get(`/track/${trackId}`)
-      .then((res) => {
-        const d = res.data?.data || res.data;
-        if (!cancelled && d?.file_url) setTrackAudio({ url: d.file_url, name: d.name || "" });
+    if (!release) return;
+    const rows = Array.isArray(release.releaseTracks) && release.releaseTracks.length
+      ? release.releaseTracks
+      : Array.isArray(release.tracks) && release.tracks.length
+        ? release.tracks
+        : release.track
+          ? [release.track]
+          : [];
+    const ids = rows
+      .map((t) => {
+        const src = t.track || t;
+        if (t.file_url || src.file_url) return null;
+        return t.track_id || src.id || t.id;
       })
-      .catch(() => {});
+      .filter(Boolean);
+    if (!ids.length) return;
+    let cancelled = false;
+    Promise.all(
+      ids.map((tid) =>
+        userApi
+          .get(`/track/${tid}`)
+          .then((res) => {
+            const d = res.data?.data || res.data;
+            return d?.file_url ? [tid, d.file_url] : null;
+          })
+          .catch(() => null)
+      )
+    ).then((pairs) => {
+      if (cancelled) return;
+      const next = {};
+      for (const p of pairs) if (p) next[p[0]] = p[1];
+      if (Object.keys(next).length) setTrackAudioById((prev) => ({ ...prev, ...next }));
+    });
     return () => {
       cancelled = true;
     };
-  }, [release?.track_id]);
+  }, [release]);
 
   const handleDistribute = async () => {
     setDistributing(true);
@@ -250,8 +267,8 @@ export default function ReleaseDetail() {
     ["Sub-genre", subGenreName],
     ["Label", labelName],
     ["UPC", release.upc],
-    ["Copyright of recording", release.copyright_of_recording],
-    ["Copyright of release", release.copyright_of_release],
+    ["Copyright Date of Recording", release.copyright_of_recording],
+    ["Copyright Date of Release", release.copyright_of_release],
     ["Explicit", typeof release.explicit_lyrics === "boolean" ? (release.explicit_lyrics ? "Yes" : "No") : null],
     ["Territory", release.territory],
     ["Language", release.language],
@@ -362,12 +379,6 @@ export default function ReleaseDetail() {
           <p className="text-sm text-gray-500">No track details available for this release.</p>
         ) : (
           <div className="space-y-4">
-            {trackAudio && (
-              <div className="bg-white border border-gray-200 rounded-xl p-3">
-                <p className="text-xs text-gray-500 mb-1.5">{trackAudio.name ? `Audio — ${trackAudio.name}` : "Audio"}</p>
-                <audio controls src={trackAudio.url} className="w-full" />
-              </div>
-            )}
             {trackList.map((t, i) => {
               const tr = t.track || t;
               const version = tr.version || t.version;
@@ -393,12 +404,6 @@ export default function ReleaseDetail() {
                 ["Explicit", typeof explicit === "boolean" ? (explicit ? "Yes" : "No") : null],
                 ["AI classification", tr.ai_classification || t.ai_classification ? cap(String(tr.ai_classification || t.ai_classification).replace(/_/g, " ")) : null],
                 ["Audio", audioInfo],
-                [
-                  "TikTok clip",
-                  typeof tr.tiktok_clip_start === "number"
-                    ? `${formatTime(tr.tiktok_clip_start)} → ${formatTime(tr.tiktok_clip_start + (tr.tiktok_clip_duration || 30))}`
-                    : null,
-                ],
                 ["Genre", typeof tr.genre === "string" ? tr.genre : tr.genre?.name || null],
               ].filter(([, v]) => v !== null && v !== undefined && v !== "");
 
@@ -454,11 +459,33 @@ export default function ReleaseDetail() {
                       <p className="text-sm text-gray-800 whitespace-pre-wrap">{t.lyrics ?? tr.lyrics}</p>
                     </div>
                   )}
-                  {(t.file_url || tr.file_url) && (
-                    <div className="mt-3">
-                      <audio controls src={t.file_url || tr.file_url} className="w-full" />
-                    </div>
-                  )}
+                  {(() => {
+                    const audioSrc = t.file_url || tr.file_url || trackAudioById[t.track_id || tr.id || t.id];
+                    const clipStart = tr.tiktok_clip_start ?? t.tiktok_clip_start;
+                    return (
+                      <>
+                        {audioSrc && (
+                          <div className="mt-3">
+                            <p className="text-xs font-bold text-gray-700 mb-1.5">Track audio</p>
+                            <audio controls src={audioSrc} className="w-full" />
+                          </div>
+                        )}
+                        {audioSrc && (
+                          <div className="mt-3">
+                            <p className="text-xs font-bold text-gray-700 mb-1.5">TikTok selection</p>
+                            <TikTokClipPicker
+                              readOnly
+                              track={{
+                                key: String(tr.id || t.id || i),
+                                audioPreview: audioSrc,
+                                tiktok_clip_start: typeof clipStart === "number" ? clipStart : 0,
+                              }}
+                            />
+                          </div>
+                        )}
+                      </>
+                    );
+                  })()}
                 </div>
               );
             })}

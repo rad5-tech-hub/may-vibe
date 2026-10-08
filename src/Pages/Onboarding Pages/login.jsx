@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { FaFacebookF, FaApple, FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 import "../../index.css";
 import { getErrorMessage } from "../../utils/errorHelper";
+import { pruneSubscriptionForUser } from "../../utils/subscription";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -61,8 +62,10 @@ const Login = () => {
       if (!decoded || !decoded.userId) {
         throw new Error("Invalid authentication token");
       }
-      // Save decoded user info (optional but useful)
-      localStorage.setItem("user", JSON.stringify(decoded));
+      // A cached subscription belongs to one account — drop it if it isn't this user's
+      pruneSubscriptionForUser(decoded.userId);
+      const profile = response.data.user && typeof response.data.user === "object" ? response.data.user : {};
+      localStorage.setItem("user", JSON.stringify({ ...decoded, ...profile }));
       toast.success("Welcome back!");
 
       setTimeout(() => {

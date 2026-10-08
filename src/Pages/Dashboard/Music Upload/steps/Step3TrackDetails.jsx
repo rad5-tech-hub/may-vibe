@@ -178,33 +178,6 @@ export default function Step3TrackDetails() {
           </div>
 
           <div>
-            <label className={labelCls}>Explicit Content *</label>
-            <div className="mt-1 flex gap-2">
-              {[
-                { v: true, label: "Yes" },
-                { v: false, label: "No" },
-              ].map((opt) => (
-                <button
-                  key={opt.label}
-                  type="button"
-                  onClick={() => {
-                    patchTrack(t.key, { explicit_content: opt.v });
-                    clearErr("explicit");
-                  }}
-                  className={`cursor-pointer flex-1 py-2.5 rounded-xl text-sm font-semibold border transition ${
-                    t.explicit_content === opt.v
-                      ? "bg-orange-500 border-orange-500 text-white"
-                      : "bg-white border-gray-200 text-gray-600 hover:border-orange-300"
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-            {err("explicit") && <p className="text-xs text-red-500 mt-1">{err("explicit")}</p>}
-          </div>
-
-          <div>
             <label className={labelCls}>ISRC (optional)</label>
             <input
               value={t.isrc}
@@ -231,9 +204,10 @@ export default function Step3TrackDetails() {
                   key={opt.label}
                   type="button"
                   onClick={() => {
-                    patchTrack(t.key, { is_instrumental: opt.v });
+                    patchTrack(t.key, { is_instrumental: opt.v, ...(opt.v ? { explicit_content: null, language: "", lyrics: "" } : {}) });
                     clearErr("instrumental");
                     clearErr("language");
+                    clearErr("explicit");
                   }}
                   className={`cursor-pointer flex-1 py-2.5 rounded-xl text-sm font-semibold border transition ${
                     t.is_instrumental === opt.v ? "bg-orange-500 border-orange-500 text-white" : "bg-white border-gray-200 text-gray-600 hover:border-orange-300"
@@ -278,6 +252,35 @@ export default function Step3TrackDetails() {
               </div>
             )}
             {err("instrumental") && <p className="text-xs text-red-500 mt-1">{err("instrumental")}</p>}
+
+            {!t.is_instrumental && (
+              <div className="mt-5 pt-4 border-t border-gray-100">
+                <label className={labelCls}>Explicit Content *</label>
+                <div className="mt-1 flex gap-2">
+                  {[
+                    { v: true, label: "Yes" },
+                    { v: false, label: "No" },
+                  ].map((opt) => (
+                    <button
+                      key={opt.label}
+                      type="button"
+                      onClick={() => {
+                        patchTrack(t.key, { explicit_content: opt.v });
+                        clearErr("explicit");
+                      }}
+                      className={`cursor-pointer flex-1 py-2.5 rounded-xl text-sm font-semibold border transition ${
+                        t.explicit_content === opt.v
+                          ? "bg-orange-500 border-orange-500 text-white"
+                          : "bg-white border-gray-200 text-gray-600 hover:border-orange-300"
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+                {err("explicit") && <p className="text-xs text-red-500 mt-1">{err("explicit")}</p>}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -293,7 +296,7 @@ export default function Step3TrackDetails() {
       </Section>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <Section title="Producers">
+        <Section title="Producers *" error={err("producers")}>
           <CreditPicker
             roles={PRODUCER_ROLES}
             roleLabel="Producer"
@@ -302,7 +305,7 @@ export default function Step3TrackDetails() {
             onRemove={(i) => removeCredit("producers", i)}
           />
         </Section>
-        <Section title="Engineers">
+        <Section title="Engineers (optional)">
           <CreditPicker
             roles={ENGINEER_ROLES}
             roleLabel="Engineer"

@@ -1,4 +1,5 @@
-import { Check } from "lucide-react";
+import { Check, AlertTriangle } from "lucide-react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { ReleaseWizardProvider, useReleaseWizard } from "./context/ReleaseWizardContext";
 import Step1ReleaseDetails from "./steps/Step1ReleaseDetails";
@@ -125,9 +126,23 @@ function NavFooter() {
 }
 
 function WizardInner() {
-  const { step } = useReleaseWizard();
+  const { step, serverLabelId } = useReleaseWizard();
   return (
     <div>
+      {serverLabelId === null && (
+        <div className="mb-4 bg-red-50 border border-red-200 rounded-xl px-4 py-3 flex items-center justify-between gap-3 text-xs text-red-800">
+          <span className="flex items-center gap-2">
+            <AlertTriangle size={15} className="shrink-0" />
+            <span>
+              <span className="font-bold">No label on this account (server-side).</span> Adding contributors and creating releases will fail until you
+              link one.
+            </span>
+          </span>
+          <Link to="/dashboard/subscription" className="font-bold underline shrink-0">
+            Open Subscription
+          </Link>
+        </div>
+      )}
       <Stepper />
       <StepBody key={step} />
       <NavFooter />

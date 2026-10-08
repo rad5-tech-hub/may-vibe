@@ -2,9 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Menu, Search, Bell } from 'lucide-react';
 import Sidebar from './sidebar.jsx';
+import { decodeJwt, getDisplayName, getToken } from '../../utils/auth';
 
 const Dashboard = () => {
+  const payload = decodeJwt(getToken() || "") || {};
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [displayName] = useState(() => getDisplayName(payload));
+  const [avatarUrl] = useState(() => payload.profilePhoto || payload.image_url || '');
   const location = useLocation();
   const mainRef = useRef(null);
 
@@ -32,8 +36,14 @@ const Dashboard = () => {
               <button className="p-2 hover:bg-gray-100 rounded-lg hidden sm:block transition-colors"><Search size={20} className="text-gray-600" /></button>
               <button className="p-2 hover:bg-gray-100 rounded-lg relative transition-colors"><Bell size={20} className="text-gray-600" /><span className="absolute top-1 right-1 w-2 h-2 bg-orange-500 rounded-full" /></button>
               <div className="flex items-center gap-2 sm:gap-3">
-                <span className="text-sm font-medium text-gray-900 hidden sm:block">Junior Achebe</span>
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="Profile" className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover ring-2 ring-gray-100" />
+                <span className="text-sm font-medium text-gray-900 hidden sm:block">{displayName || "User"}</span>
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt={displayName || "Profile"} className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover ring-2 ring-gray-100" />
+                ) : (
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-orange-100 text-orange-700 text-xs font-bold flex items-center justify-center ring-2 ring-gray-100">
+                    {(displayName || "A").slice(0, 2).toUpperCase()}
+                  </div>
+                )}
               </div>
             </div>
           </div>
