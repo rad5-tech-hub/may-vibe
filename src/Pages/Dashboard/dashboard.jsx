@@ -2,13 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Menu, Search, Bell } from 'lucide-react';
 import Sidebar from './sidebar.jsx';
-import { decodeJwt, getDisplayName, getToken } from '../../utils/auth';
+import { getDisplayName, getStoredUser } from '../../utils/auth';
 
 const Dashboard = () => {
-  const payload = decodeJwt(getToken() || "") || {};
+  const user = getStoredUser() || {};
+  const displayName = getDisplayName(user);
+  const avatarUrl = user.profilePhoto || user.image_url || user.avatar || '';
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [displayName] = useState(() => getDisplayName(payload));
-  const [avatarUrl] = useState(() => payload.profilePhoto || payload.image_url || '');
   const location = useLocation();
   const mainRef = useRef(null);
 

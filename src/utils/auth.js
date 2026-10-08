@@ -4,9 +4,10 @@ export function getToken() {
 
 export function decodeJwt(token) {
   try {
-    const base64Url = token.split(".")[1];
+    const raw = String(token || "").replace(/^Bearer\s+/i, "");
+    const base64Url = raw.split(".")[1];
     if (!base64Url) return null;
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/").padEnd(base64Url.length + ((4 - (base64Url.length % 4)) % 4), "=");
     const jsonPayload = decodeURIComponent(
       atob(base64)
         .split("")
@@ -43,29 +44,54 @@ export function clearAuth() {
 }
 
 export function getStoredUser() {
-  return decodeJwt(getToken() || "") || null;
+  let stored = null;
+  try {
+    const raw = localStorage.getItem("user");
+    if (raw) stored = JSON.parse(raw);
+  } catch {
+    stored = null;
+  }
+  const decoded = decodeJwt(getToken() || "");
+  if (stored && decoded) return { ...decoded, ...stored };
+  return stored || decoded || null;
 }
 
 function looksLikeEmail(s) {
   return typeof s === "string" && s.includes("@");
 }
 
-export function getDisplayName(user) {
-  const u = user || getStoredUser() || {};
-  const nested = u.user && typeof u.user === "object" ? u.user : {};
-  const fromParts = [u.first_name || u.firstName || nested.first_name, u.last_name || u.lastName || nested.last_name]
+function nameFromObject(u, depth = 0) {
+  if (!u || typeof u !== "object" || depth > 3) return "";
+  const fromParts = [
+    u.first_name || u.firstName || u.given_name || u.givenName,
+    u.last_name || u.lastName || u.family_name || u.familyName,
+  ]
     .filter(Boolean)
     .join(" ");
   const candidates = [
+    u.fullName,
     u.full_name,
     u.fullname,
-    nested.full_name,
-    nested.fullname,
+    u.FullName,
     fromParts,
     u.name,
-    nested.name,
+    u.displayName,
+    u.display_name,
+    u.username,
   ];
-  return candidates.find((n) => n && String(n).trim() && !looksLikeEmail(n)) || "";
+  const hit = candidates.find((n) => n && String(n).trim() && !looksLikeEmail(n));
+  if (hit) return String(hit).trim();
+  for (const v of Object.values(u)) {
+    if (v && typeof v === "object" && !Array.isArray(v)) {
+      const nested = nameFromObject(v, depth + 1);
+      if (nested) return nested;
+    }
+  }
+  return "";
+}
+
+export function getDisplayName(user) {
+  return nameFromObject(user || getStoredUser() || {});
 }
 
 export function getCurrentUserId() {
