@@ -1,17 +1,10 @@
-import { LayoutDashboard, Music2, Users, UserCheck } from "lucide-react";
+import { LayoutDashboard, Music2, Users, UserCheck, CreditCard, Package } from "lucide-react";
 
 export const adminNav = [
   { label: "Overview", path: "/admin", icon: LayoutDashboard, end: true },
   { label: "Releases", path: "/admin/releases", icon: Music2 },
-  { label: "Distro Artiste", path: "/admin/distro-artiste", icon: Users },
-  {
-    label: "Distributions",
-    icon: Music2,
-    children: [
-      { label: "All Album Distributions", path: "/admin/distributions/albums" },
-      { label: "All Track Distributions", path: "/admin/distributions/tracks" },
-    ],
-  },
+  { label: "Distributions", path: "/admin/distributions", icon: Package },
+  { label: "Subscription Plans", path: "/admin/subscription", icon: CreditCard },
   { label: "All Transactions", path: "/admin/transactions", icon: Music2 },
   { label: "Transactions Without Accounts", path: "/admin/transactions-without-accounts", icon: Music2 },
   { label: "All Fundings", path: "/admin/fundings", icon: Music2 },

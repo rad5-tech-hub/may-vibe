@@ -73,7 +73,32 @@ const AddGenre = () => {
 
   return (
     <div className="space-y-7">
-      {/* All Genres */}
+      <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
+        <h2 className="text-lg font-bold">Add new genre</h2>
+        <p className="mb-5 text-sm text-gray-500">Create a genre artists can tag their releases with</p>
+        <form onSubmit={handleCreate} className="flex max-w-2xl flex-col gap-4">
+          <div>
+            <label htmlFor="genre-name" className="mb-1 block text-xs font-medium text-gray-500">Genre name</label>
+            <input id="genre-name" type="text" required value={genreName}
+              onChange={(event) => setGenreName(event.target.value)}
+              placeholder="e.g. Afrobeats"
+              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-orange-500" />
+          </div>
+          <div>
+            <label htmlFor="genre-desc" className="mb-1 block text-xs font-medium text-gray-500">Description</label>
+            <input id="genre-desc" type="text" value={genreDescription}
+              onChange={(event) => setGenreDescription(event.target.value)}
+              placeholder="e.g. West African popular music blending..."
+              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-orange-500" />
+          </div>
+          <button type="submit" disabled={creating}
+            className="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-orange-600 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-500 disabled:cursor-not-allowed disabled:opacity-70">
+            {creating && <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />}
+            <Plus size={15} />Add genre
+          </button>
+        </form>
+      </section>
+
       <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
         <div className="mb-5 flex items-center gap-3">
           <div className="rounded-xl bg-orange-50 p-3 text-orange-500"><ListMusic size={20} /></div>
@@ -104,33 +129,6 @@ const AddGenre = () => {
             {genres.length === 0 && <li className="py-8 text-center text-gray-400">No genres found</li>}
           </ul>
         )}
-      </section>
-
-      {/* Add Genre */}
-      <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
-        <h2 className="text-lg font-bold">Add new genre</h2>
-        <p className="mb-5 text-sm text-gray-500">Create a genre artists can tag their releases with</p>
-        <form onSubmit={handleCreate} className="flex max-w-2xl flex-col gap-4">
-          <div>
-            <label htmlFor="genre-name" className="mb-1 block text-xs font-medium text-gray-500">Genre name</label>
-            <input id="genre-name" type="text" required value={genreName}
-              onChange={(event) => setGenreName(event.target.value)}
-              placeholder="e.g. Afrobeats"
-              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-orange-500" />
-          </div>
-          <div>
-            <label htmlFor="genre-desc" className="mb-1 block text-xs font-medium text-gray-500">Description</label>
-            <input id="genre-desc" type="text" value={genreDescription}
-              onChange={(event) => setGenreDescription(event.target.value)}
-              placeholder="e.g. West African popular music blending..."
-              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-orange-500" />
-          </div>
-          <button type="submit" disabled={creating}
-            className="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-orange-600 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-500 disabled:cursor-not-allowed disabled:opacity-70">
-            {creating && <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />}
-            <Plus size={15} />Add genre
-          </button>
-        </form>
       </section>
 
       {/* Edit Genre Modal */}

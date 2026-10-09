@@ -40,8 +40,8 @@ import UserProtectedRoute from './Pages/components/UserProtectedRoute';
 import GuestRoute from './Pages/components/GuestRoute';
 import OverviewPage from './Pages/Admin/pages/Overview';
 import DistroArtiste from './Pages/Admin/pages/DistroArtiste';
-import AllAlbumDistributions from './Pages/Admin/pages/AllAlbumDistributions';
-import AllTrackDistributions from './Pages/Admin/pages/AllTrackDistributions';
+import Distributions from './Pages/Admin/pages/Distributions';
+import AdminSubscription from './Pages/Admin/pages/Subscription';
 import AllTransactions from './Pages/Admin/pages/AllTransactions';
 import TransactionsWithoutAccounts from './Pages/Admin/pages/TransactionsWithoutAccounts';
 import AllFundings from './Pages/Admin/pages/AllFundings';
@@ -53,6 +53,7 @@ import SetAccountActivationFees from './Pages/Admin/pages/SetAccountActivationFe
 import VerifyArtist from './Pages/Admin/pages/VerifyArtist';
 import AdminProfile from './Pages/Admin/pages/Profile';
 import ReleasesAdmin from './Pages/Admin/pages/Releases';
+import AdminReleaseDetail from './Pages/Admin/pages/ReleaseDetail';
 
 
 function App() {
@@ -94,9 +95,10 @@ function App() {
           >
             <Route index element={<OverviewPage />} />
             <Route path="releases" element={<ReleasesAdmin />} />
+            <Route path="releases/:id" element={<AdminReleaseDetail />} />
+            <Route path="distributions" element={<Distributions />} />
+            <Route path="subscription" element={<AdminSubscription />} />
             <Route path="distro-artiste" element={<DistroArtiste />} />
-            <Route path="distributions/albums" element={<AllAlbumDistributions />} />
-            <Route path="distributions/tracks" element={<AllTrackDistributions />} />
             <Route path="transactions" element={<AllTransactions />} />
             <Route path="transactions-without-accounts" element={<TransactionsWithoutAccounts />} />
             <Route path="fundings" element={<AllFundings />} />

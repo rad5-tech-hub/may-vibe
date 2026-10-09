@@ -79,7 +79,7 @@ export function ReleaseWizardProvider({ children }) {
   const [genresLoading, setGenresLoading] = useState(true);
   const [contributors, setContributors] = useState([]);
   const [contributorsLoading, setContributorsLoading] = useState(true);
-  const [serverLabelId, setServerLabelId] = useState(undefined);
+  const [serverLabelId, setServerLabelId] = useState(() => getLabel()?.id || undefined);
   const [songwriters, setSongwriters] = useState([]);
   const [songwritersLoading, setSongwritersLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -103,9 +103,11 @@ export function ReleaseWizardProvider({ children }) {
       .then((res) => {
         const list = res.data?.data || [];
         setContributors(Array.isArray(list) ? list : []);
-        setServerLabelId(res.data?.scope?.label_id ?? null);
+        setServerLabelId(res.data?.scope?.label_id ?? getLabel()?.id ?? null);
       })
-      .catch(() => {})
+      .catch(() => {
+        setServerLabelId(getLabel()?.id ?? undefined);
+      })
       .finally(() => setContributorsLoading(false));
 
     userApi
@@ -422,7 +424,7 @@ export function ReleaseWizardProvider({ children }) {
     setErrors({});
 
     if (!getLabel()?.id) {
-      toast.error("No label found on your subscription. Re-subscribe with a label name.");
+      toast.error("No label found on your account. Subscribe with a label name before submitting.");
       return;
     }
 

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { ArrowLeft, Pencil, Send, Loader2, Music2, Disc3, RefreshCw, ExternalLink, MessageSquare } from "lucide-react";
+import { ArrowLeft, Pencil, Send, Loader2, Music2, Disc3, RefreshCw, ExternalLink, MessageSquare, CheckCircle2 } from "lucide-react";
 import userApi from "../../../utils/userApi";
 import { getErrorMessage } from "../../../utils/errorHelper";
 import { ARTIST_ROLES, PRODUCER_ROLES, ENGINEER_ROLES, MUSICIAN_ROLES } from "../../../utils/releaseConstants";
@@ -65,7 +65,14 @@ Row.propTypes = {
   value: PropTypes.string,
 };
 
-export default function ReleaseDetail() {
+export default function ReleaseDetail({
+  api = userApi,
+  basePath = "/release",
+  listPath = "/dashboard/releases",
+  listLabel = "Back to My Releases",
+  canEdit = true,
+  canApprove = false,
+}) {
   const { id } = useParams();
   const location = useLocation();
   const [release, setRelease] = useState(location.state?.release || null);
@@ -77,12 +84,13 @@ export default function ReleaseDetail() {
   const [showEdit, setShowEdit] = useState(false);
   const [showDistribute, setShowDistribute] = useState(false);
   const [distributing, setDistributing] = useState(false);
+  const [approving, setApproving] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
-      const res = await userApi.get(`/release/${id}`);
+      const res = await api.get(`${basePath}/${id}`);
       const d = res.data?.data || res.data;
       if (d && typeof d === "object" && !Array.isArray(d)) {
         setRelease((prev) => ({ ...(prev || {}), ...d }));
@@ -94,7 +102,7 @@ export default function ReleaseDetail() {
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, api, basePath]);
 
   useEffect(() => {
     load();
@@ -102,7 +110,7 @@ export default function ReleaseDetail() {
 
   // One-time name lookups so no raw id is ever rendered
   useEffect(() => {
-    userApi
+    api
       .get("/contributors")
       .then((res) => {
         const list = res.data?.data || [];
@@ -112,7 +120,7 @@ export default function ReleaseDetail() {
         setArtistMap(map);
       })
       .catch(() => {});
-    userApi
+    api
       .get("/contributors/songwriters/list")
       .then((res) => {
         const list = res.data?.data || [];
@@ -122,7 +130,7 @@ export default function ReleaseDetail() {
         setSongwriterMap(map);
       })
       .catch(() => {});
-  }, []);
+  }, [api]);
 
   useEffect(() => {
     if (!release) return;
@@ -144,7 +152,7 @@ export default function ReleaseDetail() {
     let cancelled = false;
     Promise.all(
       ids.map((tid) =>
-        userApi
+        api
           .get(`/track/${tid}`)
           .then((res) => {
             const d = res.data?.data || res.data;
@@ -161,12 +169,30 @@ export default function ReleaseDetail() {
     return () => {
       cancelled = true;
     };
-  }, [release]);
+  }, [release, api]);
+
+  const handleApprove = async () => {
+    setApproving(true);
+    try {
+      let res;
+      try {
+        res = await api.post(`${basePath}/${id}/approve`);
+      } catch {
+        res = await api.patch(`${basePath}/${id}`, { status: "approved" });
+      }
+      toast.success(res.data?.message || "Release approved");
+      load();
+    } catch (err) {
+      toast.error(getErrorMessage(err, "Approve failed"));
+    } finally {
+      setApproving(false);
+    }
+  };
 
   const handleDistribute = async () => {
     setDistributing(true);
     try {
-      const res = await userApi.post(`/release/${id}/distribute`);
+      const res = await api.post(`${basePath}/${id}/distribute`);
       toast.success(res.data?.message || "Release sent for distribution");
       setShowDistribute(false);
       load();
@@ -197,8 +223,8 @@ export default function ReleaseDetail() {
           >
             <RefreshCw size={14} /> Retry
           </button>
-          <Link to="/dashboard/releases" className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-full text-sm font-semibold">
-            Back to releases
+          <Link to={listPath} className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-full text-sm font-semibold">
+            {listLabel}
           </Link>
         </div>
       </div>
@@ -298,8 +324,8 @@ export default function ReleaseDetail() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-5">
-      <Link to="/dashboard/releases" className="cursor-pointer inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
-        <ArrowLeft size={16} /> Back to My Releases
+      <Link to={listPath} className="cursor-pointer inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+        <ArrowLeft size={16} /> {listLabel}
       </Link>
 
       {/* Header — mirrors how the release was created */}
@@ -322,12 +348,24 @@ export default function ReleaseDetail() {
             <span className={`px-3 py-1 rounded-full text-xs font-semibold shrink-0 ${getStatusStyle(status)}`}>{cap(status) || "—"}</span>
           </div>
           <div className="flex gap-2 mt-3 flex-wrap">
-            <button
-              onClick={() => setShowEdit(true)}
-              className="cursor-pointer inline-flex items-center gap-1.5 bg-gray-900 hover:bg-black text-white px-4 py-2 rounded-full text-xs font-semibold"
-            >
-              <Pencil size={13} /> Edit
-            </button>
+            {canEdit && (
+              <button
+                onClick={() => setShowEdit(true)}
+                className="cursor-pointer inline-flex items-center gap-1.5 bg-gray-900 hover:bg-black text-white px-4 py-2 rounded-full text-xs font-semibold"
+              >
+                <Pencil size={13} /> Edit
+              </button>
+            )}
+            {canApprove && (
+              <button
+                onClick={handleApprove}
+                disabled={approving}
+                className="cursor-pointer inline-flex items-center gap-1.5 bg-green-600 hover:bg-green-700 disabled:opacity-60 text-white px-4 py-2 rounded-full text-xs font-semibold"
+              >
+                {approving ? <Loader2 size={13} className="animate-spin" /> : <CheckCircle2 size={13} />}
+                {approving ? "Approving..." : "Approve"}
+              </button>
+            )}
             <button
               onClick={() => setShowDistribute(true)}
               className="cursor-pointer inline-flex items-center gap-1.5 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full text-xs font-semibold"
@@ -514,7 +552,7 @@ export default function ReleaseDetail() {
         </dl>
       </Section>
 
-      {showEdit && (
+      {canEdit && showEdit && (
         <EditReleaseModal
           isOpen={showEdit}
           onClose={() => setShowEdit(false)}
@@ -552,3 +590,12 @@ export default function ReleaseDetail() {
     </div>
   );
 }
+
+ReleaseDetail.propTypes = {
+  api: PropTypes.object,
+  basePath: PropTypes.string,
+  listPath: PropTypes.string,
+  listLabel: PropTypes.string,
+  canEdit: PropTypes.bool,
+  canApprove: PropTypes.bool,
+};

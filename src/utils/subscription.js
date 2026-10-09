@@ -1,5 +1,5 @@
 import userApi from "./userApi";
-import { getCurrentUserId } from "./auth";
+import { getCurrentUserId, getStoredUser } from "./auth";
 
 const KEY = "subscription";
 
@@ -41,6 +41,16 @@ export function clearSubscription() {
   localStorage.removeItem(KEY);
 }
 
+// "dsp_distribution" -> "DSP Distribution"
+export function formatFeatureKey(key) {
+  if (!key) return "";
+  return String(key)
+    .replace(/_/g, " ")
+    .split(/\s+/)
+    .map((w) => (w.toLowerCase() === "dsp" ? "DSP" : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+    .join(" ");
+}
+
 export function hasActiveSubscription() {
   const sub = getSubscription();
   if (!sub?.subscription_id) return false;
@@ -48,8 +58,21 @@ export function hasActiveSubscription() {
   return true;
 }
 
+// Label lives on the JWT (label_id / label_name), not on the plan response.
 export function getLabel() {
-  return getSubscription()?.label || null;
+  const u = getStoredUser() || {};
+  const id = u.label_id || u.labelId || u.label?.id;
+  const name = u.label_name || u.labelName || u.label?.name;
+  if (!id && !name) {
+    const cached = getSubscription()?.label;
+    if (cached) return cached;
+    return null;
+  }
+  return { id: id || "", name: name || "" };
+}
+
+export function hasLabel() {
+  return !!getLabel()?.id;
 }
 
 export function getDefaultArtist() {
@@ -67,4 +90,59 @@ export async function subscribe(labelName) {
     return data;
   }
   throw new Error(data?.message || "Subscription failed");
+}
+
+export async function fetchAllPlans() {
+  const res = await userApi.get("/auth/all-plans");
+  return res.data?.data || [];
+}
+
+export async function fetchMyPlan() {
+  const res = await userApi.get("/auth/a-plan");
+  const data = res.data;
+  if (data?.success === false || data?.error) {
+    throw new Error(data?.error || "Subscription plan not found");
+  }
+  const plan = data?.data || data || null;
+  if (plan) cachePlan(plan);
+  return plan;
+}
+
+export async function initiateSubscriptionPayment(planId) {
+  const res = await userApi.post("/subscribe/create-subscription-plan", { planId });
+  return res.data;
+}
+
+export async function refreshUserContext() {
+  const res = await userApi.get("/auth/refresh-context");
+  return res.data;
+}
+
+function cachePlan(plan) {
+  const sub = {
+    ...plan,
+    subscription_id: plan.subscription_id || plan.id || plan.subscription?.id,
+    plan: plan.plan || (plan.name ? plan : null),
+    expires_at: plan.expires_at || plan.expiresAt || plan.subscription?.expires_at || null,
+    label: plan.label || plan.subscription?.label || null,
+  };
+  if (sub.subscription_id) saveSubscription(sub);
+  return sub;
+}
+
+// Call after payment confirmation: refresh context immediately, then poll
+// fetchMyPlan until the backend has attached the plan (webhooks can lag).
+export async function refreshContextAndFetchPlan({ retries = 4, delayMs = 2000 } = {}) {
+  await refreshUserContext().catch(() => {});
+  let lastErr;
+  for (let attempt = 0; attempt < retries; attempt++) {
+    if (attempt > 0) await new Promise((r) => setTimeout(r, delayMs * attempt));
+    try {
+      const plan = await fetchMyPlan();
+      if (plan) return cachePlan(plan);
+    } catch (err) {
+      lastErr = err;
+    }
+  }
+  throw lastErr || new Error("Subscription plan not found");
 }

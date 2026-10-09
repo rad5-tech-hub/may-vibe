@@ -15,9 +15,11 @@ const extractList = (payload) => {
 };
 
 const extractCursor = (payload) => {
+  const pag = payload?.pagination;
+  if (pag?.nextCursor || pag?.next_cursor) return pag.nextCursor || pag.next_cursor;
   const data = payload?.data;
   if (typeof data === "string") return data;
-  return data?.next_cursor || data?.cursor || null;
+  return data?.next_cursor || data?.cursor || payload?.nextCursor || null;
 };
 
 const BooleanBadge = ({ value, label }) => (
@@ -98,7 +100,7 @@ const AllRegisteredUsers = () => {
                       <td className="py-4"><BooleanBadge value={!!(user.is_verified ?? user.verified)} label={user.is_verified ?? user.verified ? "Yes" : "No"} /></td>
                       <td className="py-4"><BooleanBadge value={!!(user.onBoarded ?? user.onboarded ?? user.complete_onboarding)} label={user.onBoarded ?? user.onboarded ?? user.complete_onboarding ? "Complete" : "Incomplete"} /></td>
                       <td className="py-4"><span className={`rounded-full px-3 py-1 text-xs font-medium capitalize ${(user.status || "active") === "active" ? "bg-emerald-50 text-emerald-600" : "bg-orange-50 text-orange-600"}`}>{user.status || "active"}</span></td>
-                      <td className="py-4 text-gray-500">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "—"}</td>
+                      <td className="py-4 text-gray-500">{user.created_at || user.createdAt ? new Date(user.created_at || user.createdAt).toLocaleDateString() : "—"}</td>
                     </tr>
                   ))}
                   {users.length === 0 && (
