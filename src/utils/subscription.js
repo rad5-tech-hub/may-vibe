@@ -53,7 +53,9 @@ export function formatFeatureKey(key) {
 
 export function hasActiveSubscription() {
   const sub = getSubscription();
-  if (!sub?.subscription_id) return false;
+  if (!sub) return false;
+  const id = sub.subscription_id || sub.plan_id || sub.plan?.id;
+  if (!id) return false;
   if (sub.expires_at && new Date(sub.expires_at).getTime() < Date.now()) return false;
   return true;
 }
@@ -121,12 +123,13 @@ export async function refreshUserContext() {
 function cachePlan(plan) {
   const sub = {
     ...plan,
-    subscription_id: plan.subscription_id || plan.id || plan.subscription?.id,
+    subscription_id:
+      plan.subscription_id || plan.id || plan.plan_id || plan.subscription?.id || plan.plan?.id || "active",
     plan: plan.plan || (plan.name ? plan : null),
     expires_at: plan.expires_at || plan.expiresAt || plan.subscription?.expires_at || null,
     label: plan.label || plan.subscription?.label || null,
   };
-  if (sub.subscription_id) saveSubscription(sub);
+  saveSubscription(sub);
   return sub;
 }
 

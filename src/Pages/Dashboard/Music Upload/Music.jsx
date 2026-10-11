@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Music4, Video, Sparkles } from "lucide-react";
 import { hasActiveSubscription } from "../../../utils/subscription";
 import SubscriptionGate from "./components/SubscriptionGate";
@@ -7,6 +7,23 @@ import ReleaseWizard from "./ReleaseWizard";
 const UploadMusic = () => {
   const [subscribed, setSubscribed] = useState(hasActiveSubscription());
   const [releaseType, setReleaseType] = useState(null);
+
+  // Re-check whenever the tab regains focus — payment may have completed
+  // in another tab, unlocking uploads without a reload.
+  useEffect(() => {
+    const check = () => setSubscribed(hasActiveSubscription());
+    const onVisible = () => {
+      if (document.visibilityState === "visible") check();
+    };
+    window.addEventListener("focus", check);
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("storage", check);
+    return () => {
+      window.removeEventListener("focus", check);
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("storage", check);
+    };
+  }, []);
 
   if (!subscribed) {
     return (

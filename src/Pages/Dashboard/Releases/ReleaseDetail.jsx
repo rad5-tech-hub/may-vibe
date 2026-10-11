@@ -55,7 +55,7 @@ function Row({ label, value }) {
   return (
     <div className="flex justify-between gap-4 text-sm py-2 border-b border-gray-100 last:border-0">
       <dt className="text-gray-500 shrink-0">{label}</dt>
-      <dd className="text-gray-900 text-right font-medium break-words min-w-0">{value}</dd>
+      <dd className="text-gray-900 text-right font-medium wrap-break-word min-w-0">{value}</dd>
     </div>
   );
 }
