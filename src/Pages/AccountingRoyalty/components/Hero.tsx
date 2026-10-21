@@ -31,7 +31,7 @@ export default function AccountingHero() {
               onClick={() => navigate("/signup")}
               className="bg-[#FF6200] text-white font-bold text-base px-10 py-2 lg:py-3 rounded-2xl shadow-md hover:bg-orange-600 transition duration-150 cursor-pointer"
             >
-              Join Mayvibe
+              Start Distributing
             </button>
           </div>
         </div>

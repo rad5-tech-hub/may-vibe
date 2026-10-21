@@ -17,7 +17,7 @@ export default function DistributeBanner() {
           onClick={() => navigate("/signup")}
           className="mt-8 bg-transparent hover:bg-white text-white border-2 hover:text-orange-600 border-white rounded-[20px] px-10 py-2 lg:py-3 font-bold text-xl transition cursor-pointer"
         >
-          Join Mayvibe
+          Start Distributing
         </button>
       </div>
     </section>

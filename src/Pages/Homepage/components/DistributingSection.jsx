@@ -14,18 +14,18 @@ export default function DistributingSection() {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-20 py-20">
         <div className="max-w-xl">
           <h2 className="text-white text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
-            Distributing
+            Publishing
           </h2>
           
           <p className="mt-5 text-[#E5E5E5] text-base sm:text-lg lg:text-xl font-normal leading-relaxed opacity-95">
-            Protect your songs, collect distributing royalties worldwide, and build a music career that pays you long after release.
+            Protect your compositions, collect publishing royalties worldwide, and build a music career that pays you long after release.
           </p>
           
           <button
             onClick={() => navigate("/signup")}
             className="mt-8 sm:mt-10 border border-white/80 text-white rounded-full px-8 py-3.5 font-medium text-base hover:bg-white hover:text-black transition duration-300 w-fit cursor-pointer tracking-wide"
           >
-            Start Distributing
+            Start Publishing
           </button>
         </div>
       </div>

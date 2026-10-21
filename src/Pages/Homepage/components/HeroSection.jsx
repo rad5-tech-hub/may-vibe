@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import heroImage from "../../../assets/HeroImage.png";
+import heroImage from "../../../assets/manonbraids.png";
 import Sub1 from '../../../assets/Subscribers1.png';
 import Sub2 from '../../../assets/Subscribers2.png';
 import Sub3 from '../../../assets/Subscribers3.png';
@@ -10,7 +10,7 @@ export default function HeroSection() {
   return (
     <section className="relative overflow-hidden bg-[#FDF5F2] pt-28 md:pt-36 md:pb-0">
       <div className="max-w-7xl mx-auto px-6 md:px-6">
-        <div className="flex flex-col lg:flex-row gap-3 lg:gap-0 items-start justify-between">
+        <div className="flex flex-col lg:flex-row gap-3 lg:gap-0 lg:items-start justify-between">
           
           {/* Left Content */}
           <div className="space-y-8">
@@ -47,11 +47,11 @@ export default function HeroSection() {
           </div>
 
           {/* Right Image + Waveform */}
-          <div className="relative flex justify-center md:justify-end">
+          <div className="relative flex justify-center lg:justify-end items-center -mt-24" >
             <img
               src={heroImage}
               alt="Artist"
-              className="h-[350px] md:h-140 md:max-h-140 lg:h-150 lg:max-h-180 object-cover"
+              className="h-140 md:h-140 md:max-h-140 lg:h-200 lg:max-h-full object-cover flex justify-center items-center"
             />
           </div>
         </div>

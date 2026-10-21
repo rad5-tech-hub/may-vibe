@@ -22,15 +22,15 @@ export default function AboutHero() {
 
           {/* Master Heading with Specific Line Break Splits */}
           <h1 className="text-[#111111] text-3xl lg:text-[54px] font-bold tracking-tight leading-[1.12]">
-            Africa’s Music Distribution & <br />
-            Artist monetization Platform <br />
-            <span className="text-[#FF6200]">Built For You</span>
+            YOUR MUSIC. YOUR RIGHTS. <br />
+            <span className="text-[#FF6200]">YOUR GLOBAL REACH.</span>
           </h1>
 
           {/* Paragraph Copy block with embedded highlight */}
           <p className="mt-6 text-[#444444] text-sm lg:text-lg font-normal max-w-xl leading-relaxed">
-            Distribute your music globally, manage releases professionally, track royalties transparently, 
-            and grow sustainable music careers with <span className="text-[#FF6200] font-bold">Mayvibe</span> today.
+            Distribute your music worldwide, manage your releases, and track your royalties with <span className="text-[#FF6200] font-bold">Mayvibe</span>. We give independent
+            artists and record labels the tools to take control of their music, reach new audiences, and build sustainable music
+            careers.
           </p>
 
           {/* Main Direct Call to Action Button */}
@@ -39,7 +39,7 @@ export default function AboutHero() {
               onClick={() => navigate("/signup")}
               className="bg-[#FF6200] text-white font-bold text-base px-10 py-2 lg:py-3 rounded-2xl shadow-md hover:bg-orange-600 transition duration-150 active:scale-98 cursor-pointer"
             >
-              Join Mayvibe
+              Start Distributing
             </button>
           </div>
         </div>

@@ -35,7 +35,7 @@ export default function AdvancedHero() {
 
             <div className="mt-8">
               <button onClick={() => navigate("/signup")} className="bg-[#FF6200] text-white font-bold text-base px-10 py-2 lg:py-3 rounded-2xl shadow-sm hover:bg-orange-600 transition duration-150 cursor-pointer">
-                Join Mayvibe
+                Start Distributing
               </button>
             </div>
           </div>
