@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { ShieldCheck, UserPlus, UserCog } from "lucide-react";
+import { ShieldCheck, UserPlus, UserCog, X, Plus } from "lucide-react";
 import { getErrorMessage } from "../../../utils/errorHelper";
 import adminApi from "../adminApi";
 
@@ -12,6 +12,8 @@ const AddAdmin = () => {
   const [form, setForm] = useState({ full_name: "", email: "", phone: "", role_id: "" });
   const [selectedAdmin, setSelectedAdmin] = useState(null);
   const [updating, setUpdating] = useState(false);
+  const [roleAction, setRoleAction] = useState(null); // 'assign' | 'remove'
+  const [selectedRoleId, setSelectedRoleId] = useState("");
 
   const refreshAdmins = async () => {
     const adminsRes = await adminApi.get("/admin/all-admin");
@@ -32,6 +34,29 @@ const AddAdmin = () => {
       setUpdating(false);
     }
   };
+
+  const handleRoleAction = async (action, roleId) => {
+    if (!selectedAdmin) return;
+    setUpdating(true);
+    try {
+      await adminApi.post("/admin/role", {
+        admin_id: selectedAdmin.id,
+        role_id: roleId,
+        action,
+      });
+      toast.success(action === "assign" ? "Role assigned successfully" : "Role removed successfully");
+      setSelectedAdmin(null);
+      setRoleAction(null);
+      setSelectedRoleId("");
+      await refreshAdmins();
+    } catch (error) {
+      toast.error(getErrorMessage(error, action === "assign" ? "Failed to assign role" : "Failed to remove role"));
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const currentRole = selectedAdmin?.roles?.[0];
 
   useEffect(() => {
     const loadData = async () => {
@@ -178,16 +203,111 @@ const AddAdmin = () => {
         </form>
       </section>
 
-      {/* Suspend / Restore Modal */}
+      {/* Manage Admin Modal */}
       {selectedAdmin && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
           <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
             <h3 className="text-lg font-bold text-gray-900">Manage admin</h3>
             <p className="mt-1 text-sm text-gray-500">{selectedAdmin.email || selectedAdmin.full_name}</p>
+            
+            {/* Status */}
             <p className="mt-4 text-sm text-gray-500">
               Status: <span className={`font-semibold capitalize ${selectedAdmin.status === "suspended" ? "text-red-600" : "text-emerald-600"}`}>{selectedAdmin.status || "active"}</span>
             </p>
-            <div className="mt-6 flex flex-wrap justify-end gap-3">
+
+            {/* Role Management */}
+            <div className="mt-6 border-t border-gray-100 pt-6">
+              <h4 className="text-sm font-semibold text-gray-700">Role</h4>
+              <div className="mt-3 flex items-center justify-between">
+                <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-medium capitalize text-orange-600">
+                  {(currentRole?.name || "—").replace(/_/g, " ")}
+                </span>
+                {!roleAction ? (
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      disabled={updating}
+                      onClick={() => setRoleAction("remove")}
+                      className="cursor-pointer rounded-lg border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 disabled:opacity-50"
+                    >
+                      <X size={12} className="inline mr-1" />Remove
+                    </button>
+                    <button
+                      type="button"
+                      disabled={updating}
+                      onClick={() => setRoleAction("assign")}
+                      className="cursor-pointer rounded-lg border border-emerald-200 px-3 py-1.5 text-xs font-medium text-emerald-600 hover:bg-emerald-50 disabled:opacity-50"
+                    >
+                      <Plus size={12} className="inline mr-1" />Assign
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    {roleAction === "remove" && currentRole && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-500">Remove</span>
+                        <button
+                          type="button"
+                          disabled={updating}
+                          onClick={() => handleRoleAction("remove", currentRole.id)}
+                          className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-500 disabled:opacity-70"
+                        >
+                          {updating && <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />}
+                          Confirm
+                        </button>
+                        <button
+                          type="button"
+                          disabled={updating}
+                          onClick={() => setRoleAction(null)}
+                          className="cursor-pointer rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    )}
+                    {roleAction === "assign" && (
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <select
+                          value={selectedRoleId}
+                          onChange={(e) => setSelectedRoleId(e.target.value)}
+                          disabled={updating}
+                          className="cursor-pointer rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-orange-500 disabled:opacity-50"
+                        >
+                          <option value="" disabled>Select role</option>
+                          {roles
+                            .filter((r) => !currentRole || r.id !== currentRole.id)
+                            .map((role) => (
+                              <option key={role.id} value={role.id}>
+                                {(role.name || "").replace(/_/g, " ")}
+                              </option>
+                            ))}
+                        </select>
+                        <button
+                          type="button"
+                          disabled={updating || !selectedRoleId}
+                          onClick={() => handleRoleAction("assign", selectedRoleId)}
+                          className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-500 disabled:opacity-70"
+                        >
+                          {updating && <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />}
+                          Confirm
+                        </button>
+                        <button
+                          type="button"
+                          disabled={updating}
+                          onClick={() => { setRoleAction(null); setSelectedRoleId(""); }}
+                          className="cursor-pointer rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Suspend / Restore */}
+            <div className="mt-6 border-t border-gray-100 pt-6 flex flex-wrap justify-end gap-3">
               {selectedAdmin.status === "suspended" ? (
                 <button type="button" disabled={updating} onClick={() => handleStatusChange("reactivate")}
                   className="flex cursor-pointer items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-500 disabled:opacity-70">
@@ -201,7 +321,7 @@ const AddAdmin = () => {
                   Suspend admin
                 </button>
               )}
-              <button type="button" onClick={() => setSelectedAdmin(null)}
+              <button type="button" onClick={() => { setSelectedAdmin(null); setRoleAction(null); setSelectedRoleId(""); }}
                 className="cursor-pointer rounded-xl border border-gray-200 px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50">
                 Cancel
               </button>
